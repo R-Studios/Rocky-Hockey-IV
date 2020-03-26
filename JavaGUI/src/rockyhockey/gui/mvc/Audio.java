@@ -135,4 +135,58 @@ public class Audio extends Applet {
 		soundBackground.stop();
 	}
 
+	public void playScoreSound(int run, int score) {
+		switch (run) {
+		case 3:
+			playSound(soundDominating);
+			break;
+		case 5:
+			playSound(soundRampage);
+			break;
+		case 7:
+			playSound(soundUnstoppable);
+			break;
+		case 9:
+			playSound(soundGodlike);
+			break;
+		default:
+			playGoalSound(score);
+			break;
+		}
+	}
+
+	public void playGoalSound(int goal) {
+		switch (goal) {
+		case 1:
+			playSound(soundOne);
+			break;
+		case 2:
+			playSound(soundTwo);
+			break;
+		case 3:
+			playSound(soundThree);
+			break;
+		case 4:
+			playSound(soundFour);
+			break;
+		case 5:
+			playSound(soundFive);
+			break;
+		case 6:
+			playSound(soundSix);
+			break;
+		case 7:
+			playSound(soundSeven);
+			break;
+		case 8:
+			playSound(soundEight);
+			break;
+		case 9:
+			playSound(soundNine);
+			break;
+		case 10:
+			playSound(soundTen);
+			break;
+		}
+	}
 }

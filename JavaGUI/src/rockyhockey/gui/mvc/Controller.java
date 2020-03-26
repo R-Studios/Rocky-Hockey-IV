@@ -91,7 +91,7 @@ public class Controller implements Runnable {
 								audio.playSound(Audio.soundTakenlead);
 								leader = PLAYER;
 							} else {
-								playScoreSound(highestRun, scorePlayer);
+								audio.playScoreSound(highestRun, scorePlayer);
 							}
 						} else if (hardware.isBotLsActive()) {
 							scoreBot++;
@@ -110,7 +110,7 @@ public class Controller implements Runnable {
 								audio.playSound(Audio.soundLostlead);
 								leader = BOT;
 							} else {
-								playScoreSound(highestRun, scoreBot); // before scorePlayer right?
+								audio.playScoreSound(highestRun, scoreBot); // before scorePlayer right?
 							}
 						}
 						timeRemaining = GAME_TIME - (System.nanoTime() - timeAtStart);
@@ -137,60 +137,4 @@ public class Controller implements Runnable {
 		}
 
 	}
-
-	public void playScoreSound(int run, int score) {
-		switch (run) {
-		case 3:
-			audio.playSound(Audio.soundDominating);
-			break;
-		case 5:
-			audio.playSound(Audio.soundRampage);
-			break;
-		case 7:
-			audio.playSound(Audio.soundUnstoppable);
-			break;
-		case 9:
-			audio.playSound(Audio.soundGodlike);
-			break;
-		default:
-			playGoalSound(score);
-			break;
-		}
-	}
-
-	public void playGoalSound(int goal) {
-		switch (goal) {
-		case 1:
-			audio.playSound(Audio.soundOne);
-			break;
-		case 2:
-			audio.playSound(Audio.soundTwo);
-			break;
-		case 3:
-			audio.playSound(Audio.soundThree);
-			break;
-		case 4:
-			audio.playSound(Audio.soundFour);
-			break;
-		case 5:
-			audio.playSound(Audio.soundFive);
-			break;
-		case 6:
-			audio.playSound(Audio.soundSix);
-			break;
-		case 7:
-			audio.playSound(Audio.soundSeven);
-			break;
-		case 8:
-			audio.playSound(Audio.soundEight);
-			break;
-		case 9:
-			audio.playSound(Audio.soundNine);
-			break;
-		case 10:
-			audio.playSound(Audio.soundTen);
-			break;
-		}
-	}
-
 }
