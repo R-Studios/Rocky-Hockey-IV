@@ -1,47 +1,44 @@
 package rockyhockey.gui.mvc;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.io.File;
+import java.net.MalformedURLException;
 
-@SuppressWarnings("deprecation")
-public class Audio extends Applet {
+public class Audio {
 
-	private static final long serialVersionUID = 1L;
-//	public static final String independentFolder = System.getProperty("user.dir") + "/sounds/";
+	public static final String independentFolder = "./sounds/";
 
 	private static Audio instance;
-	
-	private boolean backgroundOn;
 
-	public AudioClip soundBackground;
-	public AudioClip soundOne;
-	public AudioClip soundTwo;
-	public AudioClip soundThree;
-	public AudioClip soundFour;
-	public AudioClip soundFive;
-	public AudioClip soundSix;
-	public AudioClip soundSeven;
-	public AudioClip soundEight;
-	public AudioClip soundNine;
-	public AudioClip soundTen;
-	public AudioClip soundDominating;
-	public AudioClip soundUnstoppable;
-	public AudioClip soundRampage;
-	public AudioClip soundGodlike;
-	public AudioClip soundTakenlead;
-	public AudioClip soundLostlead;
-	public AudioClip soundPrepare;
-	public AudioClip soundWinner;
-	public AudioClip soundLostmatch;
-	private AudioClip current;
-	// private Thread thread;
-	private boolean soundEnabled = true;
+	public File soundBackground;
+	public File soundOne;
+	public File soundTwo;
+	public File soundThree;
+	public File soundFour;
+	public File soundFive;
+	public File soundSix;
+	public File soundSeven;
+	public File soundEight;
+	public File soundNine;
+	public File soundTen;
+	public File soundDominating;
+	public File soundUnstoppable;
+	public File soundRampage;
+	public File soundGodlike;
+	public File soundTakenlead;
+	public File soundLostlead;
+	public File soundPrepare;
+	public File soundWinner;
+	public File soundLostmatch;
+
 	private boolean soundAvailable = true;
+	private boolean soundEnabled = true;
+	private boolean backgroundEnabled = true;
+	
+	private volatile AudioThread backgroundMusicThread = null;
 
-	public AudioClip[] sounds = { soundBackground, soundOne, soundTwo, soundThree, soundFour, soundFive, soundSix,
+	public File[] sounds = { soundBackground, soundOne, soundTwo, soundThree, soundFour, soundFive, soundSix,
 			soundSeven, soundEight, soundNine, soundTen, soundDominating, soundUnstoppable, soundRampage, soundGodlike,
-			soundTakenlead, soundLostlead, soundPrepare, soundWinner, soundLostmatch, current };
+			soundTakenlead, soundLostlead, soundPrepare, soundWinner, soundLostmatch };
 
 	private Audio() {
 		try {
@@ -80,41 +77,48 @@ public class Audio extends Applet {
 		return instance;
 	}
 
-	public AudioClip checkAndGetFile(String filename) throws Exception {
-		String soundFolder = "./sounds/";
+	private File checkAndGetFile(String filename) throws MalformedURLException {
+		File soundFile = new File(independentFolder + filename);
 		
-		File file = new File(soundFolder + filename);
-		
-		String filePath = file.getAbsolutePath();
+		String soundFilePath = soundFile.getAbsolutePath();
 
-		if (file.exists() && !file.isDirectory()) {
-			System.out.println(filePath + " exists");
-			
-			return newAudioClip(file.toURL());
-		} else {
-			System.out.println(filePath + " doesn't exist");
-			soundAvailable = false;
-			soundEnabled = false;
-			return null;
+		if (soundFile.exists() && !soundFile.isDirectory()) {
+			System.out.println(soundFilePath + " exists");
+
+			return soundFile;
 		}
+
+		System.out.println(soundFilePath + " doesn't exist");
+		soundAvailable = false;
+		soundEnabled = false;
+		return null;
 	}
 
-	public void playSound(AudioClip sound) {
-		if (soundAvailable && soundEnabled) {
-			sound.play();
-		}
+	public void playSound(File soundFile) {
+		if (soundAvailable && soundEnabled)
+			AudioThread.playSound(soundFile);
 	}
 
 	public void startBackgroundSound() {
-		if (soundEnabled == true)
-			soundBackground.loop();
+		if (soundAvailable)
+		{
+			if (backgroundMusicThread == null)
+				backgroundMusicThread = AudioThread.playSound(soundBackground, true);
+		}
 		
 		//backgroundEnabled = true;
 	}
 
 	public void stopBackgroundSound() {
-		if (soundEnabled == true)
-			soundBackground.stop();
+		synchronized (backgroundMusicThread)
+		{
+			if (backgroundMusicThread != null)
+			{
+				backgroundMusicThread.interrupt();
+				
+				backgroundMusicThread = null;
+			}
+		}
 		
 		//backgroundEnabled = false;
 	}
