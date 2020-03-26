@@ -42,46 +42,26 @@ public class Audio extends Applet {
 
 	static {
 		try {
-			checkFile("backgroundsound.wav");
-			checkFile("one.wav");
-			checkFile("two.wav");
-			checkFile("three.wav");
-			checkFile("four.wav");
-			checkFile("five.wav");
-			checkFile("six.wav");
-			checkFile("seven.wav");
-			checkFile("eight.wav");
-			checkFile("nine.wav");
-			checkFile("ten.wav");
-			checkFile("dominating.wav");
-			checkFile("unstoppable.wav");
-			checkFile("rampage.wav");
-			checkFile("godlike.wav");
-			checkFile("takenlead.wav");
-			checkFile("lostlead.wav");
-			checkFile("prepare.wav");
-			checkFile("winner.wav");
-			checkFile("lostmatch.wav");
-			soundBackground = newAudioClip((new File(independentFolder + "backgroundsound.wav")).toURL());
-			soundOne = newAudioClip((new File(independentFolder + "one.wav")).toURL());
-			soundTwo = newAudioClip((new File(independentFolder + "two.wav")).toURL());
-			soundThree = newAudioClip((new File(independentFolder + "three.wav")).toURL());
-			soundFour = newAudioClip((new File(independentFolder + "four.wav")).toURL());
-			soundFive = newAudioClip((new File(independentFolder + "five.wav")).toURL());
-			soundSix = newAudioClip((new File(independentFolder + "six.wav")).toURL());
-			soundSeven = newAudioClip((new File(independentFolder + "seven.wav")).toURL());
-			soundEight = newAudioClip((new File(independentFolder + "eight.wav")).toURL());
-			soundNine = newAudioClip((new File(independentFolder + "nine.wav")).toURL());
-			soundTen = newAudioClip((new File(independentFolder + "ten.wav")).toURL());
-			soundDominating = newAudioClip((new File(independentFolder + "dominating.wav")).toURL());
-			soundUnstoppable = newAudioClip((new File(independentFolder + "unstoppable.wav")).toURL());
-			soundRampage = newAudioClip((new File(independentFolder + "rampage.wav")).toURL());
-			soundGodlike = newAudioClip((new File(independentFolder + "godlike.wav")).toURL());
-			soundTakenlead = newAudioClip((new File(independentFolder + "takenlead.wav")).toURL());
-			soundLostlead = newAudioClip((new File(independentFolder + "lostlead.wav")).toURL());
-			soundPrepare = newAudioClip((new File(independentFolder + "prepare.wav")).toURL());
-			soundWinner = newAudioClip((new File(independentFolder + "winner.wav")).toURL());
-			soundLostmatch = newAudioClip((new File(independentFolder + "lostmatch.wav")).toURL());
+			soundBackground = checkAndGetFile("backgroundsound.wav");
+			soundOne = checkAndGetFile("one.wav");
+			soundTwo = checkAndGetFile("two.wav");
+			soundThree = checkAndGetFile("three.wav");
+			soundFour = checkAndGetFile("four.wav");
+			soundFive = checkAndGetFile("five.wav");
+			soundSix = checkAndGetFile("six.wav");
+			soundSeven = checkAndGetFile("seven.wav");
+			soundEight = checkAndGetFile("eight.wav");
+			soundNine = checkAndGetFile("nine.wav");
+			soundTen = checkAndGetFile("ten.wav");
+			soundDominating = checkAndGetFile("dominating.wav");
+			soundUnstoppable = checkAndGetFile("unstoppable.wav");
+			soundRampage = checkAndGetFile("rampage.wav");
+			soundGodlike = checkAndGetFile("godlike.wav");
+			soundTakenlead = checkAndGetFile("takenlead.wav");
+			soundLostlead = checkAndGetFile("lostlead.wav");
+			soundPrepare = checkAndGetFile("prepare.wav");
+			soundWinner = checkAndGetFile("winner.wav");
+			soundLostmatch = checkAndGetFile("lostmatch.wav");
 		} catch (Exception e) {
 			System.out.println("disabled");
 			e.printStackTrace();
@@ -105,15 +85,20 @@ public class Audio extends Applet {
 		return instance;
 	}
 
-	public static void checkFile(String filename) {
-		File f = new File(independentFolder + filename);
+	public static AudioClip checkAndGetFile(String filename) throws Exception {
+		File file = new File(independentFolder + filename);
+		
+		String filePath = file.getAbsolutePath();
 
-		if (f.exists() && !f.isDirectory()) {
-			System.out.println(f.getAbsolutePath() + " exists");
+		if (file.exists() && !file.isDirectory()) {
+			System.out.println(filePath + " exists");
+			
+			return newAudioClip(file.toURL());
 		} else {
 			System.out.println(f.getAbsolutePath() + " don't exists");
 			soundNotAvailable = true;
 			soundEnabled = false;
+			return null;
 		}
 	}
 
