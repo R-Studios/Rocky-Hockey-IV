@@ -108,28 +108,30 @@ public class Audio extends Applet {
 	public void startBackgroundSound() {
 		if (soundEnabled == true)
 			soundBackground.loop();
-			backgroundOn = true;
+		
+		//backgroundEnabled = true;
 	}
 
 	public void stopBackgroundSound() {
 		if (soundEnabled == true)
 			soundBackground.stop();
 		
-		backgroundOn = false;
+		//backgroundEnabled = false;
 	}
 
 	public void enableSound() {
 		if (soundAvailable)
+		{
 			soundEnabled = true;
 		
-		if(backgroundOn) {
-			soundBackground.loop();
+			startBackgroundSound();
 		}
 	}
 
 	public void disableSound() {
 		soundEnabled = false;
-		soundBackground.stop();
+		
+		stopBackgroundSound();
 	}
 
 	public void playScoreSound(int run, int score) {
