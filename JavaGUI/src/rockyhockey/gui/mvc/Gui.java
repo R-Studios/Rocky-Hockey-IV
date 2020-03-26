@@ -3,9 +3,9 @@ package rockyhockey.gui.mvc;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,26 +24,11 @@ public class Gui extends JPanel implements ActionListener {
 
 	private static Gui instance;
 
-	private static ImageIcon playIcon;
-	private static ImageIcon resetIcon;
-	private static ImageIcon closeIcon;
+	private ImageIcon playIcon;
+	private ImageIcon resetIcon;
+	private ImageIcon closeIcon;
 
-	private static BufferedImage backgroundImage;
-
-	static {
-//		String folder = System.getProperty("user.dir") + "/src/de/rockeyhockey/game/pictures/";
-		String folder = "./img/";
-		try {
-			playIcon = new ImageIcon(ImageIO.read(new File(folder + "play.png")));
-			resetIcon = new ImageIcon(ImageIO.read(new File(folder + "replay.png")));
-			closeIcon = new ImageIcon(ImageIO.read(new File(folder + "close.png")));
-			backgroundImage = ImageIO.read(new File(folder + "background.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
+	private Image backgroundImage = null;
 
 	private Color foreground = Color.red;
 	private Color foregroundDefault = Color.white;
@@ -75,8 +60,35 @@ public class Gui extends JPanel implements ActionListener {
 		return instance;
 	}
 
+	private ImageIcon checkAndGetFile(String filename) throws Exception {
+		File imageFile = new File("./img/" + filename);
+		
+		String imageFilePath = imageFile.getAbsolutePath();
+
+		if (imageFile.exists() && !imageFile.isDirectory()) {
+			System.out.println(imageFilePath + " exists");
+
+			return new ImageIcon(ImageIO.read(imageFile));
+		}
+
+		System.out.println(imageFilePath + " doesn't exist");
+		return null;
+	}
+
 	private Gui() {
 		super();
+		
+		try {
+			playIcon = checkAndGetFile("play.png");
+			resetIcon = checkAndGetFile("replay.png");
+			closeIcon = checkAndGetFile("close.png");
+			ImageIcon backgroundImageIcon = checkAndGetFile("ggrafikk.png");
+			if (backgroundImageIcon != null)
+				backgroundImage = backgroundImageIcon.getImage();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		initGuiElements();
 		setLayout(null);
 		addComponents();
