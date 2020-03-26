@@ -47,7 +47,6 @@ public class Gui extends JPanel implements ActionListener {
 
 	private Color foreground = Color.red;
 	private Color foregroundDefault = Color.white;
-	private Font font;
 
 	private boolean playPressed;
 	private boolean resetPressed;
@@ -78,7 +77,6 @@ public class Gui extends JPanel implements ActionListener {
 
 	private Gui() {
 		super();
-		this.font = new Font("Arial", Font.BOLD, 32);
 		initGuiElements();
 		setLayout(null);
 		addComponents();
@@ -119,6 +117,8 @@ public class Gui extends JPanel implements ActionListener {
 	}
 
 	private void initGuiElements() {
+		Font font = new Font("Arial", Font.BOLD, 32);
+		
 		this.playButton = new IconButton();
 		this.playButton.addActionListener(this);
 		this.resetButton = new IconButton();
