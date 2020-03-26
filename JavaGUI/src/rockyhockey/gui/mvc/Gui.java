@@ -59,6 +59,7 @@ public class Gui extends JPanel implements ActionListener {
 	private JLabel botLabel;
 	private JLabel playerScoreLabel;
 	private JLabel botScoreLabel;
+	private JLabel scoreColon;
 	private JLabel timeLabel;
 
 	private IconButton playButton;
@@ -94,6 +95,7 @@ public class Gui extends JPanel implements ActionListener {
 		this.add(this.resetButton);
 		this.add(this.closeButton);
 		this.add(this.muteButton);
+		add(scoreColon);
 	}
 
 	@Override
@@ -112,12 +114,7 @@ public class Gui extends JPanel implements ActionListener {
 				eight_of_height);
 		this.playButton.setBounds(eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
 		this.resetButton.setBounds(width - 3 * eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		JLabel dots = new JLabel(":");
-		dots.setFont(font);
-		dots.setHorizontalAlignment(JLabel.CENTER);
-		dots.setBounds(3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		dots.setForeground(foregroundDefault);
-		this.add(dots);
+		scoreColon.setBounds(3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
 
 	}
 
@@ -156,6 +153,10 @@ public class Gui extends JPanel implements ActionListener {
 		this.playButton.setIcon(playIcon);
 		this.closeButton.setIcon(closeIcon);
 		this.resetButton.setIcon(resetIcon);
+		scoreColon = new JLabel(":");
+		scoreColon.setFont(font);
+		scoreColon.setHorizontalAlignment(JLabel.CENTER);
+		scoreColon.setForeground(foregroundDefault);
 	}
 
 	public void reset() {
