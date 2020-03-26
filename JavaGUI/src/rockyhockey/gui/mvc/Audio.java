@@ -38,7 +38,7 @@ public class Audio extends Applet {
 	private static AudioClip current;
 	// private Thread thread;
 	private static boolean soundEnabled = true;
-	private static boolean soundNotAvailable = false;
+	private static boolean soundAvailable = true;
 
 	static {
 		try {
@@ -65,7 +65,7 @@ public class Audio extends Applet {
 		} catch (Exception e) {
 			System.out.println("disabled");
 			e.printStackTrace();
-			soundNotAvailable = true;
+			soundAvailable = false;
 			soundEnabled = false;
 		}
 	}
@@ -95,15 +95,15 @@ public class Audio extends Applet {
 			
 			return newAudioClip(file.toURL());
 		} else {
-			System.out.println(f.getAbsolutePath() + " don't exists");
-			soundNotAvailable = true;
+			System.out.println(filePath + " doesn't exist");
+			soundAvailable = false;
 			soundEnabled = false;
 			return null;
 		}
 	}
 
 	public void playSound(AudioClip sound) {
-		if (soundEnabled) {
+		if (soundAvailable && soundEnabled) {
 			sound.play();
 		}
 	}
@@ -122,7 +122,7 @@ public class Audio extends Applet {
 	}
 
 	public static void enableSound() {
-		if (soundNotAvailable == false)
+		if (soundAvailable)
 			soundEnabled = true;
 		
 		if(backgroundOn) {
