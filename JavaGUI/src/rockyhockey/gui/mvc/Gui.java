@@ -142,16 +142,15 @@ public class Gui extends JFrame implements ActionListener {
 		int eigth_of_with = width / 8;
 		int eight_of_height = height / 8;
 
-		this.closeButton.setBounds(width - eigth_of_with , 0, eigth_of_with , eight_of_height);
-		this.muteButton.setBounds(width - 2 * eigth_of_with, 0, eigth_of_with, eight_of_height);
-		this.playerLabel.setBounds(eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
-		this.botLabel.setBounds(width - 3 * eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
-		this.timeLabel.setBounds(3 * eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
-		this.playerScoreLabel.setBounds(eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		this.botScoreLabel.setBounds(width - 3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with,
-				eight_of_height);
-		this.playButton.setBounds(eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		this.resetButton.setBounds(width - 3 * eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
+		closeButton.setBounds(width - eigth_of_with , 0, eigth_of_with , eight_of_height);
+		muteButton.setBounds(width - 2 * eigth_of_with, 0, eigth_of_with, eight_of_height);
+		playerLabel.setBounds(eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
+		botLabel.setBounds(width - 3 * eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
+		timeLabel.setBounds(3 * eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
+		playerScoreLabel.setBounds(eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
+		botScoreLabel.setBounds(width - 3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
+		playButton.setBounds(eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
+		resetButton.setBounds(width - 3 * eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
 		scoreColon.setBounds(3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
 
 	}
@@ -159,58 +158,69 @@ public class Gui extends JFrame implements ActionListener {
 	private void initGuiElements() {
 		Font font = new Font("Arial", Font.BOLD, 32);
 		
-		this.playButton = new IconButton();
-		this.playButton.addActionListener(this);
-		this.resetButton = new IconButton();
-		this.resetButton.addActionListener(this);
-		this.closeButton = new IconButton();
-		this.closeButton.addActionListener(this);
-		this.muteButton = new MuteButton();
-		this.muteButton.addActionListener(this);
-		this.playerLabel = new JLabel();
-		this.playerLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.playerLabel.setVerticalAlignment(JLabel.CENTER);
-		this.playerLabel.setForeground(foreground);
-		this.playerLabel.setFont(font);
-		this.botLabel = new JLabel();
-		this.botLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.botLabel.setForeground(foreground);
-		this.botLabel.setFont(font);
-		this.playerScoreLabel = new JLabel();
-		this.playerScoreLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.playerScoreLabel.setForeground(foregroundDefault);
-		this.playerScoreLabel.setFont(font);
-		this.botScoreLabel = new JLabel();
-		this.botScoreLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.botScoreLabel.setForeground(foregroundDefault);
-		this.botScoreLabel.setFont(font);
-		this.timeLabel = new JLabel();
-		this.timeLabel.setHorizontalAlignment(JLabel.CENTER);
-		this.timeLabel.setForeground(foregroundDefault);
-		this.timeLabel.setFont(font);
-		this.reset();
-
-		this.playButton.setIcon(playIcon);
-		this.closeButton.setIcon(closeIcon);
-		this.resetButton.setIcon(resetIcon);
 		setLayout(null);
 		setUndecorated(true);
 		
 		contentPanel = new PanelWithBackground();
 		contentPanel.setLayout(null);
+		
+		playButton = new IconButton();
+		playButton.addActionListener(this);
+		
+		resetButton = new IconButton();
+		resetButton.addActionListener(this);
+		
+		closeButton = new IconButton();
+		closeButton.addActionListener(this);
+		
+		muteButton = new MuteButton();
+		muteButton.addActionListener(this);
+		
+		playerLabel = new JLabel();
+		playerLabel.setHorizontalAlignment(JLabel.CENTER);
+		playerLabel.setVerticalAlignment(JLabel.CENTER);
+		playerLabel.setForeground(foreground);
+		playerLabel.setFont(font);
+		
+		botLabel = new JLabel();
+		botLabel.setHorizontalAlignment(JLabel.CENTER);
+		botLabel.setForeground(foreground);
+		botLabel.setFont(font);
+		
+		playerScoreLabel = new JLabel();
+		playerScoreLabel.setHorizontalAlignment(JLabel.CENTER);
+		playerScoreLabel.setForeground(foregroundDefault);
+		playerScoreLabel.setFont(font);
+		
 		scoreColon = new JLabel(":");
 		scoreColon.setFont(font);
 		scoreColon.setHorizontalAlignment(JLabel.CENTER);
 		scoreColon.setForeground(foregroundDefault);
+		
+		botScoreLabel = new JLabel();
+		botScoreLabel.setHorizontalAlignment(JLabel.CENTER);
+		botScoreLabel.setForeground(foregroundDefault);
+		botScoreLabel.setFont(font);
+		
+		timeLabel = new JLabel();
+		timeLabel.setHorizontalAlignment(JLabel.CENTER);
+		timeLabel.setForeground(foregroundDefault);
+		timeLabel.setFont(font);
+		
+		reset();
+
+		playButton.setIcon(playIcon);
+		closeButton.setIcon(closeIcon);
+		resetButton.setIcon(resetIcon);
 	}
 
 	public void reset() {
-		this.playerLabel.setText("Player");
-		this.botLabel.setText("Bot");
-		this.playerScoreLabel.setText("0");
-		this.botScoreLabel.setText("0");
-		this.timeLabel.setText("10:00");
-		this.timeLabel.setForeground(foregroundDefault);
+		playerLabel.setText("Player");
+		botLabel.setText("Bot");
+		playerScoreLabel.setText("0");
+		botScoreLabel.setText("0");
+		timeLabel.setText("10:00");
+		timeLabel.setForeground(foregroundDefault);
 		repaint();
 	}
 
