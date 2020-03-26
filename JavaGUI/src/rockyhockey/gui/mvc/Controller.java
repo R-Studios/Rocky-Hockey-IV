@@ -1,10 +1,5 @@
 package rockyhockey.gui.mvc;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
-import javax.swing.JFrame;
-
 public class Controller implements Runnable {
 
 	public static final long GAME_TIME = 600000000000l;
@@ -21,19 +16,6 @@ public class Controller implements Runnable {
 		this.gui = Gui.getInstance();
 		this.audio = Audio.getInstance();
 		this.hardware = HardwareIO.getInstance();
-
-		this.initFrame();
-	}
-
-	private void initFrame() {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		JFrame frame = new JFrame();
-		frame.setLayout(null);
-		frame.setUndecorated(true);
-		this.gui.setBounds(0, 0, dim.width, dim.height);
-		frame.setBounds(0, 0, dim.width, dim.height);
-		frame.add(gui);
-		frame.setVisible(true);
 	}
 
 	public static Controller getInstance() {

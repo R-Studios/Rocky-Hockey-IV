@@ -1,24 +1,26 @@
 package rockyhockey.gui.mvc;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import rockyhockey.gui.specialbuttons.IconButton;
 import rockyhockey.gui.specialbuttons.MuteButton;
 
-public class Gui extends JPanel implements ActionListener {
+public class Gui extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -38,6 +40,18 @@ public class Gui extends JPanel implements ActionListener {
 	private boolean mutePressed;
 	
 	private boolean soundActive;
+	
+	class PanelWithBackground extends JPanel {
+		private static final long serialVersionUID = -3597732424273848852L;
+
+		@Override
+		protected void paintComponent(Graphics g) {
+			if (backgroundImage != null)
+				g.drawImage(backgroundImage, 0, 0, getBounds().width,getBounds().height,null);
+		}
+	}
+	
+	private PanelWithBackground contentPanel;
 
 	private JLabel playerLabel;
 	private JLabel botLabel;
@@ -90,27 +104,41 @@ public class Gui extends JPanel implements ActionListener {
 		}
 		
 		initGuiElements();
-		setLayout(null);
 		addComponents();
-		this.soundActive = true;
+		setBounds();
+		
+		soundActive = true;
+
+		setVisible(true);
 	}
 
 	private void addComponents() {
-		this.add(this.playerLabel);
-		this.add(this.botLabel);
-		this.add(this.playerScoreLabel);
-		this.add(this.botScoreLabel);
-		this.add(this.timeLabel);
-		this.add(this.playButton);
-		this.add(this.resetButton);
-		this.add(this.closeButton);
-		this.add(this.muteButton);
-		add(scoreColon);
+		this.setContentPane(contentPanel);
+		
+		contentPanel.add(playerLabel);
+		contentPanel.add(botLabel);
+		contentPanel.add(playerScoreLabel);
+		contentPanel.add(scoreColon);
+		contentPanel.add(botScoreLabel);
+		contentPanel.add(timeLabel);
+		contentPanel.add(playButton);
+		contentPanel.add(resetButton);
+		contentPanel.add(closeButton);
+		contentPanel.add(muteButton);
 	}
 
-	@Override
-	public void setBounds(int x, int y, int width, int height) {
+	public void setBounds() {
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int x = 0;
+		int y = 0;
+		int width = dim.width;
+		int height = dim.height;
+
 		super.setBounds(x, y, width, height);
+		setBounds(x, y, width, height);
+		contentPanel.setBounds(x, y, width, height);
+		
 		int eigth_of_with = width / 8;
 		int eight_of_height = height / 8;
 
@@ -165,6 +193,11 @@ public class Gui extends JPanel implements ActionListener {
 		this.playButton.setIcon(playIcon);
 		this.closeButton.setIcon(closeIcon);
 		this.resetButton.setIcon(resetIcon);
+		setLayout(null);
+		setUndecorated(true);
+		
+		contentPanel = new PanelWithBackground();
+		contentPanel.setLayout(null);
 		scoreColon = new JLabel(":");
 		scoreColon.setFont(font);
 		scoreColon.setHorizontalAlignment(JLabel.CENTER);
@@ -224,14 +257,6 @@ public class Gui extends JPanel implements ActionListener {
 			this.timeLabel.setForeground(Color.red);
 		}
 		this.timeLabel.repaint();
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-		g.drawImage(backgroundImage, 0, 0, getBounds().width,getBounds().height,null);
-//		g.setColor(Color.black);
-//		g.drawRect(0, 0, getBounds().width, getBounds().height);
 	}
 
 	public void actionPerformed(ActionEvent event) {
