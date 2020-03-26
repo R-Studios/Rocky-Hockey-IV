@@ -8,39 +8,42 @@ import java.io.File;
 public class Audio extends Applet {
 
 	private static final long serialVersionUID = 1L;
-	public static final String independentFolder = "./sounds/";
 //	public static final String independentFolder = System.getProperty("user.dir") + "/sounds/";
 
 	private static Audio instance;
 	
-	private static boolean backgroundOn;
+	private boolean backgroundOn;
 
-	public static AudioClip soundBackground;
-	public static AudioClip soundOne;
-	public static AudioClip soundTwo;
-	public static AudioClip soundThree;
-	public static AudioClip soundFour;
-	public static AudioClip soundFive;
-	public static AudioClip soundSix;
-	public static AudioClip soundSeven;
-	public static AudioClip soundEight;
-	public static AudioClip soundNine;
-	public static AudioClip soundTen;
-	public static AudioClip soundDominating;
-	public static AudioClip soundUnstoppable;
-	public static AudioClip soundRampage;
-	public static AudioClip soundGodlike;
-	public static AudioClip soundTakenlead;
-	public static AudioClip soundLostlead;
-	public static AudioClip soundPrepare;
-	public static AudioClip soundWinner;
-	public static AudioClip soundLostmatch;
-	private static AudioClip current;
+	public AudioClip soundBackground;
+	public AudioClip soundOne;
+	public AudioClip soundTwo;
+	public AudioClip soundThree;
+	public AudioClip soundFour;
+	public AudioClip soundFive;
+	public AudioClip soundSix;
+	public AudioClip soundSeven;
+	public AudioClip soundEight;
+	public AudioClip soundNine;
+	public AudioClip soundTen;
+	public AudioClip soundDominating;
+	public AudioClip soundUnstoppable;
+	public AudioClip soundRampage;
+	public AudioClip soundGodlike;
+	public AudioClip soundTakenlead;
+	public AudioClip soundLostlead;
+	public AudioClip soundPrepare;
+	public AudioClip soundWinner;
+	public AudioClip soundLostmatch;
+	private AudioClip current;
 	// private Thread thread;
-	private static boolean soundEnabled = true;
-	private static boolean soundAvailable = true;
+	private boolean soundEnabled = true;
+	private boolean soundAvailable = true;
 
-	static {
+	public AudioClip[] sounds = { soundBackground, soundOne, soundTwo, soundThree, soundFour, soundFive, soundSix,
+			soundSeven, soundEight, soundNine, soundTen, soundDominating, soundUnstoppable, soundRampage, soundGodlike,
+			soundTakenlead, soundLostlead, soundPrepare, soundWinner, soundLostmatch, current };
+
+	private Audio() {
 		try {
 			soundBackground = checkAndGetFile("backgroundsound.wav");
 			soundOne = checkAndGetFile("one.wav");
@@ -70,14 +73,6 @@ public class Audio extends Applet {
 		}
 	}
 
-	public AudioClip[] sounds = { soundBackground, soundOne, soundTwo, soundThree, soundFour, soundFive, soundSix,
-			soundSeven, soundEight, soundNine, soundTen, soundDominating, soundUnstoppable, soundRampage, soundGodlike,
-			soundTakenlead, soundLostlead, soundPrepare, soundWinner, soundLostmatch, current };
-
-	private Audio() {
-
-	}
-
 	public static Audio getInstance() {
 		if (instance == null) {
 			instance = new Audio();
@@ -85,8 +80,10 @@ public class Audio extends Applet {
 		return instance;
 	}
 
-	public static AudioClip checkAndGetFile(String filename) throws Exception {
-		File file = new File(independentFolder + filename);
+	public AudioClip checkAndGetFile(String filename) throws Exception {
+		String soundFolder = "./sounds/";
+		
+		File file = new File(soundFolder + filename);
 		
 		String filePath = file.getAbsolutePath();
 
@@ -121,7 +118,7 @@ public class Audio extends Applet {
 		backgroundOn = false;
 	}
 
-	public static void enableSound() {
+	public void enableSound() {
 		if (soundAvailable)
 			soundEnabled = true;
 		
@@ -130,7 +127,7 @@ public class Audio extends Applet {
 		}
 	}
 
-	public static void disableSound() {
+	public void disableSound() {
 		soundEnabled = false;
 		soundBackground.stop();
 	}

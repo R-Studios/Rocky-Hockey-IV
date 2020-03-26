@@ -61,7 +61,7 @@ public class Controller implements Runnable {
 			while (true) {
 				if (gui.isPlayPressed() && isReseted) {
 					isReseted = false;
-					audio.playSound(Audio.soundPrepare);
+					audio.playSound(audio.soundPrepare);
 					Thread.sleep(2000);
 					audio.startBackgroundSound();
 					timeAtStart = System.nanoTime();
@@ -85,10 +85,10 @@ public class Controller implements Runnable {
 							}
 
 							if (scorePlayer >= 10) {
-								audio.playSound(Audio.soundWinner);
+								audio.playSound(audio.soundWinner);
 								break;
 							} else if (scorePlayer > scoreBot && (leader == BOT || leader == UNDEFINED)) {
-								audio.playSound(Audio.soundTakenlead);
+								audio.playSound(audio.soundTakenlead);
 								leader = PLAYER;
 							} else {
 								audio.playScoreSound(highestRun, scorePlayer);
@@ -104,10 +104,10 @@ public class Controller implements Runnable {
 							}
 //							playScoreSound(highestRun, scoreBot);
 							if (scoreBot >= 10) {
-								audio.playSound(Audio.soundLostmatch);
+								audio.playSound(audio.soundLostmatch);
 								break;
 							} else if (scorePlayer <= scoreBot && leader == PLAYER) {
-								audio.playSound(Audio.soundLostlead);
+								audio.playSound(audio.soundLostlead);
 								leader = BOT;
 							} else {
 								audio.playScoreSound(highestRun, scoreBot); // before scorePlayer right?

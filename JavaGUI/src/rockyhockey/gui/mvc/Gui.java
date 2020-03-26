@@ -231,9 +231,9 @@ public class Gui extends JPanel implements ActionListener {
 			this.muteButton.toggleIcon();
 			soundActive ^= true;
 			if(soundActive) {
-				Audio.enableSound();
+				Audio.getInstance().enableSound();
 			} else {
-				Audio.disableSound();
+				Audio.getInstance().disableSound();
 			}
 			this.mutePressed = true;
 		} else if (sourceButton == this.closeButton) {
