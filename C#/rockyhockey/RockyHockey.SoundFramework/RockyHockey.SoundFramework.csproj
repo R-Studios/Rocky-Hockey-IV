@@ -48,7 +48,7 @@
     <Compile Include="GoalSoundPlayer.cs" />
     <Compile Include="SoundEffectsPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundtrackAndEndeSoundPlayer.cs" />
+    <Compile Include="SoundtrackAndFinishSoundPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RockyHockey.Common\RockyHockey.Common.csproj">
