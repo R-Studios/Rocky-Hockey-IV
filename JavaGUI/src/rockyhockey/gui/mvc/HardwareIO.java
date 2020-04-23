@@ -28,7 +28,8 @@ public class HardwareIO implements Runnable {
 
 			Thread thread = new Thread(this);
 			thread.start();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -52,7 +53,8 @@ public class HardwareIO implements Runnable {
 			fr.read(fileOut);
 			fr.close();
 			return fileOut[0] == '1';
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			System.err.println("gpio fail");
 			e.printStackTrace();
 		}
@@ -105,7 +107,8 @@ public class HardwareIO implements Runnable {
 						timeStemp = currentTime;
 					}
 
-				} else if (!gpio5) {
+				}
+				else if (!gpio5) {
 					playerWasHigh = false;
 				}
 				if (!botWasHigh && gpio6) {
@@ -114,12 +117,14 @@ public class HardwareIO implements Runnable {
 						botLs = true;
 						timeStemp = currentTime;
 					}
-				} else if (!gpio6) {
+				}
+				else if (!gpio6) {
 					botWasHigh = false;
 				}
 				Thread.sleep(10);
 			}
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

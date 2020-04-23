@@ -38,19 +38,20 @@ public class Gui extends JFrame implements ActionListener {
 	private boolean playPressed;
 	private boolean resetPressed;
 	private boolean mutePressed;
-	
+
 	private boolean soundActive;
-	
+
 	class PanelWithBackground extends JPanel {
 		private static final long serialVersionUID = -3597732424273848852L;
 
 		@Override
 		protected void paintComponent(Graphics g) {
+			g.clearRect(0, 0, getBounds().width, getBounds().height);
 			if (backgroundImage != null)
-				g.drawImage(backgroundImage, 0, 0, getBounds().width,getBounds().height,null);
+				g.drawImage(backgroundImage, 0, 0, getBounds().width, getBounds().height, null);
 		}
 	}
-	
+
 	private PanelWithBackground contentPanel;
 
 	private JLabel playerLabel;
@@ -76,7 +77,7 @@ public class Gui extends JFrame implements ActionListener {
 
 	private ImageIcon checkAndGetFile(String filename) throws Exception {
 		File imageFile = new File("./img/" + filename);
-		
+
 		String imageFilePath = imageFile.getAbsolutePath();
 
 		if (imageFile.exists() && !imageFile.isDirectory()) {
@@ -91,22 +92,23 @@ public class Gui extends JFrame implements ActionListener {
 
 	private Gui() {
 		super();
-		
+
 		try {
 			playIcon = checkAndGetFile("play.png");
 			resetIcon = checkAndGetFile("replay.png");
 			closeIcon = checkAndGetFile("close.png");
-			ImageIcon backgroundImageIcon = checkAndGetFile("ggrafikk.png");
+			ImageIcon backgroundImageIcon = checkAndGetFile("background.png");
 			if (backgroundImageIcon != null)
 				backgroundImage = backgroundImageIcon.getImage();
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		initGuiElements();
 		addComponents();
 		setBounds();
-		
+
 		soundActive = true;
 
 		setVisible(true);
@@ -114,7 +116,7 @@ public class Gui extends JFrame implements ActionListener {
 
 	private void addComponents() {
 		this.setContentPane(contentPanel);
-		
+
 		contentPanel.add(playerLabel);
 		contentPanel.add(botLabel);
 		contentPanel.add(playerScoreLabel);
@@ -129,7 +131,7 @@ public class Gui extends JFrame implements ActionListener {
 
 	public void setBounds() {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		
+
 		int x = 0;
 		int y = 0;
 		int width = dim.width;
@@ -138,75 +140,75 @@ public class Gui extends JFrame implements ActionListener {
 		super.setBounds(x, y, width, height);
 		setBounds(x, y, width, height);
 		contentPanel.setBounds(x, y, width, height);
-		
-		int eigth_of_with = width / 8;
+
+		int eigth_of_width = width / 8;
 		int eight_of_height = height / 8;
 
-		closeButton.setBounds(width - eigth_of_with , 0, eigth_of_with , eight_of_height);
-		muteButton.setBounds(width - 2 * eigth_of_with, 0, eigth_of_with, eight_of_height);
-		playerLabel.setBounds(eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
-		botLabel.setBounds(width - 3 * eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
-		timeLabel.setBounds(3 * eigth_of_with, eight_of_height, 2 * eigth_of_with, eight_of_height);
-		playerScoreLabel.setBounds(eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		botScoreLabel.setBounds(width - 3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		playButton.setBounds(eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		resetButton.setBounds(width - 3 * eigth_of_with, 6 * eight_of_height, 2 * eigth_of_with, eight_of_height);
-		scoreColon.setBounds(3 * eigth_of_with, 3 * eight_of_height, 2 * eigth_of_with, eight_of_height);
+		closeButton.setBounds(width - eigth_of_width, 0, eigth_of_width, eight_of_height);
+		muteButton.setBounds(width - 2 * eigth_of_width, 0, eigth_of_width, eight_of_height);
+		playerLabel.setBounds(eigth_of_width, eight_of_height, 2 * eigth_of_width, eight_of_height);
+		botLabel.setBounds(width - 3 * eigth_of_width, eight_of_height, 2 * eigth_of_width, eight_of_height);
+		timeLabel.setBounds(3 * eigth_of_width, eight_of_height, 2 * eigth_of_width, eight_of_height);
+		playerScoreLabel.setBounds(eigth_of_width, 3 * eight_of_height, 2 * eigth_of_width, eight_of_height);
+		botScoreLabel.setBounds(width - 3 * eigth_of_width, 3 * eight_of_height, 2 * eigth_of_width, eight_of_height);
+		playButton.setBounds(eigth_of_width, 6 * eight_of_height, 2 * eigth_of_width, eight_of_height);
+		resetButton.setBounds(width - 3 * eigth_of_width, 6 * eight_of_height, 2 * eigth_of_width, eight_of_height);
+		scoreColon.setBounds(3 * eigth_of_width, 3 * eight_of_height, 2 * eigth_of_width, eight_of_height);
 
 	}
 
 	private void initGuiElements() {
 		Font font = new Font("Arial", Font.BOLD, 32);
-		
+
 		setLayout(null);
 		setUndecorated(true);
-		
+
 		contentPanel = new PanelWithBackground();
 		contentPanel.setLayout(null);
-		
+
 		playButton = new IconButton();
 		playButton.addActionListener(this);
-		
+
 		resetButton = new IconButton();
 		resetButton.addActionListener(this);
-		
+
 		closeButton = new IconButton();
 		closeButton.addActionListener(this);
-		
+
 		muteButton = new MuteButton();
 		muteButton.addActionListener(this);
-		
+
 		playerLabel = new JLabel();
 		playerLabel.setHorizontalAlignment(JLabel.CENTER);
 		playerLabel.setVerticalAlignment(JLabel.CENTER);
 		playerLabel.setForeground(foreground);
 		playerLabel.setFont(font);
-		
+
 		botLabel = new JLabel();
 		botLabel.setHorizontalAlignment(JLabel.CENTER);
 		botLabel.setForeground(foreground);
 		botLabel.setFont(font);
-		
+
 		playerScoreLabel = new JLabel();
 		playerScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 		playerScoreLabel.setForeground(foregroundDefault);
 		playerScoreLabel.setFont(font);
-		
+
 		scoreColon = new JLabel(":");
 		scoreColon.setFont(font);
 		scoreColon.setHorizontalAlignment(JLabel.CENTER);
 		scoreColon.setForeground(foregroundDefault);
-		
+
 		botScoreLabel = new JLabel();
 		botScoreLabel.setHorizontalAlignment(JLabel.CENTER);
 		botScoreLabel.setForeground(foregroundDefault);
 		botScoreLabel.setFont(font);
-		
+
 		timeLabel = new JLabel();
 		timeLabel.setHorizontalAlignment(JLabel.CENTER);
 		timeLabel.setForeground(foregroundDefault);
 		timeLabel.setFont(font);
-		
+
 		reset();
 
 		playButton.setIcon(playIcon);
@@ -273,18 +275,22 @@ public class Gui extends JFrame implements ActionListener {
 		JButton sourceButton = (JButton) event.getSource();
 		if (sourceButton == this.playButton) {
 			this.playPressed = true;
-		} else if (sourceButton == this.resetButton) {
+		}
+		else if (sourceButton == this.resetButton) {
 			this.resetPressed = true;
-		} else if (sourceButton == this.muteButton) {
+		}
+		else if (sourceButton == this.muteButton) {
 			this.muteButton.toggleIcon();
 			soundActive ^= true;
-			if(soundActive) {
+			if (soundActive) {
 				Audio.getInstance().enableSound();
-			} else {
+			}
+			else {
 				Audio.getInstance().disableSound();
 			}
 			this.mutePressed = true;
-		} else if (sourceButton == this.closeButton) {
+		}
+		else if (sourceButton == this.closeButton) {
 			System.exit(0);
 		}
 	}

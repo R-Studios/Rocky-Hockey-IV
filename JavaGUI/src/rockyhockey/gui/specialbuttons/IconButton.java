@@ -3,7 +3,7 @@ package rockyhockey.gui.specialbuttons;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-public class IconButton extends JButton{
+public class IconButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
@@ -12,13 +12,14 @@ public class IconButton extends JButton{
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
 		this.setIcon(icon);
+		this.setFocusPainted(false);
 	}
-	
+
 	public IconButton() {
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
-		
+		this.setFocusPainted(false);
 	}
 
 }

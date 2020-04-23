@@ -22,7 +22,8 @@ public class MuteButton extends JButton {
 			String folder = "./img/";
 			mutedIcon = new ImageIcon(ImageIO.read(new File(folder + "mute.png")));
 			unmutedIcon = new ImageIcon(ImageIO.read(new File(folder + "sound.png")));
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -35,6 +36,7 @@ public class MuteButton extends JButton {
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
 		this.setBorderPainted(false);
+		this.setFocusPainted(false);
 		this.iconNotNull = mutedIcon != null && unmutedIcon != null;
 		if (this.iconNotNull) {
 			this.setIcon(unmutedIcon);

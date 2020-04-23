@@ -61,7 +61,8 @@ public class Controller implements Runnable {
 							gui.setPlayerScore(scorePlayer);
 							if (lastGoal == PLAYER) {
 								highestRun++;
-							} else {
+							}
+							else {
 								highestRun = 1;
 								lastGoal = PLAYER;
 							}
@@ -69,29 +70,35 @@ public class Controller implements Runnable {
 							if (scorePlayer >= 10) {
 								audio.playSound(audio.soundWinner);
 								break;
-							} else if (scorePlayer > scoreBot && (leader == BOT || leader == UNDEFINED)) {
+							}
+							else if (scorePlayer > scoreBot && (leader == BOT || leader == UNDEFINED)) {
 								audio.playSound(audio.soundTakenlead);
 								leader = PLAYER;
-							} else {
+							}
+							else {
 								audio.playScoreSound(highestRun, scorePlayer);
 							}
-						} else if (hardware.isBotLsActive()) {
+						}
+						else if (hardware.isBotLsActive()) {
 							scoreBot++;
 							gui.setBotScore(scoreBot);
 							if (lastGoal == BOT) {
 								highestRun++;
-							} else {
+							}
+							else {
 								highestRun = 1;
 								lastGoal = BOT;
 							}
-//							playScoreSound(highestRun, scoreBot);
+							// playScoreSound(highestRun, scoreBot);
 							if (scoreBot >= 10) {
 								audio.playSound(audio.soundLostmatch);
 								break;
-							} else if (scorePlayer <= scoreBot && leader == PLAYER) {
+							}
+							else if (scorePlayer <= scoreBot && leader == PLAYER) {
 								audio.playSound(audio.soundLostlead);
 								leader = BOT;
-							} else {
+							}
+							else {
 								audio.playScoreSound(highestRun, scoreBot); // before scorePlayer right?
 							}
 						}
@@ -112,7 +119,8 @@ public class Controller implements Runnable {
 
 			}
 
-		} catch (InterruptedException e) {
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

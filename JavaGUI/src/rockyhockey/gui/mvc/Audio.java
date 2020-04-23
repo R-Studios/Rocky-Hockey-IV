@@ -33,7 +33,7 @@ public class Audio {
 	private boolean soundAvailable = true;
 	private boolean soundEnabled = true;
 	private boolean backgroundEnabled = true;
-	
+
 	private volatile AudioThread backgroundMusicThread = null;
 
 	public File[] sounds = { soundBackground, soundOne, soundTwo, soundThree, soundFour, soundFive, soundSix,
@@ -62,7 +62,8 @@ public class Audio {
 			soundPrepare = checkAndGetFile("prepare.wav");
 			soundWinner = checkAndGetFile("winner.wav");
 			soundLostmatch = checkAndGetFile("lostmatch.wav");
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			System.out.println("disabled");
 			e.printStackTrace();
 			soundAvailable = false;
@@ -79,7 +80,7 @@ public class Audio {
 
 	private File checkAndGetFile(String filename) throws MalformedURLException {
 		File soundFile = new File(independentFolder + filename);
-		
+
 		String soundFilePath = soundFile.getAbsolutePath();
 
 		if (soundFile.exists() && !soundFile.isDirectory()) {
@@ -100,41 +101,38 @@ public class Audio {
 	}
 
 	public void startBackgroundSound() {
-		if (soundAvailable)
-		{
-			if (backgroundMusicThread == null)
-				backgroundMusicThread = AudioThread.playSound(soundBackground, true);
+		if (soundAvailable) {
+			if (backgroundMusicThread == null) {
+				backgroundMusicThread = AudioThread.playSound(soundBackground, true);				
+			}
 		}
-		
-		//backgroundEnabled = true;
+
+		// backgroundEnabled = true;
 	}
 
 	public void stopBackgroundSound() {
-		synchronized (backgroundMusicThread)
-		{
-			if (backgroundMusicThread != null)
-			{
+		synchronized (backgroundMusicThread) {
+			if (backgroundMusicThread != null) {
 				backgroundMusicThread.interrupt();
 				
 				backgroundMusicThread = null;
 			}
 		}
-		
-		//backgroundEnabled = false;
+
+		// backgroundEnabled = false;
 	}
 
 	public void enableSound() {
-		if (soundAvailable)
-		{
+		if (soundAvailable) {
 			soundEnabled = true;
-		
+
 			startBackgroundSound();
 		}
 	}
 
 	public void disableSound() {
 		soundEnabled = false;
-		
+
 		stopBackgroundSound();
 	}
 
