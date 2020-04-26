@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -75,29 +74,18 @@ public class Gui extends JFrame implements ActionListener {
 		return instance;
 	}
 
-	private ImageIcon checkAndGetFile(String filename) throws Exception {
-		File imageFile = new File("./img/" + filename);
-
-		String imageFilePath = imageFile.getAbsolutePath();
-
-		if (imageFile.exists() && !imageFile.isDirectory()) {
-			System.out.println(imageFilePath + " exists");
-
-			return new ImageIcon(ImageIO.read(imageFile));
-		}
-
-		System.out.println(imageFilePath + " doesn't exist");
-		return null;
+	private ImageIcon getImageIcon(String filename) throws Exception {
+		return new ImageIcon(ImageIO.read(ResourceLoader.load("/img/" + filename)));
 	}
 
 	private Gui() {
 		super();
 
 		try {
-			playIcon = checkAndGetFile("play.png");
-			resetIcon = checkAndGetFile("replay.png");
-			closeIcon = checkAndGetFile("close.png");
-			ImageIcon backgroundImageIcon = checkAndGetFile("background.png");
+			playIcon = getImageIcon("play.png");
+			resetIcon = getImageIcon("replay.png");
+			closeIcon = getImageIcon("close.png");
+			ImageIcon backgroundImageIcon = getImageIcon("background.png");
 			if (backgroundImageIcon != null)
 				backgroundImage = backgroundImageIcon.getImage();
 		}
@@ -162,6 +150,7 @@ public class Gui extends JFrame implements ActionListener {
 
 		setLayout(null);
 		setUndecorated(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		contentPanel = new PanelWithBackground();
 		contentPanel.setLayout(null);

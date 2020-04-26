@@ -1,11 +1,12 @@
 package rockyhockey.gui.specialbuttons;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
+import rockyhockey.gui.mvc.ResourceLoader;
 
 public class MuteButton extends JButton {
 
@@ -18,10 +19,8 @@ public class MuteButton extends JButton {
 
 	static {
 		try {
-			//String folder = System.getProperty("user.dir") + "/src/de/rockeyhockey/game/pictures/";
-			String folder = "./img/";
-			mutedIcon = new ImageIcon(ImageIO.read(new File(folder + "mute.png")));
-			unmutedIcon = new ImageIcon(ImageIO.read(new File(folder + "sound.png")));
+			mutedIcon = new ImageIcon(ImageIO.read(ResourceLoader.load("/img/mute.png")));
+			unmutedIcon = new ImageIcon(ImageIO.read(ResourceLoader.load("/img/sound.png")));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
