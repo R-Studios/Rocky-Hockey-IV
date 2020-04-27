@@ -7,6 +7,9 @@ public class IconButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
 
+	/*
+	 * Constructor with an icon
+	 */
 	public IconButton(ImageIcon icon) {
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);
@@ -15,6 +18,9 @@ public class IconButton extends JButton {
 		this.setFocusPainted(false);
 	}
 
+	/*
+	 * Fallback constructor
+	 */
 	public IconButton() {
 		this.setOpaque(false);
 		this.setContentAreaFilled(false);

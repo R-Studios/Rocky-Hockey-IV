@@ -12,12 +12,18 @@ public class Controller implements Runnable {
 	private Audio audio;
 	private HardwareIO hardware;
 
+	/*
+	 * Initialize MVC pattern
+	 */
 	private Controller() {
 		this.gui = Gui.getInstance();
 		this.audio = Audio.getInstance();
 		this.hardware = HardwareIO.getInstance();
 	}
 
+	/*
+	 * Get the controller instance
+	 */
 	public static Controller getInstance() {
 		if (instance == null) {
 			instance = new Controller();
@@ -25,10 +31,17 @@ public class Controller implements Runnable {
 		return instance;
 	}
 
+	/*
+	 * Start the controller thread
+	 */
 	public void start() {
 		new Thread(this).start();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		boolean isReseted = true;
@@ -109,7 +122,7 @@ public class Controller implements Runnable {
 				}
 				if (gui.isResetPressed()) {
 					gui.reset();
-					//hardware.resetOutput();
+					hardware.resetOutput();
 					isReseted = true;
 					scoreBot = 0;
 					scorePlayer = 0;

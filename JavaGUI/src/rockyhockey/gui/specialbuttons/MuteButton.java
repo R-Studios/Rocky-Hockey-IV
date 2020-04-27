@@ -29,6 +29,9 @@ public class MuteButton extends JButton {
 
 	private boolean defaultIcon;
 
+	/*
+	 * Constructor
+	 */
 	public MuteButton() {
 		super();
 		defaultIcon = true;
@@ -42,6 +45,9 @@ public class MuteButton extends JButton {
 		}
 	}
 
+	/*
+	 * Toggles the displayed icon
+	 */
 	public void toggleIcon() {
 		if (this.iconNotNull) {
 			this.defaultIcon ^= true;

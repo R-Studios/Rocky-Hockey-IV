@@ -9,13 +9,6 @@ public class Audio {
 	private volatile AudioThread backgroundMusicThread = null;
 
 	/*
-	 * Constructor
-	 */
-	private Audio() {
-
-	}
-
-	/*
 	 * Get the only audio instance for MVC pattern
 	 */
 	public static Audio getInstance() {
@@ -59,7 +52,7 @@ public class Audio {
 	}
 
 	/*
-	 * Event sound toggle
+	 * Toggle sound
 	 */
 	public void enableSound() {
 		soundEnabled = true;
@@ -68,7 +61,7 @@ public class Audio {
 	}
 
 	/*
-	 * Event sound toggle
+	 * Toggle sound
 	 */
 	public void disableSound() {
 		soundEnabled = false;
@@ -77,7 +70,7 @@ public class Audio {
 	}
 
 	/*
-	 * Play sound for streaks
+	 * Play sound for point streaks
 	 */
 	public void playScoreSound(int run, int score) {
 		switch (run) {
@@ -100,7 +93,7 @@ public class Audio {
 	}
 
 	/*
-	 * Play sound for a goal
+	 * Play sound for each goal
 	 */
 	public void playGoalSound(int goal) {
 		switch (goal) {

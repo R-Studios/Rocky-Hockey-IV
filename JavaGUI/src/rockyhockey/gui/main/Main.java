@@ -4,6 +4,9 @@ import rockyhockey.gui.mvc.Controller;
 
 public class Main {
 
+	/*
+	 * Initialize MVC pattern
+	 */
 	public static void main(String[] args) {
 		Controller controller = Controller.getInstance();
 		controller.start();

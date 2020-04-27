@@ -67,6 +67,9 @@ public class Gui extends JFrame implements ActionListener {
 
 	private MuteButton muteButton;
 
+	/*
+	 * Get the gui instance
+	 */
 	public static Gui getInstance() {
 		if (instance == null) {
 			instance = new Gui();
@@ -74,10 +77,16 @@ public class Gui extends JFrame implements ActionListener {
 		return instance;
 	}
 
+	/*
+	 * Get image from inputstream
+	 */
 	private ImageIcon getImageIcon(String filename) throws Exception {
 		return new ImageIcon(ImageIO.read(ResourceLoader.load("/img/" + filename)));
 	}
 
+	/*
+	 * Constructor
+	 */
 	private Gui() {
 		super();
 
@@ -102,6 +111,9 @@ public class Gui extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
+	/*
+	 * Add the buttons to the JPanel
+	 */
 	private void addComponents() {
 		this.setContentPane(contentPanel);
 
@@ -117,6 +129,9 @@ public class Gui extends JFrame implements ActionListener {
 		contentPanel.add(muteButton);
 	}
 
+	/*
+	 * Set the bounds of the JButtons
+	 */
 	public void setBounds() {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -145,6 +160,9 @@ public class Gui extends JFrame implements ActionListener {
 
 	}
 
+	/*
+	 * Create all gui elements
+	 */
 	private void initGuiElements() {
 		Font font = new Font("Arial", Font.BOLD, 32);
 
@@ -205,6 +223,9 @@ public class Gui extends JFrame implements ActionListener {
 		resetButton.setIcon(resetIcon);
 	}
 
+	/*
+	 * Reset all gui text
+	 */
 	public void reset() {
 		playerLabel.setText("Player");
 		botLabel.setText("Bot");
@@ -215,6 +236,9 @@ public class Gui extends JFrame implements ActionListener {
 		repaint();
 	}
 
+	/*
+	 * Returns if play button was pressed
+	 */
 	public boolean isPlayPressed() {
 		if (this.playPressed) {
 			this.playPressed = false;
@@ -223,6 +247,9 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
+	/*
+	 * Returns if reset button was pressed
+	 */
 	public boolean isResetPressed() {
 		if (this.resetPressed) {
 			this.resetPressed = false;
@@ -231,6 +258,9 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
+	/*
+	 * Returns if mute button was pressed
+	 */
 	public boolean isMutePressed() {
 		if (this.mutePressed) {
 			this.mutePressed = false;
@@ -239,16 +269,25 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
+	/*
+	 * Set the score of the player
+	 */
 	public void setPlayerScore(int score) {
 		this.playerScoreLabel.setText("" + score);
 		this.playerScoreLabel.repaint();
 	}
 
+	/*
+	 * Set the score of the bot
+	 */
 	public void setBotScore(int score) {
 		this.botScoreLabel.setText("" + score);
 		this.botScoreLabel.repaint();
 	}
 
+	/*
+	 * Update the remaining time
+	 */
 	public void setRemainingTime(long countdownTime) {
 		int time = (int) (countdownTime / 1000000000);
 		int min = time / 60;
@@ -260,6 +299,10 @@ public class Gui extends JFrame implements ActionListener {
 		this.timeLabel.repaint();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public void actionPerformed(ActionEvent event) {
 		JButton sourceButton = (JButton) event.getSource();
 		if (sourceButton == this.playButton) {

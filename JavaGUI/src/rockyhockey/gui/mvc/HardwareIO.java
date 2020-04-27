@@ -13,6 +13,9 @@ public class HardwareIO implements Runnable {
 	private volatile boolean playerLs;
 	private volatile boolean botLs;
 
+	/*
+	 * Get the hardwareio instance
+	 */
 	public static HardwareIO getInstance() {
 		if (instance == null) {
 			instance = new HardwareIO();
@@ -20,6 +23,9 @@ public class HardwareIO implements Runnable {
 		return instance;
 	}
 
+	/*
+	 * Constructor
+	 */
 	private HardwareIO() {
 		try {
 			if (!initGPIOasInput(5) || !initGPIOasInput(6)) {
@@ -35,6 +41,9 @@ public class HardwareIO implements Runnable {
 
 	}
 
+	/*
+	 * Initialize gpio pin as input
+	 */
 	public boolean initGPIOasInput(int gpio) throws IOException {
 		File gpioLocation = new File(GPIO_DIRECTORY + "gpio" + gpio + "/value");
 		if (gpioLocation.exists()) {
@@ -46,6 +55,9 @@ public class HardwareIO implements Runnable {
 		return gpioLocation.exists();
 	}
 
+	/*
+	 * Read signal from a specific gpio pin
+	 */
 	public boolean readGPIOSignal(int gpio) {
 		try {
 			FileReader fr = new FileReader(new File(GPIO_DIRECTORY + "gpio" + gpio + "/value"));
@@ -61,11 +73,17 @@ public class HardwareIO implements Runnable {
 		return false;
 	}
 
+	/*
+	 * Reset the output
+	 */
 	public void resetOutput() {
 		playerLs = false;
 		botLs = false;
 	}
 
+	/*
+	 * Returns if player is active
+	 */
 	public boolean isPlayerLsActive() {
 		if (playerLs) {
 			playerLs = false;
@@ -74,6 +92,9 @@ public class HardwareIO implements Runnable {
 		return false;
 	}
 
+	/*
+	 * Returns if bot is active
+	 */
 	public boolean isBotLsActive() {
 		if (botLs) {
 			botLs = false;
@@ -82,14 +103,24 @@ public class HardwareIO implements Runnable {
 		return false;
 	}
 
+	/*
+	 * Set the player active
+	 */
 	public void setPlayerLs() {
 		playerLs = true;
 	}
 
+	/*
+	 * Set the bot active
+	 */
 	public void setBotLs() {
 		botLs = true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		try {
