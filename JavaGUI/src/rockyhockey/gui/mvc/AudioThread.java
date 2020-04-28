@@ -37,7 +37,7 @@ public class AudioThread extends Thread implements Runnable {
 	 * Constructor
 	 */
 	private AudioThread(String filename, boolean loop) {
-		this.filename = filename;
+		this.filename = "/sounds/" + filename;
 		this.loop = loop;
 	}
 
@@ -48,8 +48,7 @@ public class AudioThread extends Thread implements Runnable {
 	@Override
 	public void run() {
 		try {
-			
-			soundInputStream = ResourceLoader.load("/sounds/" + filename);
+			soundInputStream = ResourceLoader.load(filename);
 			
 			InputStream bufferedIn = new BufferedInputStream(soundInputStream);
 			
@@ -59,30 +58,34 @@ public class AudioThread extends Thread implements Runnable {
 			
 			soundClip.open(inputStream);
 			
-			if (loop) {
-				soundClip.loop(Clip.LOOP_CONTINUOUSLY);
-			}
-			else {
-				soundClip.loop(0);
-				soundClip.addLineListener(event -> {
-					if(LineEvent.Type.STOP.equals(event.getType())) {
-						soundClip.close();
-						soundClip.flush();
-						interrupt();
+			try {
+				synchronized (this) {
+					if (loop) {
+						soundClip.loop(Clip.LOOP_CONTINUOUSLY);
+	
+						wait();
 					}
-				});
-			}  
-			
-			while (true) {
-				if (Thread.interrupted()) {
-					soundClip.close();
-					soundClip.flush();
-					interrupt();
+					else {
+						soundClip.loop(0);
+						soundClip.addLineListener(event -> {
+							if(LineEvent.Type.STOP.equals(event.getType())) {
+								interrupt();
+							}
+						});
+						
+						wait(soundClip.getMicrosecondLength() / 1000);
+					}
 				}
+			} 
+			catch (InterruptedException e) {
+				System.out.println("stopped playing " + filename);
 			}
+
+			soundClip.close();
+			soundClip.flush();
 		}
 		catch (Exception e) {
-			//System.out.println("exception while playing file: " + soundFile.getAbsolutePath());
+			System.out.println("exception while playing: " + filename);
 			System.out.println("exception type: " + e.getClass().getCanonicalName());
 			System.out.println("message: " + e.getMessage());
 			System.out.println();
