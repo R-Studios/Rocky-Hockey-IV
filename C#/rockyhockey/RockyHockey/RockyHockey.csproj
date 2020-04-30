@@ -49,8 +49,6 @@
   <ItemGroup>
     <Compile Include="CommandHandler.cs" />
     <Compile Include="ConsoleCommands.cs" />
-    <Compile Include="FeatureExamples.cs" />
-    <Compile Include="GenericVectorExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
