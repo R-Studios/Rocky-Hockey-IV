@@ -9,6 +9,12 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class AudioThread extends Thread implements Runnable {
 	
 	private Clip soundClip;
@@ -16,33 +22,40 @@ public class AudioThread extends Thread implements Runnable {
 	private String filename;
 	private boolean loop;
 
-	/*
-	 * Create a new AudioThread for each sound
+	/**
+	 * Creates a new AudioThread for the sound
+	 * @param filename The audio filename
+	 * @param loop Should the sound be looped
+	 * @return Returns the new AudioThread for the sound
 	 */
 	public static AudioThread playSound(String filename, boolean loop) {
 		AudioThread soundThread = new AudioThread(filename, loop);
 		soundThread.start();
-
 		return soundThread;
 	}
 
-	/*
-	 * Play a specific sound
+	/**
+	 * Redirects method call for the default parameter
+	 * @param filename The audio filename
+	 * @return Returns method call for the default parameter
 	 */
 	public static AudioThread playSound(String filename) {
 		return playSound(filename, false);
 	}
 
-	/*
+	/**
 	 * Constructor
+	 * @param filename The audio filename
+	 * @param loop Should the sound be looped
 	 */
 	private AudioThread(String filename, boolean loop) {
 		this.filename = "/sounds/" + filename;
 		this.loop = loop;
 	}
 
-	/*
-	 * (non-Javadoc)
+
+	/**
+	 * Plays the sound until it ends or is interrupted
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
@@ -91,4 +104,5 @@ public class AudioThread extends Thread implements Runnable {
 			System.out.println();
 		}
 	}
+	
 }

@@ -19,6 +19,12 @@ import javax.swing.JPanel;
 import rockyhockey.gui.specialbuttons.IconButton;
 import rockyhockey.gui.specialbuttons.MuteButton;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class Gui extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -40,9 +46,19 @@ public class Gui extends JFrame implements ActionListener {
 
 	private boolean soundActive;
 
+	/**
+	 * 
+	 * @author Roman Wecker
+	 * @version 1.0
+	 *
+	 */
 	class PanelWithBackground extends JPanel {
-		private static final long serialVersionUID = -3597732424273848852L;
+		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Draws the background image
+		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+		 */
 		@Override
 		protected void paintComponent(Graphics g) {
 			g.clearRect(0, 0, getBounds().width, getBounds().height);
@@ -67,8 +83,9 @@ public class Gui extends JFrame implements ActionListener {
 
 	private MuteButton muteButton;
 
-	/*
-	 * Get the gui instance
+	/**
+	 * Creates a single gui instance
+	 * @return The single gui instace
 	 */
 	public static Gui getInstance() {
 		if (instance == null) {
@@ -77,14 +94,18 @@ public class Gui extends JFrame implements ActionListener {
 		return instance;
 	}
 
-	/*
-	 * Get image from inputstream
+	/**
+	 * Creates a new ImageIcon from InputStream
+	 * @see ResourceLoader#load(String path)
+	 * @param filename The image filename
+	 * @return The ImageIcon from the path
+	 * @throws Exception Image could not be found
 	 */
 	private ImageIcon getImageIcon(String filename) throws Exception {
 		return new ImageIcon(ImageIO.read(ResourceLoader.load("/img/" + filename)));
 	}
 
-	/*
+	/**
 	 * Constructor
 	 */
 	private Gui() {
@@ -111,8 +132,8 @@ public class Gui extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	/*
-	 * Add the buttons to the JPanel
+	/**
+	 * Adds all gui elements to the JPanel
 	 */
 	private void addComponents() {
 		this.setContentPane(contentPanel);
@@ -129,8 +150,8 @@ public class Gui extends JFrame implements ActionListener {
 		contentPanel.add(muteButton);
 	}
 
-	/*
-	 * Set the bounds of the JButtons
+	/**
+	 * Sets the bounds for all gui elements
 	 */
 	public void setBounds() {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -157,11 +178,10 @@ public class Gui extends JFrame implements ActionListener {
 		playButton.setBounds(eigth_of_width, 6 * eight_of_height, 2 * eigth_of_width, eight_of_height);
 		resetButton.setBounds(width - 3 * eigth_of_width, 6 * eight_of_height, 2 * eigth_of_width, eight_of_height);
 		scoreColon.setBounds(3 * eigth_of_width, 3 * eight_of_height, 2 * eigth_of_width, eight_of_height);
-
 	}
 
-	/*
-	 * Create all gui elements
+	/**
+	 * Creates all gui elements
 	 */
 	private void initGuiElements() {
 		Font font = new Font("Arial", Font.BOLD, 32);
@@ -223,8 +243,8 @@ public class Gui extends JFrame implements ActionListener {
 		resetButton.setIcon(resetIcon);
 	}
 
-	/*
-	 * Reset all gui text
+	/**
+	 * Resets all gui texts and colors
 	 */
 	public void reset() {
 		playerLabel.setText("Player");
@@ -236,8 +256,9 @@ public class Gui extends JFrame implements ActionListener {
 		repaint();
 	}
 
-	/*
-	 * Returns if play button was pressed
+	/**
+	 * Was the play button pressed
+	 * @return Returns if the play button was pressed
 	 */
 	public boolean isPlayPressed() {
 		if (this.playPressed) {
@@ -247,8 +268,9 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
-	/*
-	 * Returns if reset button was pressed
+	/**
+	 * Was the reset button pressed
+	 * @return Returns if the reset button was pressed
 	 */
 	public boolean isResetPressed() {
 		if (this.resetPressed) {
@@ -258,8 +280,9 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
-	/*
-	 * Returns if mute button was pressed
+	/**
+	 * Was the mute button pressed
+	 * @return Returns if the mute button was pressed
 	 */
 	public boolean isMutePressed() {
 		if (this.mutePressed) {
@@ -269,24 +292,27 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
-	/*
-	 * Set the score of the player
+	/**
+	 * Update the score of the player
+	 * @param score The new score of the player
 	 */
 	public void setPlayerScore(int score) {
 		this.playerScoreLabel.setText("" + score);
 		this.playerScoreLabel.repaint();
 	}
 
-	/*
-	 * Set the score of the bot
+	/**
+	 * Update the score of the bot
+	 * @param score The new score of the bot
 	 */
 	public void setBotScore(int score) {
 		this.botScoreLabel.setText("" + score);
 		this.botScoreLabel.repaint();
 	}
 
-	/*
-	 * Update the remaining time
+	/**
+	 * Calculate and update the remaining time
+	 * @param countdownTime The time in milliseconds
 	 */
 	public void setRemainingTime(long countdownTime) {
 		int time = (int) (countdownTime / 1000000000);
@@ -299,8 +325,8 @@ public class Gui extends JFrame implements ActionListener {
 		this.timeLabel.repaint();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * Handles button events
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent event) {

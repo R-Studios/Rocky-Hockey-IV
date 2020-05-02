@@ -1,5 +1,11 @@
 package rockyhockey.gui.mvc;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class Controller implements Runnable {
 
 	public static final long GAME_TIME = 600000000000l;
@@ -12,8 +18,8 @@ public class Controller implements Runnable {
 	private Audio audio;
 	private HardwareIO hardware;
 
-	/*
-	 * Initialize MVC pattern
+	/**
+	 * Creates the MVC pattern
 	 */
 	private Controller() {
 		this.gui = Gui.getInstance();
@@ -21,8 +27,9 @@ public class Controller implements Runnable {
 		this.hardware = HardwareIO.getInstance();
 	}
 
-	/*
-	 * Get the controller instance
+	/**
+	 * Creates a single controller instance
+	 * @return The single controller instance
 	 */
 	public static Controller getInstance() {
 		if (instance == null) {
@@ -31,15 +38,15 @@ public class Controller implements Runnable {
 		return instance;
 	}
 
-	/*
-	 * Start the controller thread
+	/**
+	 * Starts the controller thread
 	 */
 	public void start() {
 		new Thread(this).start();
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * The main game logic
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -137,4 +144,5 @@ public class Controller implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
 }

@@ -8,9 +8,15 @@ import javax.swing.JButton;
 
 import rockyhockey.gui.mvc.ResourceLoader;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class MuteButton extends JButton {
 
-	private static final long serialVersionUID = 6330466439406908672L;
+	private static final long serialVersionUID = 1L;
 
 	private static ImageIcon mutedIcon;
 	private static ImageIcon unmutedIcon;
@@ -29,7 +35,7 @@ public class MuteButton extends JButton {
 
 	private boolean defaultIcon;
 
-	/*
+	/**
 	 * Constructor
 	 */
 	public MuteButton() {
@@ -45,7 +51,7 @@ public class MuteButton extends JButton {
 		}
 	}
 
-	/*
+	/**
 	 * Toggles the displayed icon
 	 */
 	public void toggleIcon() {

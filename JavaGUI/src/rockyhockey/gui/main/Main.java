@@ -2,10 +2,17 @@ package rockyhockey.gui.main;
 
 import rockyhockey.gui.mvc.Controller;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class Main {
 
-	/*
-	 * Initialize MVC pattern
+	/**
+	 * Initialize the Model View Controller Pattern
+	 * @param args Optional start parameters
 	 */
 	public static void main(String[] args) {
 		Controller controller = Controller.getInstance();
