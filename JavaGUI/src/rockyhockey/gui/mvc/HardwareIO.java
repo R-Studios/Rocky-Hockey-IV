@@ -5,6 +5,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class HardwareIO implements Runnable {
 
 	private static HardwareIO instance;
@@ -13,6 +19,10 @@ public class HardwareIO implements Runnable {
 	private volatile boolean playerLs;
 	private volatile boolean botLs;
 
+	/**
+	 * Creates a single hardware io instance
+	 * @return The single hardware io instance
+	 */
 	public static HardwareIO getInstance() {
 		if (instance == null) {
 			instance = new HardwareIO();
@@ -20,6 +30,9 @@ public class HardwareIO implements Runnable {
 		return instance;
 	}
 
+	/**
+	 * Constructor
+	 */
 	private HardwareIO() {
 		try {
 			if (!initGPIOasInput(5) || !initGPIOasInput(6)) {
@@ -35,6 +48,12 @@ public class HardwareIO implements Runnable {
 
 	}
 
+	/**
+	 * Initializes GPIO pins as input
+	 * @param gpio The GPIO pin on the raspberry pi
+	 * @return Returns true if GPIO pins exist
+	 * @throws IOException The GPIO pins could not be found
+	 */
 	public boolean initGPIOasInput(int gpio) throws IOException {
 		File gpioLocation = new File(GPIO_DIRECTORY + "gpio" + gpio + "/value");
 		if (gpioLocation.exists()) {
@@ -46,6 +65,11 @@ public class HardwareIO implements Runnable {
 		return gpioLocation.exists();
 	}
 
+	/**
+	 * Read a signal from a specific GPIO pin
+	 * @param gpio The GPIO pin on the raspberry pi
+	 * @return Returns signal on GPIO pin
+	 */
 	public boolean readGPIOSignal(int gpio) {
 		try {
 			FileReader fr = new FileReader(new File(GPIO_DIRECTORY + "gpio" + gpio + "/value"));
@@ -61,11 +85,18 @@ public class HardwareIO implements Runnable {
 		return false;
 	}
 
+	/**
+	 * Resets the output
+	 */
 	public void resetOutput() {
 		playerLs = false;
 		botLs = false;
 	}
 
+	/**
+	 * Is the player active
+	 * @return Returns if the player is active
+	 */
 	public boolean isPlayerLsActive() {
 		if (playerLs) {
 			playerLs = false;
@@ -74,6 +105,10 @@ public class HardwareIO implements Runnable {
 		return false;
 	}
 
+	/**
+	 * Is the bot active
+	 * @return Returns if the bot is active
+	 */
 	public boolean isBotLsActive() {
 		if (botLs) {
 			botLs = false;
@@ -82,14 +117,24 @@ public class HardwareIO implements Runnable {
 		return false;
 	}
 
+	/**
+	 * Sets the player active
+	 */
 	public void setPlayerLs() {
 		playerLs = true;
 	}
 
+	/**
+	 * Sets the bot active
+	 */
 	public void setBotLs() {
 		botLs = true;
 	}
 
+	/**
+	 * GPIO read process
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		try {

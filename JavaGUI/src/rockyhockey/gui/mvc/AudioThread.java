@@ -1,71 +1,108 @@
 package rockyhockey.gui.mvc;
 
-import java.io.File;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class AudioThread extends Thread implements Runnable {
 	
-	private File soundFile;
+	private Clip soundClip;
+	private InputStream soundInputStream;
+	private String filename;
 	private boolean loop;
 
-	public static AudioThread playSound(File soundFile, boolean loop) {
-		if (soundFile != null && soundFile.exists() && !soundFile.isDirectory()) {
-			AudioThread soundThread = new AudioThread(soundFile, loop);
-			soundThread.start();
-
-			return soundThread;
-		}
-
-		return null;
+	/**
+	 * Creates a new AudioThread for the sound
+	 * @param filename The audio filename
+	 * @param loop Should the sound be looped
+	 * @return Returns the new AudioThread for the sound
+	 */
+	public static AudioThread playSound(String filename, boolean loop) {
+		AudioThread soundThread = new AudioThread(filename, loop);
+		soundThread.start();
+		return soundThread;
 	}
 
-	public static AudioThread playSound(File soundFile) {
-		return playSound(soundFile, false);
+	/**
+	 * Redirects method call for the default parameter
+	 * @param filename The audio filename
+	 * @return Returns method call for the default parameter
+	 */
+	public static AudioThread playSound(String filename) {
+		return playSound(filename, false);
 	}
 
-	private AudioThread(File soundFile, boolean loop) {
-		this.soundFile = soundFile;
+	/**
+	 * Constructor
+	 * @param filename The audio filename
+	 * @param loop Should the sound be looped
+	 */
+	private AudioThread(String filename, boolean loop) {
+		this.filename = "/sounds/" + filename;
 		this.loop = loop;
 	}
 
+
+	/**
+	 * Plays the sound until it ends or is interrupted
+	 * @see java.lang.Thread#run()
+	 */
 	@Override
 	public void run() {
 		try {
-			do {
-				AudioInputStream inputStream = AudioSystem.getAudioInputStream(soundFile);
-
-				Clip soundClip = AudioSystem.getClip();
-
-				soundClip.open(inputStream);
-
-				long clipDuration = soundClip.getMicrosecondLength() / 1000;
-
-				try {
-					synchronized (this) {
-						soundClip.start();
-
-						wait(clipDuration);
+			soundInputStream = ResourceLoader.load(filename);
+			
+			InputStream bufferedIn = new BufferedInputStream(soundInputStream);
+			
+			AudioInputStream inputStream = AudioSystem.getAudioInputStream(bufferedIn);
+			
+			soundClip = AudioSystem.getClip();
+			
+			soundClip.open(inputStream);
+			
+			try {
+				synchronized (this) {
+					if (loop) {
+						soundClip.loop(Clip.LOOP_CONTINUOUSLY);
+	
+						wait();
 					}
-				} catch (InterruptedException e) {
-					soundClip.stop();
-
-					loop = false;
-
-					System.out.println("stopped playing " + soundFile.getAbsolutePath());
+					else {
+						soundClip.loop(0);
+						soundClip.addLineListener(event -> {
+							if(LineEvent.Type.STOP.equals(event.getType())) {
+								interrupt();
+							}
+						});
+						
+						wait(soundClip.getMicrosecondLength() / 1000);
+					}
 				}
-
-				soundClip.close();
+			} 
+			catch (InterruptedException e) {
+				System.out.println("stopped playing " + filename);
 			}
-			while (loop);
+
+			soundClip.close();
+			soundClip.flush();
 		}
 		catch (Exception e) {
-			System.out.println("exception while playing file: " + soundFile.getAbsolutePath());
+			System.out.println("exception while playing: " + filename);
 			System.out.println("exception type: " + e.getClass().getCanonicalName());
 			System.out.println("message: " + e.getMessage());
 			System.out.println();
 		}
 	}
+	
 }
