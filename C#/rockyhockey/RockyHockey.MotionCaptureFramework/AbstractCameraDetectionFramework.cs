@@ -30,7 +30,7 @@ namespace RockyHockey.MotionCaptureFramework
         {
             try
             {
-                camera = new VideoCapture(Config.Instance.Camera1Index);
+                camera = new VideoCapture(Config.Instance.Camera1.index);
                 camera.SetCaptureProperty(CapProp.Fps, TargetedFramesPerSecond);
                 camera.SetCaptureProperty(CapProp.FrameWidth, TargetedCameraHeight);
                 camera.SetCaptureProperty(CapProp.FrameHeight, TargetedCameraWidth);
