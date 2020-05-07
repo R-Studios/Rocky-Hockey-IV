@@ -28,7 +28,7 @@ namespace RockyHockey.MotionCaptureFramework
                 //Y = cameraPosition.X,
                 //X = playfieldHeightInPx - (cameraPosition.Y - offsetBottomSide),
                 Y = cameraPosition.X,
-                X = Config.Instance.Camera1GameFieldHeight - cameraPosition.Y,
+                X = Config.Instance.Camera1.FieldSize.Height - cameraPosition.Y,
                 FrameNumber = cameraPosition.FrameNumber
             };
         }

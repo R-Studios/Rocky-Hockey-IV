@@ -23,7 +23,8 @@ namespace RockyHockey.Common
         /// <returns>executeable Task</returns>
         public async Task Log(Exception ex)
         {
-            await Log(ex.Message).ConfigureAwait(false);
+            string message = ex.Message + "\n" + ex.StackTrace;
+            await Log(message).ConfigureAwait(false);
             Exception innerException = ex.InnerException;
             while (innerException != null)
             {

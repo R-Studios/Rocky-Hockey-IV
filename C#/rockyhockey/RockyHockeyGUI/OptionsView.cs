@@ -47,8 +47,8 @@ namespace RockyHockeyGUI
             DifficultyComboBox.SelectedItem = Config.Instance.GameDifficulty.ToString();
             PunchAxisPositionTextBox.Text = Config.Instance.ImaginaryAxePosition.ToString();
             ToleranceTextBox.Text = Config.Instance.Tolerance.ToString();
-            Camera1IndexTextBox.Text = Config.Instance.Camera1Index.ToString();
-            Camera2IndexTextBox.Text = Config.Instance.Camera2Index.ToString();
+            Camera1IndexTextBox.Text = Config.Instance.Camera1.index.ToString();
+            Camera2IndexTextBox.Text = Config.Instance.Camera2.index.ToString();
             MaximumBatVelocityTextBox.Text = Config.Instance.MaxBatVelocity.ToString();
             RestPositionDivisorTextBox.Text = Config.Instance.RestPositionDivisor.ToString();
         }
@@ -68,13 +68,12 @@ namespace RockyHockeyGUI
                 Config.Instance.GameDifficulty = (Difficulties)Enum.Parse(typeof(Difficulties), DifficultyComboBox.SelectedItem.ToString());
                 Config.Instance.ImaginaryAxePosition = Convert.ToInt32(PunchAxisPositionTextBox.Text);
                 Config.Instance.Tolerance = Convert.ToInt32(ToleranceTextBox.Text);
-                Config.Instance.Camera1Index = Convert.ToInt32(Camera1IndexTextBox.Text);
-                Config.Instance.Camera2Index = Convert.ToInt32(Camera2IndexTextBox.Text);
+                Config.Instance.Camera1.index = Convert.ToInt32(Camera1IndexTextBox.Text);
+                Config.Instance.Camera2.index = Convert.ToInt32(Camera2IndexTextBox.Text);
                 Config.Instance.MaxBatVelocity = Convert.ToDouble(MaximumBatVelocityTextBox.Text);
                 Config.Instance.RestPositionDivisor = Convert.ToDouble(RestPositionDivisorTextBox.Text);
 
-                var objectSerializer = new ObjectSerializer("RockyHockeyConfig.xml");
-                objectSerializer.SerializeObject(Config.Instance);
+                Config.Instance.save();
                 Close();
             }
             catch

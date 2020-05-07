@@ -35,7 +35,6 @@ namespace RockyHockeyGUI
             {
                 StopButton.Enabled = false;
                 CalibrateButton.Enabled = false;
-                ConfigInitializer.InitializeConfig(new ObjectSerializer("RockyHockeyConfig.xml"));
 
                 myModel = new PlotModel();
                 var timer = new System.Windows.Forms.Timer { Interval = 50 };
@@ -115,8 +114,7 @@ namespace RockyHockeyGUI
             }
             catch (Exception ex)
             {
-                var startException = new Exception("Error while executing RockyHockey", ex);
-                await MsgBoxLogger?.Log(startException);
+                await MsgBoxLogger?.Log(ex);
                 MsgBoxLogger?.Show();
             }
         }

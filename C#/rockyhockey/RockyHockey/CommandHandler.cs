@@ -17,7 +17,6 @@ namespace RockyHockey
         public CommandHandler(ILogger logger)
         {
             this.logger = logger;
-            ConfigInitializer.InitializeConfig(objectSerializer);
         }
 
         private ILogger logger;
@@ -26,8 +25,6 @@ namespace RockyHockey
         /// Instanz des MoveCalculationProvider, um die KI zu starten
         /// </summary>
         private IMoveCalculationProvider moveCalculationProvider = new MoveCalculationProvider();
-
-        private ObjectSerializer objectSerializer = new ObjectSerializer("RockyHockeyConfig.xml");
 
         /// <summary>
         /// TextFileLogger
@@ -70,12 +67,12 @@ namespace RockyHockey
                         SetTolerance();
                         break;
                     case ConsoleCommands.SetCameraIndexOne:
-                        Config.Instance.Camera1Index = SetIntValue("camera index one", Config.Instance.Camera1Index);
-                        objectSerializer.SerializeObject(Config.Instance);
+                        Config.Instance.Camera1.index = SetIntValue("camera index one", Config.Instance.Camera1.index);
+                        Config.Instance.save();
                         break;
                     case ConsoleCommands.SetCameraIndexTwo:
-                        Config.Instance.Camera2Index = SetIntValue("camera index two", Config.Instance.Camera2Index);
-                        objectSerializer.SerializeObject(Config.Instance);
+                        Config.Instance.Camera2.index = SetIntValue("camera index two", Config.Instance.Camera2.index);
+                        Config.Instance.save();
                         break;
                     case ConsoleCommands.SetMaxBatVelocity:
                         SetMaxBatVelocity();
@@ -178,25 +175,25 @@ namespace RockyHockey
             }
             Config.Instance.GameDifficulty = consoleCommand;
             logger?.Log($"difficulty changed to {consoleCommand}").Wait();
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
 
         private void SetFrameRate()
         {
             Config.Instance.FrameRate = SetIntValue("framerate", Config.Instance.FrameRate);
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
 
         private void SetPunchAxis()
         {
             Config.Instance.ImaginaryAxePosition = SetIntValue("punch axis position", Config.Instance.ImaginaryAxePosition);
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
 
         private void SetTolerance()
         {
             Config.Instance.Tolerance = SetIntValue("tolerance", Config.Instance.Tolerance);
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
 
         private void SetGameFieldSize()
@@ -204,20 +201,20 @@ namespace RockyHockey
             int width = SetIntValue("width", Config.Instance.GameFieldSize.Width);
             int height = SetIntValue("height", Config.Instance.GameFieldSize.Height);
             Config.Instance.GameFieldSize = new Size(width, height);
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
 
         private void SetMaxBatVelocity()
         {
             //TODO: bestimmen ob das Setzen eines Integer-Wertes für die Geschwindigkeit reicht
             Config.Instance.MaxBatVelocity = SetIntValue("max bat velocity", Convert.ToInt32(Config.Instance.MaxBatVelocity));
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
 
         private void SetRestPositionDivisor()
         {
             Config.Instance.RestPositionDivisor = SetIntValue("rest position divisor", Convert.ToInt32(Config.Instance.RestPositionDivisor));
-            objectSerializer.SerializeObject(Config.Instance);
+            Config.Instance.save();
         }
     }
 }

@@ -9,14 +9,73 @@ namespace RockyHockey.Common
     [Serializable]
     public class Config
     {
-        private Config() { }
+        private Config()
+        {
+            GameFieldSize = new Size(423, 238);
+            FrameRate = 187;
+            GameDifficulty = Difficulties.hard;
+            ImaginaryAxePosition = 320;
+            Tolerance = 5;
+            MaxBatVelocity = 0.4;
+            RestPositionDivisor = 16;
+
+            Camera1 = new CameraConfig(0);
+            Camera1.FieldSize = new Size(320, 240);
+            Camera1.UpperRight = new Coordinate(320, 0);
+            Camera1.LowerLeft = new Coordinate(0, 240);
+            Camera1.LowerRight = new Coordinate(320, 240);
+
+            Camera2 = new CameraConfig(1);
+            Camera2.FieldSize = new Size(320, 240);
+            Camera2.UpperRight = new Coordinate(320, 0);
+            Camera2.LowerLeft = new Coordinate(0, 240);
+            Camera2.LowerRight = new Coordinate(320, 240);
+        }
 
         private static Config instance;
+
+        private static string configFile = "RockyHockeyConfig.xml";
+
+        /// <summary>
+        /// tries to load config from file
+        /// if none exists a new config gets created
+        /// </summary>
+        /// <returns></returns>
+        private static Config Load()
+        {
+            Config config = ObjectSerializer.DeserializeObject<Config>(configFile);
+
+            if (config == null)
+            {
+                config = new Config();
+                config.save();
+            }
+
+            return config;
+        }
+
+        /// <summary>
+        /// saves / serializes config object into file
+        /// </summary>
+        public void save()
+        {
+            ObjectSerializer.SerializeObject(this, configFile);
+        }
 
         /// <summary>
         /// Singleton instance
         /// </summary>
-        public static Config Instance => instance ?? (instance = new Config());
+        public static Config Instance => instance ?? (instance = Load());
+
+        /// <summary>
+        /// config of camera 1
+        /// </summary>
+        public CameraConfig Camera1 { get; set; }
+
+        /// <summary>
+        /// config of camera 2
+        /// </summary>
+        public CameraConfig Camera2 { get; set; }
 
         /// <summary>
         /// Size of the gamefield
@@ -44,16 +103,6 @@ namespace RockyHockey.Common
         public Difficulties GameDifficulty { get; set; }
 
         /// <summary>
-        /// Index of the first camera
-        /// </summary>
-        public int Camera1Index { get; set; }
-
-        /// <summary>
-        /// Index of the second camera
-        /// </summary>
-        public int Camera2Index { get; set; }
-
-        /// <summary>
         /// Maximum velocity of the bat
         /// </summary>
         public double MaxBatVelocity { get; set; }
@@ -62,125 +111,5 @@ namespace RockyHockey.Common
         /// Determines the Bat Rest Position on the X-Axis
         /// </summary>
         public double RestPositionDivisor { get; set; }
-
-        /// <summary>
-        /// GameFieldWidth in px for Camera 1
-        /// </summary>
-        public int Camera1GameFieldWidth { get; set; }
-
-        /// <summary>
-        /// GameFieldHeigth in px for Camera 1
-        /// </summary>
-        public int Camera1GameFieldHeight { get; set; }
-
-        /// <summary>
-        /// Offset from top side for camera 1
-        /// </summary>
-        public int Camera1OffsetFromTop { get; set; }
-
-        /// <summary>
-        /// Offset from left side for camera 1
-        /// </summary>
-        public int Camera1OffsetFromLeft { get; set; }
-
-        /// <summary>
-        /// x position for upper left position for warping for camera 1
-        /// </summary>
-        public int Camera1UpperLeftPositionX { get; set; }
-
-        /// <summary>
-        /// y position for upper left position for warping for camera 1
-        /// </summary>
-        public int Camera1UpperLeftPositionY { get; set; }
-
-        /// <summary>
-        /// x position for upper right position for warping for camera 1
-        /// </summary>
-        public int Camera1UpperRightPositionX { get; set; }
-
-        /// <summary>
-        /// y position for upper right position for warping for camera 1
-        /// </summary>
-        public int Camera1UpperRightPositionY { get; set; }
-
-        /// <summary>
-        /// x position for lower left position for warping for camera 1
-        /// </summary>
-        public int Camera1LowerLeftPositionX { get; set; }
-
-        /// <summary>
-        /// y position for lower left position for warping for camera 1
-        /// </summary>
-        public int Camera1LowerLeftPositionY { get; set; }
-
-        /// <summary>
-        /// x position for lower right position for warping for camera 1
-        /// </summary>
-        public int Camera1LowerRightPositionX { get; set; }
-
-        /// <summary>
-        /// y position for lower right position for warping for camera 1
-        /// </summary>
-        public int Camera1LowerRightPositionY { get; set; }
-
-        /// <summary>
-        /// GameFieldHeigth in px for Camera 2
-        /// </summary>
-        public int Camera2GameFieldWidth { get; set; }
-
-        /// <summary>
-        /// GameFieldHeigth in px for Camera 2
-        /// </summary>
-        public int Camera2GameFieldHeight { get; set; }
-
-        /// <summary>
-        /// Offset from top side for camera 2
-        /// </summary>
-        public int Camera2OffsetFromTop { get; set; }
-
-        /// <summary>
-        /// Offset from top side for camera 2
-        /// </summary>
-        public int Camera2OffsetFromLeft { get; set; }
-
-        /// <summary>
-        /// x position for upper left position for warping for camera 2
-        /// </summary>
-        public int Camera2UpperLeftPositionX { get; set; }
-
-        /// <summary>
-        /// y position for upper left position for warping for camera 2
-        /// </summary>
-        public int Camera2UpperLeftPositionY { get; set; }
-
-        /// <summary>
-        /// x position for upper right position for warping for camera 2
-        /// </summary>
-        public int Camera2UpperRightPositionX { get; set; }
-
-        /// <summary>
-        /// y position for upper right position for warping for camera 2
-        /// </summary>
-        public int Camera2UpperRightPositionY { get; set; }
-
-        /// <summary>
-        /// x position for lower left position for warping for camera 2
-        /// </summary>
-        public int Camera2LowerLeftPositionX { get; set; }
-
-        /// <summary>
-        /// y position for lower left position for warping for camera 2
-        /// </summary>
-        public int Camera2LowerLeftPositionY { get; set; }
-
-        /// <summary>
-        /// x position for lower right position for warping for camera 2
-        /// </summary>
-        public int Camera2LowerRightPositionX { get; set; }
-
-        /// <summary>
-        /// y position for lower right position for warping for camera 2
-        /// </summary>
-        public int Camera2LowerRightPositionY { get; set; }
     }
 }

@@ -16,8 +16,8 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
             Config.Instance.GameFieldSize = new Size(700, 400);
             Config.Instance.FrameRate = 187;
             Config.Instance.ImaginaryAxePosition = 600;
-            Config.Instance.Camera1Index = 0;
-            Config.Instance.Camera2Index = 1;
+            Config.Instance.Camera1.index = 0;
+            Config.Instance.Camera2.index = 1;
             Config.Instance.Tolerance = 6;
             Config.Instance.MaxBatVelocity = 100;
         }

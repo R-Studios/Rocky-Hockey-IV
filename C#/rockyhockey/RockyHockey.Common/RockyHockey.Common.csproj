@@ -43,9 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraConfig.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="ConfigInitializer.cs" />
     <Compile Include="ConsoleLogger.cs" />
+    <Compile Include="Coordinate.cs" />
     <Compile Include="Difficulties.cs" />
     <Compile Include="FrameGameFieldPosition.cs" />
     <Compile Include="FrameVector.cs" />
