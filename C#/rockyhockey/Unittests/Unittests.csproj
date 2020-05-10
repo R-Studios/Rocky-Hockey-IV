@@ -1,16 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props')" />
+  <Import Project="..\packages\NUnit.3.12.0\build\NUnit.props" Condition="Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9901D7AA-14AE-4411-A34C-5293819FB560}</ProjectGuid>
+    <ProjectGuid>{1245F3FF-336A-4A5F-ADB6-76BB7E9DDB3A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RockyHockey.MoveCalculationFramework</RootNamespace>
-    <AssemblyName>RockyHockey.MoveCalculationFramework</AssemblyName>
+    <RootNamespace>Unittests</RootNamespace>
+    <AssemblyName>Unittests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -18,11 +22,10 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\Build\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Build\RockyHockey.MoveCalculationFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,9 +34,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\RockyHockey.MoveCalculationFramework.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,44 +50,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMoveCalculationProvider.cs" />
-    <Compile Include="IStrategy.cs" />
-    <Compile Include="IStrategyCalculationFramework.cs" />
-    <Compile Include="MoveCalculationProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StrategyCalculationFramework.cs" />
-    <Compile Include="StrategyDirect.cs" />
-    <Compile Include="StrategyOneBank.cs" />
-    <Compile Include="TrajectoryCalculationFramework.cs" />
-    <Compile Include="VectorCalculationProvider.cs" />
+    <Compile Include="RockyHockey.MoveCalculationFramework\MockMotionCaptureProvider.cs" />
+    <Compile Include="RockyHockey.MoveCalculationFramework\MockVectorCalculationProvider.cs" />
+    <Compile Include="RockyHockey.MoveCalculationFramework\TrajectoryCalculationTests.cs" />
+    <Compile Include="RockyHockey.MoveCalculationFramework\VectorCalculationProviderTests.cs" />
+    <Compile Include="RockyHockey.MoveCalculationFramework\VectorExtensionsTests.cs" />
+    <Compile Include="RockyHockey.MovementFramework\MovementControllerTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RockyHockey.Common\RockyHockey.Common.csproj">
       <Project>{124d54b6-d88a-49c7-9241-25e46c4e9c27}</Project>
       <Name>RockyHockey.Common</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\RockyHockey.GoalDetectionFramework\RockyHockey.GoalDetectionFramework.csproj">
       <Project>{6b01d597-e5ba-41eb-a7cb-9c271afb51ba}</Project>
       <Name>RockyHockey.GoalDetectionFramework</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\RockyHockey.MotionCaptureFramework\RockyHockey.MotionCaptureFramework.csproj">
       <Project>{b4cef20c-19d3-4989-9f27-12dc0f4e85a1}</Project>
       <Name>RockyHockey.MotionCaptureFramework</Name>
-      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\RockyHockey.MoveCalculationFramework\RockyHockey.MoveCalculationFramework.csproj">
+      <Project>{9901d7aa-14ae-4411-a34c-5293819fb560}</Project>
+      <Name>RockyHockey.MoveCalculationFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\RockyHockey.MovementFramework\RockyHockey.MovementFramework.csproj">
       <Project>{3e6577bc-4681-4916-8115-fd1f3add092d}</Project>
       <Name>RockyHockey.MovementFramework</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NUnit.3.12.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.12.0\build\NUnit.props'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props'))" />
+  </Target>
 </Project>

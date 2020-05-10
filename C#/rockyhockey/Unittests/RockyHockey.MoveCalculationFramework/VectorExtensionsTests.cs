@@ -47,7 +47,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 Direction = new GameFieldPosition { X = xDir, Y = yDir }
             };
 
-            double pitch = await vector.GetVectorPitch().ConfigureAwait(false);
+            double pitch = vector.GetVectorGradient();
             Vector normalVector = await vector.GetZeroVector().ConfigureAwait(false);
             double expectedPitch = normalVector.Direction.Y / normalVector.Direction.X;
 
@@ -79,14 +79,14 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 Direction = new GameFieldPosition { X = xDir, Y = yDir }
             };
 
-            Vector strechedVector = await vector.StretchVectorToYCoordinate(xBarrier).ConfigureAwait(false);
+            Vector strechedVector = vector.StretchVectorToYCoordinate(xBarrier);
             Assert.AreEqual(xBarrier, strechedVector.Direction.Y);
             Assert.AreEqual(xBarrier, strechedVector.Direction.X);
         }
 
         [TestCase(7, 7, 8, 8)]
         [TestCase(2, 2, 3, 3)]
-        public async Task TestCalculateReflectedVector(double xPos, double yPos, double xDir, double yDir)
+        public void TestCalculateReflectedVector(double xPos, double yPos, double xDir, double yDir)
         {
             var vector = new Vector
             {
@@ -94,7 +94,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 Direction = new GameFieldPosition { X = xDir, Y = yDir }
             };
 
-            Vector reflectedVector = await vector.CalculateReflectedVector().ConfigureAwait(false);
+            Vector reflectedVector = vector.CalculateReflectedVector();
 
             double expectedXPos = xDir;
             double expectedYPos = yDir;

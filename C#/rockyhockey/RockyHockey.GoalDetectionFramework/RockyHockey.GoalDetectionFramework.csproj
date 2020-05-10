@@ -16,11 +16,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>..\Build\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\RockyHockey.GoalDetectionFramework.xml</DocumentationFile>
+    <DocumentationFile>..\Build\RockyHockey.GoalDetectionFramework.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,10 +57,12 @@
     <ProjectReference Include="..\RockyHockey.Common\RockyHockey.Common.csproj">
       <Project>{124d54b6-d88a-49c7-9241-25e46c4e9c27}</Project>
       <Name>RockyHockey.Common</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\RockyHockey.SoundFramework\RockyHockey.SoundFramework.csproj">
       <Project>{f06446c8-6562-47d7-8b98-71d2d5f212e1}</Project>
       <Name>RockyHockey.SoundFramework</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
