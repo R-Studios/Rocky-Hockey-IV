@@ -35,11 +35,7 @@ namespace RockyHockey.MoveCalculationFramework
         /// <returns>calculatedvVector of the puck with its velocity</returns>
         public async Task<VelocityVector> CalculatePuckVector()
         {
-            var puckPositions = await motionCaptureProvider.GetPuckPositions().ConfigureAwait(false);
-            while (puckPositions.Count() < 5)
-            {
-                puckPositions = await motionCaptureProvider.GetPuckPositions().ConfigureAwait(false);
-            }
+            IEnumerable<FrameGameFieldPosition> puckPositions  = await motionCaptureProvider.GetPuckPositions().ConfigureAwait(false);
 
             // Vector should start at the last point because the puck has been detected there for the last time
             var puckVector = new VelocityVector

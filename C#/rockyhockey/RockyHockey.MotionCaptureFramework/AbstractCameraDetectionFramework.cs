@@ -20,7 +20,12 @@ namespace RockyHockey.MotionCaptureFramework
         private VideoCapture camera;
         private int frameCount = 0;
         private int puckRecognizedCount = 0;
-        private readonly IList<FrameGameFieldPosition> cameraPuckPositions = new List<FrameGameFieldPosition>();
+
+        /// <summary>
+        /// Logger for errors
+        /// </summary>
+        public ILogger Logger { get; }
+
 
         /// <summary>
         /// Initializes the cameras, set properties and start them.
@@ -47,34 +52,24 @@ namespace RockyHockey.MotionCaptureFramework
         /// Processes images for the camera till 5 circles are detected and returns middle point of these circles
         /// </summary>
         /// <returns>CameraPictureQueue</returns>
-        public async Task<IEnumerable<FrameGameFieldPosition>> GetCameraPictures()
+        public List<Task<GameFieldPosition>> GetCameraPictures()
         {
-            cameraPuckPositions.Clear();
             puckRecognizedCount = 0;
             frameCount = 0;
 
-            while(puckRecognizedCount < 5)
+            List<Task<GameFieldPosition>> detectionTasks = new List<Task<GameFieldPosition>>();
+
+            while(frameCount++ < 10)
             {
                 var mat = new Mat();
                 camera.Read(mat);
-                await ProcessImage(mat).ConfigureAwait(false);
-                frameCount++;
+                detectionTasks.Add(ProcessImage(mat));
             }
-            return cameraPuckPositions;
+
+            return detectionTasks;
         }
 
-        internal abstract Task ProcessImage(Mat mat);
-
-        internal void SetCameraPicture(GameFieldPosition gameFieldPosition)
-        {
-            puckRecognizedCount++;
-            cameraPuckPositions.Add(new FrameGameFieldPosition
-            {
-                X = gameFieldPosition.X,
-                Y = gameFieldPosition.Y,
-                FrameNumber = frameCount
-            });
-        }
+        internal abstract Task<GameFieldPosition> ProcessImage(Mat mat);
 
         /// <summary>
         /// Stops and disposes the camera

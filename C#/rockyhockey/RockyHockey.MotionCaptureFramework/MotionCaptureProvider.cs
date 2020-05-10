@@ -39,16 +39,31 @@ namespace RockyHockey.MotionCaptureFramework
         }
 
         /// <summary>
-        /// return the puck positions for the last 5 tracked positions
+        /// return the puck positions for the last 5 to 10 tracked positions
         /// </summary>
         /// <returns>Enumerable of FrameGameFieldPositions</returns>
         public async Task<IEnumerable<FrameGameFieldPosition>> GetPuckPositions()
         {
             var convertedPositions = new List<FrameGameFieldPosition>();
-            foreach (FrameGameFieldPosition position in await gameCameraDetectionFramework.GetCameraPictures().ConfigureAwait(false))
+
+            int counter = 0;
+
+            do
             {
-                convertedPositions.Add(PicturePositionToFrameGamefieldPosition.ConvertCameraToFrameGameFieldPosition(position));
-            }
+                foreach (Task<GameFieldPosition> positionDetection in gameCameraDetectionFramework.GetCameraPictures())
+                {
+                    GameFieldPosition detectedPosition = await positionDetection;
+
+                    if (detectedPosition != null)
+                        convertedPositions.Add(new FrameGameFieldPosition
+                        {
+                            Y = detectedPosition.X,
+                            X = Config.Instance.Camera1.FieldSize.Height - detectedPosition.Y,
+                            FrameNumber = counter++
+                        });
+                }
+            } while (convertedPositions.Count < 5);
+
             return convertedPositions;
         }
 
