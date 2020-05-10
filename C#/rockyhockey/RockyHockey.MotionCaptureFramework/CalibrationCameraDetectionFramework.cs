@@ -23,9 +23,9 @@ namespace RockyHockey.MotionCaptureFramework
         double largest_area = 0;
         VectorOfPoint largestContour;
 
-        internal override Task ProcessImage(Mat mat)
+        internal override Task<GameFieldPosition> ProcessImage(Mat mat)
         {
-            return Task.Factory.StartNew(() =>
+            return Task<GameFieldPosition>.Factory.StartNew(() =>
             {
                 CvInvoke.CvtColor(mat, grayScaledImage, ColorConversion.Bgr2Gray);
                 grayScaledImage.Save(@"C:\Users\Tim-ThinkPad\Desktop\test\grayScaled.png");
@@ -112,6 +112,8 @@ namespace RockyHockey.MotionCaptureFramework
 
                 //whiteHueRange = cv2.dilate(thresh, None, iterations = 4);
                 //whiteHueRange.Save(@"C:\Users\Tim-ThinkPad\Desktop\test\dilate.png");
+
+                return null;
 
             });
         }

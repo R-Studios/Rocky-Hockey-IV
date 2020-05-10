@@ -77,7 +77,7 @@ namespace RockyHockey.MoveCalculationFramework
                 {
                     IEnumerable<Vector> trajectoryVectors = await CalculatePuckTrajectory(puckVector, gameFieldSize).ConfigureAwait(false);
                     double timeLeft = await CalculateNeededTime(trajectoryVectors, puckVector.Velocity).ConfigureAwait(false);
-                    double pitch = await trajectoryVectors.LastOrDefault().GetVectorPitch().ConfigureAwait(false);
+                    double pitch = trajectoryVectors.LastOrDefault().GetVectorGradient();
                     double angle = Math.Atan(pitch) * (180 / Math.PI);
 
                     GameFieldPosition impactPosition = trajectoryVectors.LastOrDefault().Direction;
@@ -134,10 +134,10 @@ namespace RockyHockey.MoveCalculationFramework
             while (strechedVector.Direction.X < impactAxisPosition)
             {
                 calculatedVectors.Add(strechedVector);
-                notStrechedVector = await strechedVector.CalculateReflectedVector().ConfigureAwait(false);
+                notStrechedVector = strechedVector.CalculateReflectedVector();
                 strechedVector = await notStrechedVector.StretchVectorToXCoordinate(gameFieldSize.Height).ConfigureAwait(false);
             }
-            strechedVector = await notStrechedVector.StretchVectorToYCoordinate(impactAxisPosition).ConfigureAwait(false);
+            strechedVector = notStrechedVector.StretchVectorToYCoordinate(impactAxisPosition);
             calculatedVectors.Add(strechedVector);
             return calculatedVectors;
         }

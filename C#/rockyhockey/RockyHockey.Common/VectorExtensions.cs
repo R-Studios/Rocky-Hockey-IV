@@ -23,7 +23,7 @@ namespace RockyHockey.Common
                 yBarrier = 0;
             }
 
-            double pitch = await vec.GetVectorPitch().ConfigureAwait(false);
+            double pitch = vec.GetVectorGradient();
             // calculates the shift of the new vector direction
             double shift = vec.Position.X * pitch * (-1) + vec.Position.Y;
             return new Vector
@@ -40,7 +40,7 @@ namespace RockyHockey.Common
         /// <param name="vec">Vector to Call the Method</param>
         /// <param name="xBarrier">position of the barrier</param>
         /// <returns>longer vector to the xBarrier</returns>
-        public static async Task<Vector> StretchVectorToYCoordinate(this Vector vec, double xBarrier)
+        public static Vector StretchVectorToYCoordinate(this Vector vec, double xBarrier)
         {
             // If the Vector shows to the left, then the puck will collide with the left barrier
             if (vec.Position.X > vec.Direction.X)
@@ -48,7 +48,7 @@ namespace RockyHockey.Common
                 xBarrier = 0;
             }
 
-            double pitch = await vec.GetVectorPitch().ConfigureAwait(false);
+            double pitch = vec.GetVectorGradient();
             // calculates the shift of the new vector direction
             double shift = vec.Position.X * pitch * (-1) + vec.Position.Y;
 
@@ -64,13 +64,14 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="vec">Vector to Call the Method</param>
         /// <returns>reflected vector</returns>
-        public static async Task<Vector> CalculateReflectedVector(this Vector vec)
+        public static Vector CalculateReflectedVector(this Vector vec)
         {
-            double reflectedVecPitch = await vec.GetVectorPitch().ConfigureAwait(false) * (-1);
+            double reflectedVecPitch = vec.GetVectorGradient() * (-1);
             var reflectedVector = new Vector
             {
                 Position = new GameFieldPosition { X = vec.Direction.X, Y = vec.Direction.Y }
             };
+
             if (vec.Direction.X > vec.Position.X)
             {
                 reflectedVector.Direction = new GameFieldPosition { X = vec.Direction.X + 1, Y = vec.Direction.Y + reflectedVecPitch };
@@ -79,6 +80,7 @@ namespace RockyHockey.Common
             {
                 reflectedVector.Direction = new GameFieldPosition { X = vec.Direction.X - 1, Y = vec.Direction.Y + reflectedVecPitch };
             }
+
             return reflectedVector;
         }
 
@@ -100,16 +102,13 @@ namespace RockyHockey.Common
         }
 
         /// <summary>
-        /// Calculates the pitch of the Vector
+        /// Calculates the gradient of the Vector
         /// </summary>
         /// <param name="vec">Vector to Call the Method</param>
-        /// <returns>pitch</returns>
-        public static Task<double> GetVectorPitch(this Vector vec)
+        /// <returns>gradient</returns>
+        public static double GetVectorGradient(this Vector vec)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                return (vec.Direction.Y - vec.Position.Y) / (vec.Direction.X - vec.Position.X);
-            });
+            return (vec.Direction.Y - vec.Position.Y) / (vec.Direction.X - vec.Position.X);
         }
 
         /// <summary>

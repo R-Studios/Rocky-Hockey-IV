@@ -42,11 +42,12 @@ namespace RockyHockey.MoveCalculationFramework
             {
                 Position = new GameFieldPosition { X = puckPositions.Last().X, Y = puckPositions.Last().Y }
             };
+
             IEnumerable<FrameVector> puckVectors = await CreateVectors(puckPositions).ConfigureAwait(false);
             // Vector has the average pitch of all detected vectors
             puckVector.Direction = new GameFieldPosition
             {
-                Y = puckPositions.Last().Y + await CalculateAveragePitch(puckVectors).ConfigureAwait(false)
+                Y = puckPositions.Last().Y + CalculateAveragePitch(puckVectors)
             };
 
             // Direction of the puckVector
@@ -97,33 +98,36 @@ namespace RockyHockey.MoveCalculationFramework
             return velocity / puckVectors.Count();
         }
 
-        private async Task<double> CalculateAveragePitch(IEnumerable<Vector> puckVectors)
+        private double CalculateAveragePitch(IEnumerable<Vector> puckVectors)
         {
-            if (!puckVectors.Any())
+            double retVal = 0;
+
+            if (puckVectors.Any())
             {
-                return 0;
+                double totalPitch = 0;
+                double oldPitch = 0;
+                int count = 0;
+
+                foreach (Vector vec in puckVectors)
+                {
+                    double pitch = 0;
+                    if (!(vec.Position.X == vec.Direction.X) || !(vec.Position.Y == vec.Direction.Y))
+                    {
+                        pitch = vec.GetVectorGradient();
+                    }
+
+                    if (oldPitch == 0 || (oldPitch - pitch) < tolerance || (oldPitch - pitch) > -tolerance)
+                    {
+                        // In this case the recognized vector is in tolerance an will be used to calculate the average
+                        totalPitch += pitch;
+                        count++;
+                    }
+                }
+
+                retVal = totalPitch / count;
             }
 
-            double totalPitch = 0;
-            double oldPitch = 0;
-            int count = 0;
-
-            foreach (Vector vec in puckVectors)
-            {
-                double pitch = 0;
-                if (!(vec.Position.X == vec.Direction.X) || !(vec.Position.Y == vec.Direction.Y))
-                {
-                    pitch = await vec.GetVectorPitch().ConfigureAwait(false); ;
-                }
-                 
-                if (oldPitch == 0 || (oldPitch - pitch) < tolerance || (oldPitch - pitch) > -tolerance)
-                {
-                    // In this case the recognized vector is in tolerance an will be used to calculate the average
-                    totalPitch += pitch;
-                    count++;
-                }
-            }
-            return totalPitch / count;
+            return retVal;
         }
     }
 }

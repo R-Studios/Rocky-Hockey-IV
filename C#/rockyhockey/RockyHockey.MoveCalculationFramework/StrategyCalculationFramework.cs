@@ -55,7 +55,7 @@ namespace RockyHockey.MoveCalculationFramework
             return batTrajectory;
 
             //Vector impactVector = await CalculateGoalTrajectory(impactPosition).ConfigureAwait(false);
-            //double pitchImpactVector = await impactVector.GetVectorPitch().ConfigureAwait(false);
+            //double pitchImpactVector = await impactVector.GetVectorGradient().ConfigureAwait(false);
 
             //GameFieldPosition midpointCircle = await CalculateMidpointCircle(pitchImpactVector, impactPosition).ConfigureAwait(false);
             //Vector radiusVector = new Vector { Position = impactPosition, Direction = midpointCircle };
