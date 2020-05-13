@@ -53,39 +53,39 @@ namespace RockyHockey.MoveCalculationFramework
             batTrajectory = await CalculateDirectPunch(impactPosition).ConfigureAwait(false);
             await movementController.MoveStrategy(batTrajectory, 0);
             return batTrajectory;
+            /*
+            Vector impactVector = await CalculateGoalTrajectory(impactPosition).ConfigureAwait(false);
+            double pitchImpactVector = await impactVector.GetVectorGradient().ConfigureAwait(false);
 
-            //Vector impactVector = await CalculateGoalTrajectory(impactPosition).ConfigureAwait(false);
-            //double pitchImpactVector = await impactVector.GetVectorGradient().ConfigureAwait(false);
+            GameFieldPosition midpointCircle = await CalculateMidpointCircle(pitchImpactVector, impactPosition).ConfigureAwait(false);
+            Vector radiusVector = new Vector { Position = impactPosition, Direction = midpointCircle };
+            double radiusCircle = await radiusVector.GetVectorLength().ConfigureAwait(false);
 
-            //GameFieldPosition midpointCircle = await CalculateMidpointCircle(pitchImpactVector, impactPosition).ConfigureAwait(false);
-            //Vector radiusVector = new Vector { Position = impactPosition, Direction = midpointCircle };
-            //double radiusCircle = await radiusVector.GetVectorLength().ConfigureAwait(false);
+            if (batPosition.X > impactAxisPosition - 1 && batPosition.X < impactAxisPosition + 1)
+            {
+                batTrajectory = await CalculateDirectPunch(impactPosition).ConfigureAwait(false);
+            }
+            else
+            {
+                batTrajectory =
+                await CalculateBatTrajectory(midpointCircle, radiusCircle, pitchImpactVector, impactPosition.Y, angle).ConfigureAwait(false);
+            }
 
-            //if (batPosition.X > impactAxisPosition - 1 && batPosition.X < impactAxisPosition + 1)
-            //{
-            //    batTrajectory = await CalculateDirectPunch(impactPosition).ConfigureAwait(false);
-            //}
-            //else
-            //{
-            //    batTrajectory =
-            //    await CalculateBatTrajectory(midpointCircle, radiusCircle, pitchImpactVector, impactPosition.Y, angle).ConfigureAwait(false);
-            //}
+            int delayTime = Convert.ToInt32(await CalculateDelayTime(batTrajectory, timeLeft).ConfigureAwait(false));
 
-            //int delayTime = Convert.ToInt32(await CalculateDelayTime(batTrajectory, timeLeft).ConfigureAwait(false));
-
-            //if (!await IsOutOfGamefield(batTrajectory).ConfigureAwait(false) &&
-            //    delayTime > 0)
-            //{
-            //    await movementController.MoveStrategy(batTrajectory, delayTime);
-            //    return batTrajectory;
-            //}
-            //else
-            //{
-            //    batTrajectory = await CalculateDirectPunch(impactPosition);
-            //    int delayBeforePunch = Convert.ToInt32(delayTime);
-            //    await movementController.MoveStrategy(batTrajectory, delayBeforePunch);
-            //    return batTrajectory;
-            //}
+            if (!await IsOutOfGamefield(batTrajectory).ConfigureAwait(false) &&
+                delayTime > 0)
+            {
+                await movementController.MoveStrategy(batTrajectory, delayTime);
+                return batTrajectory;
+            }
+            else
+            {
+                batTrajectory = await CalculateDirectPunch(impactPosition);
+                int delayBeforePunch = Convert.ToInt32(delayTime);
+                await movementController.MoveStrategy(batTrajectory, delayBeforePunch);
+                return batTrajectory;
+            }//*/
         }
 
         /// <summary>

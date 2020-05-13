@@ -50,9 +50,9 @@ namespace RockyHockey.MotionCaptureFramework
         }
 
         /// <summary>
-        /// Processes images for the camera till 5 circles are detected and returns middle point of these circles
+        /// initiates calculation of bat positions
         /// </summary>
-        /// <returns>CameraPictureQueue</returns>
+        /// <returns>calculation task list</returns>
         public List<Task<GameFieldPosition>> GetCameraPictures()
         {
             int frameCount = 0;

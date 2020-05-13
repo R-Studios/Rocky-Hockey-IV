@@ -39,7 +39,7 @@ namespace RockyHockey.MotionCaptureFramework
         }
 
         /// <summary>
-        /// return the puck positions for the last 5 to 10 tracked positions
+        /// return bat positions for the last 5 to 10 tracked positions
         /// </summary>
         /// <returns>Enumerable of FrameGameFieldPositions</returns>
         public async Task<IEnumerable<FrameGameFieldPosition>> GetPuckPositions()
