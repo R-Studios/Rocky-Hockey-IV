@@ -38,6 +38,6 @@ namespace RockyHockey.MotionCaptureFramework
         /// Stops the MotionCaptureProvider
         /// </summary>
         /// <returns>executeable Task</returns>
-        Task StopMotionCapturing();
+        void StopMotionCapturing();
     }
 }

@@ -71,9 +71,9 @@ namespace RockyHockey.MotionCaptureFramework
         /// Stops the MotionCapureProvider
         /// </summary>
         /// <returns>executeable Task</returns>
-        public async Task StopMotionCapturing()
+        public void StopMotionCapturing()
         {
-            await gameCameraDetectionFramework.StopCameraDetection().ConfigureAwait(false);
+            gameCameraDetectionFramework.StopCameraDetection();
         }
     }
 }

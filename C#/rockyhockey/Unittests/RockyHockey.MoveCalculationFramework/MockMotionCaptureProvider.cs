@@ -81,7 +81,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         /// Mock stop-method
         /// </summary>
         /// <returns>executeable Task</returns>
-        public Task StopMotionCapturing()
+        public void StopMotionCapturing()
         {
             throw new System.NotSupportedException();
         }

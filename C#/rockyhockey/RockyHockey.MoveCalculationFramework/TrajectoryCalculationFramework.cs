@@ -115,7 +115,7 @@ namespace RockyHockey.MoveCalculationFramework
         public async Task StopAllUsedFrameworks()
         {
             // Close all open resources
-            await motionCaptureProvider.StopMotionCapturing().ConfigureAwait(false);
+            motionCaptureProvider.StopMotionCapturing();
             await movementController.CloseSerialPorts().ConfigureAwait(false);
         }
 

@@ -19,6 +19,8 @@ namespace RockyHockey.MotionCaptureFramework
         //private const int TargetedCameraWidth = 480;
         private VideoCapture camera;
 
+        private bool stopped = false;
+
         /// <summary>
         /// Logger for errors
         /// </summary>
@@ -33,6 +35,7 @@ namespace RockyHockey.MotionCaptureFramework
         {
             try
             {
+                stopped = false;
                 camera = new VideoCapture(Config.Instance.Camera1.index);
                 camera.SetCaptureProperty(CapProp.Fps, TargetedFramesPerSecond);
                 camera.SetCaptureProperty(CapProp.FrameWidth, TargetedCameraHeight);
@@ -56,7 +59,7 @@ namespace RockyHockey.MotionCaptureFramework
 
             List<Task<GameFieldPosition>> detectionTasks = new List<Task<GameFieldPosition>>();
 
-            while(frameCount++ < 10)
+            while(!stopped && frameCount++ < 10)
             {
                 var mat = new Mat();
                 camera.Read(mat);
@@ -72,14 +75,12 @@ namespace RockyHockey.MotionCaptureFramework
         /// Stops and disposes the camera
         /// </summary>
         /// <returns>executeable Task</returns>
-        public Task StopCameraDetection()
+        public void StopCameraDetection()
         {
-            return Task.Factory.StartNew(() =>
-            {
-                camera.Stop();
-                camera.Dispose();
-                camera = null;
-            });
+            stopped = true;
+            camera.Stop();
+            camera.Dispose();
+            camera = null;
         }
     }
 }
