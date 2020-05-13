@@ -23,7 +23,7 @@ namespace RockyHockey.MotionCaptureFramework
         double largest_area = 0;
         VectorOfPoint largestContour;
 
-        internal override Task<GameFieldPosition> ProcessImage(Mat mat)
+        internal override Task<GameFieldPosition> ProcessImage(Mat mat, long timestamp)
         {
             return Task<GameFieldPosition>.Factory.StartNew(() =>
             {

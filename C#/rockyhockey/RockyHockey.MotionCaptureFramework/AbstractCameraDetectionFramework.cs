@@ -63,13 +63,13 @@ namespace RockyHockey.MotionCaptureFramework
             {
                 var mat = new Mat();
                 camera.Read(mat);
-                detectionTasks.Add(ProcessImage(mat));
+                detectionTasks.Add(ProcessImage(mat, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
             }
 
             return detectionTasks;
         }
 
-        internal abstract Task<GameFieldPosition> ProcessImage(Mat mat);
+        internal abstract Task<GameFieldPosition> ProcessImage(Mat mat, long timestamp);
 
         /// <summary>
         /// Stops and disposes the camera

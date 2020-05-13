@@ -14,5 +14,10 @@
         /// Y-Position
         /// </summary>
         public double Y { get; set; }
+
+        /// <summary>
+        /// timestamp when the position has been detected
+        /// </summary>
+        public long Timestamp { get; set;  }
     }
 }

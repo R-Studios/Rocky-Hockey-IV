@@ -20,7 +20,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// </summary>
         /// <param name="mat">image to process</param>
         /// <returns>executeable Task</returns>
-        internal override Task<GameFieldPosition> ProcessImage(Mat mat)
+        internal override Task<GameFieldPosition> ProcessImage(Mat mat, long timestamp)
         {
             return Task<GameFieldPosition>.Factory.StartNew(() =>
             {
@@ -61,7 +61,8 @@ namespace RockyHockey.MotionCaptureFramework
                             retval = new GameFieldPosition
                             {
                                 X = circle.Center.X,
-                                Y = circle.Center.Y
+                                Y = circle.Center.Y,
+                                Timestamp = timestamp
                             };
                     }
                 }
