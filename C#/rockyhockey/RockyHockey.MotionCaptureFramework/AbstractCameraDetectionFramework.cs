@@ -18,8 +18,6 @@ namespace RockyHockey.MotionCaptureFramework
         //private const int TargetedCameraHeight = 640;
         //private const int TargetedCameraWidth = 480;
         private VideoCapture camera;
-        private int frameCount = 0;
-        private int puckRecognizedCount = 0;
 
         /// <summary>
         /// Logger for errors
@@ -54,8 +52,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// <returns>CameraPictureQueue</returns>
         public List<Task<GameFieldPosition>> GetCameraPictures()
         {
-            puckRecognizedCount = 0;
-            frameCount = 0;
+            int frameCount = 0;
 
             List<Task<GameFieldPosition>> detectionTasks = new List<Task<GameFieldPosition>>();
 
