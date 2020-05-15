@@ -1,15 +1,22 @@
 package rockyhockey.gui.specialbuttons;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import rockyhockey.gui.mvc.ResourceLoader;
+
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class MuteButton extends JButton {
 
-	private static final long serialVersionUID = 6330466439406908672L;
+	private static final long serialVersionUID = 1L;
 
 	private static ImageIcon mutedIcon;
 	private static ImageIcon unmutedIcon;
@@ -18,10 +25,8 @@ public class MuteButton extends JButton {
 
 	static {
 		try {
-			//String folder = System.getProperty("user.dir") + "/src/de/rockeyhockey/game/pictures/";
-			String folder = "./img/";
-			mutedIcon = new ImageIcon(ImageIO.read(new File(folder + "mute.png")));
-			unmutedIcon = new ImageIcon(ImageIO.read(new File(folder + "sound.png")));
+			mutedIcon = new ImageIcon(ImageIO.read(ResourceLoader.load("/img/mute.png")));
+			unmutedIcon = new ImageIcon(ImageIO.read(ResourceLoader.load("/img/sound.png")));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -30,6 +35,9 @@ public class MuteButton extends JButton {
 
 	private boolean defaultIcon;
 
+	/**
+	 * Constructor
+	 */
 	public MuteButton() {
 		super();
 		defaultIcon = true;
@@ -43,6 +51,9 @@ public class MuteButton extends JButton {
 		}
 	}
 
+	/**
+	 * Toggles the displayed icon
+	 */
 	public void toggleIcon() {
 		if (this.iconNotNull) {
 			this.defaultIcon ^= true;

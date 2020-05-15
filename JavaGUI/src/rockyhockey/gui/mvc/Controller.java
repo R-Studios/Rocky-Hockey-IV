@@ -1,5 +1,11 @@
 package rockyhockey.gui.mvc;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class Controller implements Runnable {
 
 	public static final long GAME_TIME = 600000000000l;
@@ -12,12 +18,19 @@ public class Controller implements Runnable {
 	private Audio audio;
 	private HardwareIO hardware;
 
+	/**
+	 * Creates the MVC pattern
+	 */
 	private Controller() {
 		this.gui = Gui.getInstance();
 		this.audio = Audio.getInstance();
 		this.hardware = HardwareIO.getInstance();
 	}
 
+	/**
+	 * Creates a single controller instance
+	 * @return The single controller instance
+	 */
 	public static Controller getInstance() {
 		if (instance == null) {
 			instance = new Controller();
@@ -25,10 +38,17 @@ public class Controller implements Runnable {
 		return instance;
 	}
 
+	/**
+	 * Starts the controller thread
+	 */
 	public void start() {
 		new Thread(this).start();
 	}
 
+	/**
+	 * The main game logic
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		boolean isReseted = true;
@@ -43,7 +63,7 @@ public class Controller implements Runnable {
 			while (true) {
 				if (gui.isPlayPressed() && isReseted) {
 					isReseted = false;
-					audio.playSound(audio.soundPrepare);
+					audio.playSound("prepare.wav");
 					Thread.sleep(2000);
 					audio.startBackgroundSound();
 					timeAtStart = System.nanoTime();
@@ -68,11 +88,11 @@ public class Controller implements Runnable {
 							}
 
 							if (scorePlayer >= 10) {
-								audio.playSound(audio.soundWinner);
+								audio.playSound("winner.wav");
 								break;
 							}
 							else if (scorePlayer > scoreBot && (leader == BOT || leader == UNDEFINED)) {
-								audio.playSound(audio.soundTakenlead);
+								audio.playSound("takenlead.wav");
 								leader = PLAYER;
 							}
 							else {
@@ -89,13 +109,13 @@ public class Controller implements Runnable {
 								highestRun = 1;
 								lastGoal = BOT;
 							}
-							// playScoreSound(highestRun, scoreBot);
+							//playScoreSound(highestRun, scoreBot);
 							if (scoreBot >= 10) {
-								audio.playSound(audio.soundLostmatch);
+								audio.playSound("lostmatch.wav");
 								break;
 							}
 							else if (scorePlayer <= scoreBot && leader == PLAYER) {
-								audio.playSound(audio.soundLostlead);
+								audio.playSound("lostlead.wav");
 								leader = BOT;
 							}
 							else {
@@ -124,4 +144,5 @@ public class Controller implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
 }

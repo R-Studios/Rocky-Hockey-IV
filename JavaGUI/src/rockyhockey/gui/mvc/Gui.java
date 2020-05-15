@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,6 +19,12 @@ import javax.swing.JPanel;
 import rockyhockey.gui.specialbuttons.IconButton;
 import rockyhockey.gui.specialbuttons.MuteButton;
 
+/**
+ * 
+ * @author Roman Wecker
+ * @version 1.0
+ *
+ */
 public class Gui extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
@@ -41,9 +46,19 @@ public class Gui extends JFrame implements ActionListener {
 
 	private boolean soundActive;
 
+	/**
+	 * 
+	 * @author Roman Wecker
+	 * @version 1.0
+	 *
+	 */
 	class PanelWithBackground extends JPanel {
-		private static final long serialVersionUID = -3597732424273848852L;
+		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Draws the background image
+		 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+		 */
 		@Override
 		protected void paintComponent(Graphics g) {
 			g.clearRect(0, 0, getBounds().width, getBounds().height);
@@ -68,6 +83,10 @@ public class Gui extends JFrame implements ActionListener {
 
 	private MuteButton muteButton;
 
+	/**
+	 * Creates a single gui instance
+	 * @return The single gui instace
+	 */
 	public static Gui getInstance() {
 		if (instance == null) {
 			instance = new Gui();
@@ -75,29 +94,28 @@ public class Gui extends JFrame implements ActionListener {
 		return instance;
 	}
 
-	private ImageIcon checkAndGetFile(String filename) throws Exception {
-		File imageFile = new File("./img/" + filename);
-
-		String imageFilePath = imageFile.getAbsolutePath();
-
-		if (imageFile.exists() && !imageFile.isDirectory()) {
-			System.out.println(imageFilePath + " exists");
-
-			return new ImageIcon(ImageIO.read(imageFile));
-		}
-
-		System.out.println(imageFilePath + " doesn't exist");
-		return null;
+	/**
+	 * Creates a new ImageIcon from InputStream
+	 * @see ResourceLoader#load(String path)
+	 * @param filename The image filename
+	 * @return The ImageIcon from the path
+	 * @throws Exception Image could not be found
+	 */
+	private ImageIcon getImageIcon(String filename) throws Exception {
+		return new ImageIcon(ImageIO.read(ResourceLoader.load("/img/" + filename)));
 	}
 
+	/**
+	 * Constructor
+	 */
 	private Gui() {
 		super();
 
 		try {
-			playIcon = checkAndGetFile("play.png");
-			resetIcon = checkAndGetFile("replay.png");
-			closeIcon = checkAndGetFile("close.png");
-			ImageIcon backgroundImageIcon = checkAndGetFile("background.png");
+			playIcon = getImageIcon("play.png");
+			resetIcon = getImageIcon("replay.png");
+			closeIcon = getImageIcon("close.png");
+			ImageIcon backgroundImageIcon = getImageIcon("background.png");
 			if (backgroundImageIcon != null)
 				backgroundImage = backgroundImageIcon.getImage();
 		}
@@ -114,6 +132,9 @@ public class Gui extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
+	/**
+	 * Adds all gui elements to the JPanel
+	 */
 	private void addComponents() {
 		this.setContentPane(contentPanel);
 
@@ -129,6 +150,9 @@ public class Gui extends JFrame implements ActionListener {
 		contentPanel.add(muteButton);
 	}
 
+	/**
+	 * Sets the bounds for all gui elements
+	 */
 	public void setBounds() {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -154,14 +178,17 @@ public class Gui extends JFrame implements ActionListener {
 		playButton.setBounds(eigth_of_width, 6 * eight_of_height, 2 * eigth_of_width, eight_of_height);
 		resetButton.setBounds(width - 3 * eigth_of_width, 6 * eight_of_height, 2 * eigth_of_width, eight_of_height);
 		scoreColon.setBounds(3 * eigth_of_width, 3 * eight_of_height, 2 * eigth_of_width, eight_of_height);
-
 	}
 
+	/**
+	 * Creates all gui elements
+	 */
 	private void initGuiElements() {
 		Font font = new Font("Arial", Font.BOLD, 32);
 
 		setLayout(null);
 		setUndecorated(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 		contentPanel = new PanelWithBackground();
 		contentPanel.setLayout(null);
@@ -216,6 +243,9 @@ public class Gui extends JFrame implements ActionListener {
 		resetButton.setIcon(resetIcon);
 	}
 
+	/**
+	 * Resets all gui texts and colors
+	 */
 	public void reset() {
 		playerLabel.setText("Player");
 		botLabel.setText("Bot");
@@ -226,6 +256,10 @@ public class Gui extends JFrame implements ActionListener {
 		repaint();
 	}
 
+	/**
+	 * Was the play button pressed
+	 * @return Returns if the play button was pressed
+	 */
 	public boolean isPlayPressed() {
 		if (this.playPressed) {
 			this.playPressed = false;
@@ -234,6 +268,10 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
+	/**
+	 * Was the reset button pressed
+	 * @return Returns if the reset button was pressed
+	 */
 	public boolean isResetPressed() {
 		if (this.resetPressed) {
 			this.resetPressed = false;
@@ -242,6 +280,10 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
+	/**
+	 * Was the mute button pressed
+	 * @return Returns if the mute button was pressed
+	 */
 	public boolean isMutePressed() {
 		if (this.mutePressed) {
 			this.mutePressed = false;
@@ -250,16 +292,28 @@ public class Gui extends JFrame implements ActionListener {
 		return false;
 	}
 
+	/**
+	 * Update the score of the player
+	 * @param score The new score of the player
+	 */
 	public void setPlayerScore(int score) {
 		this.playerScoreLabel.setText("" + score);
 		this.playerScoreLabel.repaint();
 	}
 
+	/**
+	 * Update the score of the bot
+	 * @param score The new score of the bot
+	 */
 	public void setBotScore(int score) {
 		this.botScoreLabel.setText("" + score);
 		this.botScoreLabel.repaint();
 	}
 
+	/**
+	 * Calculate and update the remaining time
+	 * @param countdownTime The time in milliseconds
+	 */
 	public void setRemainingTime(long countdownTime) {
 		int time = (int) (countdownTime / 1000000000);
 		int min = time / 60;
@@ -271,6 +325,10 @@ public class Gui extends JFrame implements ActionListener {
 		this.timeLabel.repaint();
 	}
 
+	/**
+	 * Handles button events
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	public void actionPerformed(ActionEvent event) {
 		JButton sourceButton = (JButton) event.getSource();
 		if (sourceButton == this.playButton) {
