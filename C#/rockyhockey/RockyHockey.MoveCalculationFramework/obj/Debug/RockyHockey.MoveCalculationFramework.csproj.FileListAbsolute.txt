@@ -1,0 +1,8 @@
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.MoveCalculationFramework.dll.config
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.MoveCalculationFramework.xml
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.MoveCalculationFramework.dll
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.MoveCalculationFramework.pdb
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.MoveCalculationFramework\obj\Debug\RockyHockey.MoveCalculationFramework.csprojAssemblyReference.cache
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.MoveCalculationFramework\obj\Debug\RockyHockey.MoveCalculationFramework.csproj.CoreCompileInputs.cache
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.MoveCalculationFramework\obj\Debug\RockyHockey.MoveCalculationFramework.dll
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.MoveCalculationFramework\obj\Debug\RockyHockey.MoveCalculationFramework.pdb

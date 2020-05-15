@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RockyHockey.GoalDetectionFramework</name>
+    </assembly>
+    <members>
+        <member name="T:RockyHockey.GoalDetectionFramework.DetectedGoalEventArgs">
+            <summary>
+            EventArgs for the DetectedGoalEvent
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.DetectedGoalEventArgs.#ctor(System.Boolean)">
+            <summary>
+            Creates a new instance of the DetectedGoalEventArgs
+            </summary>
+            <param name="humanGoal">true if the human shot the goal</param>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.DetectedGoalEventArgs.HumanGoal">
+            <summary>
+            Determines if the human or the robot shot the goal
+            </summary>
+        </member>
+        <member name="T:RockyHockey.GoalDetectionFramework.GoalDetectionProvider">
+            <summary>
+            Class that can detect if the puck hit a goal
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.GoalDetectionProvider.GameScore">
+            <summary>
+            Score of the running RockyHockey game
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.GoalDetectionProvider.DetectGoals">
+            <summary>
+            Determines if the GoalDetectionProvider should keep detecting goals
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.GoalDetectionProvider.Instance">
+            <summary>
+            Singleton instance
+            </summary>
+        </member>
+        <member name="E:RockyHockey.GoalDetectionFramework.GoalDetectionProvider.DetectedGoalEvent">
+            <summary>
+            Event that is fired when a goal has been detected
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GoalDetectionProvider.StartGoalDetection">
+            <summary>
+            Starts the goal Detection
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GoalDetectionProvider.UnexportPins">
+            <summary>
+            Unexports the used Pins
+            </summary>
+        </member>
+        <member name="T:RockyHockey.GoalDetectionFramework.GPIODirection">
+            <summary>
+            Direction of the GPIO Pin
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.GPIODirection.In">
+            <summary>
+            Input Pin
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.GPIODirection.Out">
+            <summary>
+            Output Pin
+            </summary>
+        </member>
+        <member name="T:RockyHockey.GoalDetectionFramework.GPIOPinDriver">
+            <summary>
+            Driver for the hardware Pins of the Raspberry Pi
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.GPIOPinDriver.GPIOPin">
+            <summary>
+            Gets the GPIO pin number.
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.GPIOPinDriver.Direction">
+            <summary>
+            Gets or sets the direction of of an output GPIO pin.
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.GPIOPinDriver.State">
+            <summary>
+            The current value of a GPIO pin.
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GPIOPinDriver.#ctor(RockyHockey.GoalDetectionFramework.Pin)">
+            <summary>
+            Sets up an interface for accessing the specified GPIO pin with direction set to OUT and initial value to LOW.
+            </summary>
+            <param name="gpioPin">The GPIO pin to be accessed</param>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GPIOPinDriver.#ctor(RockyHockey.GoalDetectionFramework.Pin,RockyHockey.GoalDetectionFramework.GPIODirection)">
+            <summary>
+            Sets up an interface for accessing the specified GPIO pin with the given direction and initial value set to LOW.
+            </summary>
+            <param name="gpioPin">The GPIO pin to be accessed.</param>
+            <param name="direction">The direction the GPIO pin should have.</param>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GPIOPinDriver.#ctor(RockyHockey.GoalDetectionFramework.Pin,RockyHockey.GoalDetectionFramework.GPIODirection,RockyHockey.GoalDetectionFramework.GPIOState)">
+            <summary>
+            Sets up an interface for accessing the specified GPIO pin with the given direction and given initial value.
+            </summary>
+            <param name="gpioPin">The GPIO pin to be accessed.</param>
+            <param name="direction">The direction the GPIO pin should have.</param>
+            <param name="initialValue">The initial value the GPIO pin should have.</param>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GPIOPinDriver.Unexport">
+            <summary>
+            Unexports the GPIO interface.
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GPIOPinDriver.Dispose">
+            <summary>
+            Disposes the GPIO pin driver
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.GPIOPinDriver.Finalize">
+            <summary>
+            Disposes the GPIO pin driver
+            </summary>
+        </member>
+        <member name="T:RockyHockey.GoalDetectionFramework.GPIOState">
+            <summary>
+            The value (High or Low) of a GPIO pin.
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.GPIOState.Low">
+            <summary>
+            Low voltage
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.GPIOState.High">
+            <summary>
+            High Voltage
+            </summary>
+        </member>
+        <member name="T:RockyHockey.GoalDetectionFramework.LEDController">
+            <summary>
+            Has the functionality to light the Led strip
+            </summary>
+        </member>
+        <member name="P:RockyHockey.GoalDetectionFramework.LEDController.Instance">
+            <summary>
+            Singleton instance
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.LEDController.DoGoalLEDShow">
+            <summary>
+            LED show when a goal was shot
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.LEDController.DoStartLEDShow">
+            <summary>
+            LED show when the program starts
+            </summary>
+        </member>
+        <member name="M:RockyHockey.GoalDetectionFramework.LEDController.DoStopLEDShow">
+            <summary>
+            LED show when the game is stopped
+            </summary>
+            <returns>executeable Task</returns>
+        </member>
+        <member name="T:RockyHockey.GoalDetectionFramework.Pin">
+            <summary>
+            P1 GPIO pins
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.Pin.GPIO5">
+            <summary>
+            GPIO Pin number 5 of the Raspberry Pi
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.Pin.GPIO6">
+            <summary>
+            GPIO Pin number 6 of the Raspberry Pi
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.Pin.GPIO20">
+            <summary>
+            GPIO Pin number 20 of the Raspberry Pi
+            </summary>
+        </member>
+        <member name="F:RockyHockey.GoalDetectionFramework.Pin.GPIO21">
+            <summary>
+            GPIO Pin number 21 of the Raspberry Pi
+            </summary>
+        </member>
+    </members>
+</doc>

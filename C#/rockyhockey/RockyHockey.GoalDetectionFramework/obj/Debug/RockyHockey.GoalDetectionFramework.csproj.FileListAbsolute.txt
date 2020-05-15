@@ -1,0 +1,7 @@
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.GoalDetectionFramework.xml
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.GoalDetectionFramework.dll
+D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.GoalDetectionFramework.pdb
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.GoalDetectionFramework\obj\Debug\RockyHockey.GoalDetectionFramework.csprojAssemblyReference.cache
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.GoalDetectionFramework\obj\Debug\RockyHockey.GoalDetectionFramework.csproj.CoreCompileInputs.cache
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.GoalDetectionFramework\obj\Debug\RockyHockey.GoalDetectionFramework.dll
+D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.GoalDetectionFramework\obj\Debug\RockyHockey.GoalDetectionFramework.pdb
