@@ -1,7 +1,0 @@
-D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.Common.xml
-D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.Common.dll
-D:\Rocky-Hockey-IV\C#\rockyhockey\Build\RockyHockey.Common.pdb
-D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.Common\obj\Debug\RockyHockey.Common.csprojAssemblyReference.cache
-D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.Common\obj\Debug\RockyHockey.Common.csproj.CoreCompileInputs.cache
-D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.Common\obj\Debug\RockyHockey.Common.dll
-D:\Rocky-Hockey-IV\C#\rockyhockey\RockyHockey.Common\obj\Debug\RockyHockey.Common.pdb
