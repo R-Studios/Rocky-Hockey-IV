@@ -47,9 +47,9 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         /// Returns a random Position
         /// </summary>
         /// <returns>random Position</returns>
-        public async Task<IEnumerable<FrameGameFieldPosition>> GetPuckPositions()
+        public async Task<IEnumerable<TimedCoordinate>> GetPuckPositions()
         {
-            var positions = new List<FrameGameFieldPosition>();
+            var positions = new List<TimedCoordinate>();
             for (int i = 0; i < 5; i++)
             {
                 positions.Add(await CreatePosition().ConfigureAwait(false));
@@ -57,20 +57,20 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
             return positions;
         }
 
-        private Task<FrameGameFieldPosition> CreatePosition()
+        private Task<TimedCoordinate> CreatePosition()
         {
             return Task.Factory.StartNew(() =>
             {
-                var pos = new FrameGameFieldPosition
+                var pos = new TimedCoordinate
                 {
                     X = count,
                     Y = count,
-                    FrameNumber = count
+                    Timestamp = count
                 };
                 if (count % 2 == 0)
                 {
                     pos.X = count + (count * 0.9);
-                    pos.FrameNumber = count;
+                    pos.Timestamp = count;
                 }
                 count += 1;
                 return pos;

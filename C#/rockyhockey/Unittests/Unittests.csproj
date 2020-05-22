@@ -9,7 +9,7 @@
     <ProjectGuid>{1245F3FF-336A-4A5F-ADB6-76BB7E9DDB3A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Unittests</RootNamespace>
+    <RootNamespace>RockyHockey</RootNamespace>
     <AssemblyName>Unittests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -51,12 +51,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RockyHockey.MoveCalculationFramework\MockMotionCaptureProvider.cs" />
-    <Compile Include="RockyHockey.MoveCalculationFramework\MockVectorCalculationProvider.cs" />
-    <Compile Include="RockyHockey.MoveCalculationFramework\TrajectoryCalculationTests.cs" />
-    <Compile Include="RockyHockey.MoveCalculationFramework\VectorCalculationProviderTests.cs" />
-    <Compile Include="RockyHockey.MoveCalculationFramework\VectorExtensionsTests.cs" />
-    <Compile Include="RockyHockey.MovementFramework\MovementControllerTests.cs" />
+    <Compile Include="MoveCalculationFramework\MockMotionCaptureProvider.cs" />
+    <Compile Include="MoveCalculationFramework\MockVectorCalculationProvider.cs" />
+    <Compile Include="MoveCalculationFramework\TrajectoryCalculationTests.cs" />
+    <Compile Include="MoveCalculationFramework\VectorCalculationProviderTests.cs" />
+    <Compile Include="MoveCalculationFramework\VectorExtensionsTests.cs" />
+    <Compile Include="MovementFramework\MovementControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
