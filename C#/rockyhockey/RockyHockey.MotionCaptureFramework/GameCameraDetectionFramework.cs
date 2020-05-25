@@ -19,12 +19,13 @@ namespace RockyHockey.MotionCaptureFramework
         /// filters the red circle out of the image and adds the position to the list
         /// </summary>
         /// <param name="mat">image to process</param>
+        /// <param name="timestamp">timestamp when the picture was taken</param>
         /// <returns>executeable Task</returns>
-        internal override Task<GameFieldPosition> ProcessImage(Mat mat, long timestamp)
+        internal override Task<TimedCoordinate> ProcessImage(Mat mat, long timestamp)
         {
-            return Task<GameFieldPosition>.Factory.StartNew(() =>
+            return Task<TimedCoordinate>.Factory.StartNew(() =>
             {
-                GameFieldPosition retval = null;
+                TimedCoordinate retval = null;
 
                 try
                 {
@@ -58,7 +59,7 @@ namespace RockyHockey.MotionCaptureFramework
                         var circle = circles.First();
 
                         if (circle.Center.X != 0 && circle.Center.Y != 0)
-                            retval = new GameFieldPosition
+                            retval = new TimedCoordinate
                             {
                                 X = circle.Center.X,
                                 Y = circle.Center.Y,

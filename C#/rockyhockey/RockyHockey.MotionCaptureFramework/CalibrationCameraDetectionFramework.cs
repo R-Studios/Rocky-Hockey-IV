@@ -23,9 +23,9 @@ namespace RockyHockey.MotionCaptureFramework
         double largest_area = 0;
         VectorOfPoint largestContour;
 
-        internal override Task<GameFieldPosition> ProcessImage(Mat mat, long timestamp)
+        internal override Task<TimedCoordinate> ProcessImage(Mat mat, long timestamp)
         {
-            return Task<GameFieldPosition>.Factory.StartNew(() =>
+            return Task<TimedCoordinate>.Factory.StartNew(() =>
             {
                 CvInvoke.CvtColor(mat, grayScaledImage, ColorConversion.Bgr2Gray);
                 grayScaledImage.Save(@"C:\Users\Tim-ThinkPad\Desktop\test\grayScaled.png");

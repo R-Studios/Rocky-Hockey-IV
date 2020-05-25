@@ -23,12 +23,12 @@ namespace RockyHockey.MotionCaptureFramework
 
         private readonly AbstractCameraDetectionFramework gameCameraDetectionFramework;
 
-        public Task<GameFieldPosition> GetBatPosition()
+        public Task<TimedCoordinate> GetBatPosition()
         {
             throw new NotImplementedException();
         }
 
-        public Task<GameFieldPosition> GetEnemyBatPosition()
+        public Task<TimedCoordinate> GetEnemyBatPosition()
         {
             throw new NotImplementedException();
         }
@@ -42,25 +42,18 @@ namespace RockyHockey.MotionCaptureFramework
         /// return bat positions for the last 5 to 10 tracked positions
         /// </summary>
         /// <returns>Enumerable of FrameGameFieldPositions</returns>
-        public async Task<IEnumerable<FrameGameFieldPosition>> GetPuckPositions()
+        public async Task<List<TimedCoordinate>> GetPuckPositions()
         {
-            var convertedPositions = new List<FrameGameFieldPosition>();
-
-            int counter = 0;
+            var convertedPositions = new List<TimedCoordinate>();
 
             do
             {
-                foreach (Task<GameFieldPosition> positionDetection in gameCameraDetectionFramework.GetCameraPictures())
+                foreach (Task<TimedCoordinate> positionDetection in gameCameraDetectionFramework.GetCameraPictures())
                 {
-                    GameFieldPosition detectedPosition = await positionDetection;
+                    TimedCoordinate detectedPosition = await positionDetection;
 
                     if (detectedPosition != null)
-                        convertedPositions.Add(new FrameGameFieldPosition
-                        {
-                            Y = detectedPosition.X,
-                            X = Config.Instance.Camera1.FieldSize.Height - detectedPosition.Y,
-                            FrameNumber = counter++
-                        });
+                        convertedPositions.Add(detectedPosition);
                 }
             } while (convertedPositions.Count < 5);
 

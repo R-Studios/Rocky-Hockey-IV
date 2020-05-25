@@ -53,11 +53,11 @@ namespace RockyHockey.MotionCaptureFramework
         /// initiates calculation of bat positions
         /// </summary>
         /// <returns>calculation task list</returns>
-        public List<Task<GameFieldPosition>> GetCameraPictures()
+        public List<Task<TimedCoordinate>> GetCameraPictures()
         {
             int frameCount = 0;
 
-            List<Task<GameFieldPosition>> detectionTasks = new List<Task<GameFieldPosition>>();
+            List<Task<TimedCoordinate>> detectionTasks = new List<Task<TimedCoordinate>>();
 
             while(!stopped && frameCount++ < 10)
             {
@@ -69,7 +69,7 @@ namespace RockyHockey.MotionCaptureFramework
             return detectionTasks;
         }
 
-        internal abstract Task<GameFieldPosition> ProcessImage(Mat mat, long timestamp);
+        internal abstract Task<TimedCoordinate> ProcessImage(Mat mat, long timestamp);
 
         /// <summary>
         /// Stops and disposes the camera

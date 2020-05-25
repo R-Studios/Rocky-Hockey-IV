@@ -17,7 +17,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         /// Returns a random Position
         /// </summary>
         /// <returns>random Position</returns>
-        public async Task<GameFieldPosition> GetBatPosition()
+        public async Task<TimedCoordinate> GetBatPosition()
         {
             return await CreatePosition().ConfigureAwait(false);
         }
@@ -26,7 +26,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         /// Returns a random Position
         /// </summary>
         /// <returns>random Position</returns>
-        public async Task<GameFieldPosition> GetEnemyBatPosition()
+        public async Task<TimedCoordinate> GetEnemyBatPosition()
         {
             return await CreatePosition().ConfigureAwait(false);
         }
@@ -47,7 +47,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         /// Returns a random Position
         /// </summary>
         /// <returns>random Position</returns>
-        public async Task<IEnumerable<TimedCoordinate>> GetPuckPositions()
+        public async Task<List<TimedCoordinate>> GetPuckPositions()
         {
             var positions = new List<TimedCoordinate>();
             for (int i = 0; i < 5; i++)

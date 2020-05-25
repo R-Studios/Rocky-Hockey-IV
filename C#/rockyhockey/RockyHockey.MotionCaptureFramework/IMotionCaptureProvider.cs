@@ -14,19 +14,19 @@ namespace RockyHockey.MotionCaptureFramework
         /// Ermittelt die Bewegungsrichtung des Pucks
         /// </summary>
         /// <returns>Bewegungsrichtung in Form eines Vektors</returns>
-        Task<IEnumerable<FrameGameFieldPosition>> GetPuckPositions();
+        Task<List<TimedCoordinate>> GetPuckPositions();
 
         /// <summary>
         /// Ermittelt die Position des programmgesteuerten Schlägers
         /// </summary>
         /// <returns>genaue Position des Schlägers</returns>
-        Task<GameFieldPosition> GetBatPosition();
+        Task<TimedCoordinate> GetBatPosition();
 
         /// <summary>
         /// Ermittelt die Position des Schlägers des Menschen
         /// </summary>
         /// <returns>genaue Position des Schlägers</returns>
-        Task<GameFieldPosition> GetEnemyBatPosition();
+        Task<TimedCoordinate> GetEnemyBatPosition();
 
         /// <summary>
         /// Calculates the size of the gamefield

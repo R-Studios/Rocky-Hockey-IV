@@ -3,11 +3,11 @@
     /// <summary>
     /// GameFieldPosition with the number of the frame it was recorded
     /// </summary>
-    public class FrameGameFieldPosition : GameFieldPosition
+    public class TimedCoordinate : Coordinate
     {
         /// <summary>
-        /// Number of the frame, the position has been recorded
+        /// timestamp when the position has been detected
         /// </summary>
-        public int FrameNumber { get; set; }
+        public long Timestamp { get; set; }
     }
 }
