@@ -35,13 +35,13 @@ namespace RockyHockey.MoveCalculationFramework
 
         private readonly Size gameFieldSize;
 
-        private readonly IMotionCaptureProvider motionCaptureProvider;
+        protected PositionCollector motionCaptureProvider;
 
-        private readonly IMovementController movementController;
+        protected IMovementController movementController;
 
         private IStrategyCalculationFramework strategyCalculationFramework;
 
-        private readonly VectorCalculationProvider vectorCalculationProvider;
+        protected VectorCalculationProvider vectorCalculationProvider;
 
         /// <summary>
         /// Determines wether the game continuous or not
