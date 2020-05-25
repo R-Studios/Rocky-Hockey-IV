@@ -337,7 +337,7 @@ namespace RockyHockey.MoveCalculationFramework
 
             foreach (VelocityVector vector in batTrajectory)
             {
-                length += await vector.GetVectorLength().ConfigureAwait(false);
+                length += vector.GetVectorLength();
             }
 
             double neededTime = length / maxVelocity;

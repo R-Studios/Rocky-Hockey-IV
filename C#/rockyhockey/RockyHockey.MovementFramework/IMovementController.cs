@@ -20,7 +20,7 @@ namespace RockyHockey.MovementFramework
         /// Initializes the serial Ports
         /// </summary>
         /// <returns>executeable Task</returns>
-        Task InitializeSerialPorts();
+        void InitializeSerialPorts();
 
         /// <summary>
         /// Bewegt den Schläger in die Richtung des Vektors

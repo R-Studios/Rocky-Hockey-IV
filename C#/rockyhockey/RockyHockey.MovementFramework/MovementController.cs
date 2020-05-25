@@ -58,29 +58,25 @@ namespace RockyHockey.MovementFramework
         /// Initializes the serial Ports
         /// </summary>
         /// <returns>executeable Task</returns>
-        public Task InitializeSerialPorts()
+        public void InitializeSerialPorts()
         {
             string[] p = SerialPort.GetPortNames();
 
-            return Task.Factory.StartNew(() =>
+            try
             {
-                try
-                {
 
-                    xAxis = new SerialPort(p[0], 115200);
-                    xAxis.Open();
-                    yAxis = new SerialPort(p[1], 115200);
+                xAxis = new SerialPort(p[0], 115200);
+                xAxis.Open();
+                yAxis = new SerialPort(p[1], 115200);
+                yAxis.Open();
 
-                    yAxis.Open();
-                    Thread.Sleep(1000);
-                    xAxis.Write("calibrate");
-                    yAxis.Write("calibrate");
-                }
-                catch (Exception ex)
-                {
-                    MovementControllerLogger?.Log(ex).Wait();
-                }
-            });
+                xAxis.Write("calibrate");
+                yAxis.Write("calibrate");
+            }
+            catch (Exception ex)
+            {
+                MovementControllerLogger?.Log(ex);
+            }
         }
 
         /// <summary>

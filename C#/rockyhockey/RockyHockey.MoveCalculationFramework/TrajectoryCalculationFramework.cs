@@ -58,7 +58,7 @@ namespace RockyHockey.MoveCalculationFramework
 
             strategyCalculationFramework = new StrategyCalculationFramework(movementController, batRestPosition);
 
-            await movementController.InitializeSerialPorts().ConfigureAwait(false);
+            movementController.InitializeSerialPorts();
 
             while (KeepPlaying)
             {
@@ -193,7 +193,7 @@ namespace RockyHockey.MoveCalculationFramework
             double length = 0;
             foreach (Vector vector in trajectoryVectors)
             {
-                length += await vector.GetVectorLength().ConfigureAwait(false);
+                length += vector.GetVectorLength();
             }
             return (length / velocity);
         }

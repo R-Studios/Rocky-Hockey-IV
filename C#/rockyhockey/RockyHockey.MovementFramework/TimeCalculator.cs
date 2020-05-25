@@ -15,7 +15,7 @@ namespace RockyHockey.MovementFramework
         /// <returns>time in milliseconds</returns>
         public async Task<double> CalculateTimeOfVelocityVector(VelocityVector velocityVector)
         {
-            var length = await velocityVector.GetVectorLength().ConfigureAwait(false);
+            var length = velocityVector.GetVectorLength();
             return (length / velocityVector.Velocity);
         }
     }

@@ -22,7 +22,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 Direction = new GameFieldPosition { X = xDir, Y = yDir }
             };
 
-            Vector normalVector = await vector.GetZeroVector().ConfigureAwait(false);
+            Vector normalVector = vector.GetZeroVector();
             double expectedX = xDir - xPos;
             double expectedY = yDir - yPos;
 
@@ -39,7 +39,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         [TestCase(-112, -66, -2345, -234)]
         [TestCase(88, 66, -241, -451)]
         [TestCase(0.123, 6.567, 24.56, 35.65)]
-        public async Task TestGetVectorPitch(double xPos, double yPos, double xDir, double yDir)
+        public void TestGetVectorPitch(double xPos, double yPos, double xDir, double yDir)
         {
             var vector = new Vector
             {
@@ -48,7 +48,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
             };
 
             double pitch = vector.GetVectorGradient();
-            Vector normalVector = await vector.GetZeroVector().ConfigureAwait(false);
+            Vector normalVector = vector.GetZeroVector();
             double expectedPitch = normalVector.Direction.Y / normalVector.Direction.X;
 
             Assert.AreEqual(expectedPitch, pitch);
@@ -117,7 +117,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 Direction = new GameFieldPosition { X = xDir, Y = yDir }
             };
 
-            var vectorLength = await vector.GetVectorLength().ConfigureAwait(false);
+            var vectorLength = vector.GetVectorLength();
             double expectedLength = 8;
             Assert.AreEqual(expectedLength, vectorLength);
         }

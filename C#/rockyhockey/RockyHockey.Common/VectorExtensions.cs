@@ -89,16 +89,13 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="vec">Vector to Call the Method</param>
         /// <returns>zero vector</returns>
-        public static Task<Vector> GetZeroVector(this Vector vec)
+        public static Vector GetZeroVector(this Vector vec)
         {
-            return Task.Factory.StartNew(() =>
+            return new Vector
             {
-                return new Vector
-                {
-                    Position = new GameFieldPosition { X = 0, Y = 0 },
-                    Direction = new GameFieldPosition { X = vec.Direction.X - vec.Position.X, Y = vec.Direction.Y - vec.Position.Y }
-                };
-            });
+                Position = new GameFieldPosition { X = 0, Y = 0 },
+                Direction = new GameFieldPosition { X = vec.Direction.X - vec.Position.X, Y = vec.Direction.Y - vec.Position.Y }
+            };
         }
 
         /// <summary>
@@ -116,9 +113,9 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="vec">Vector to Call the Method</param>
         /// <returns>length of the Vector</returns>
-        public async static Task<double> GetVectorLength(this Vector vec)
+        public static double GetVectorLength(this Vector vec)
         {
-            Vector normalVector = await vec.GetZeroVector().ConfigureAwait(false);
+            Vector normalVector = vec.GetZeroVector();
             // Pythagoras formula for the length of the vector
             return Math.Sqrt(Math.Pow(normalVector.Direction.X, 2) + Math.Pow(normalVector.Direction.Y, 2));
         }

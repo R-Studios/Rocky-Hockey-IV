@@ -57,7 +57,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 Direction = new GameFieldPosition { X = xDir, Y = yDir }
             });
             var trajectoryCalculationFramework = new TrajectoryCalculationFramework();
-            double length = await vectors.First().GetVectorLength().ConfigureAwait(false);
+            double length = vectors.First().GetVectorLength();
             double expectedMilliSeconds = (length / velocity) * 1000;
 
             double neededTime = await trajectoryCalculationFramework.CalculateNeededTime(vectors, velocity).ConfigureAwait(false);

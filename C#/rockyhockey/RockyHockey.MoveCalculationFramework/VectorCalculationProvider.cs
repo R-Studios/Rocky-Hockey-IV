@@ -60,11 +60,11 @@ namespace RockyHockey.MoveCalculationFramework
                 puckVector.Direction.X = puckVector.Position.X - 1;
             }
 
-            puckVector.Velocity = await CalculatePuckVelocity(puckVectors).ConfigureAwait(false);
+            puckVector.Velocity = CalculatePuckVelocity(puckVectors);
             return puckVector;
         }
 
-        private Task<List<FrameVector>> CreateVectors(IEnumerable<FrameGameFieldPosition> puckPositions)
+        private Task<List<VelocityVector>> CreateVectors(List<TimedCoordinate> puckPositions)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -87,13 +87,12 @@ namespace RockyHockey.MoveCalculationFramework
         /// Creates single vectors of the puck and calculates the average velocity
         /// </summary>
         /// <returns>velocity of the puck in pixels per millisecond</returns>
-        private async Task<double> CalculatePuckVelocity(IEnumerable<FrameVector> puckVectors)
+        private double CalculatePuckVelocity(IEnumerable<TimedVector> puckVectors)
         {
             double velocity = 0;
-            foreach (FrameVector vec in puckVectors)
+            foreach (TimedVector vec in puckVectors)
             {
-                double length = await vec.GetVectorLength().ConfigureAwait(false);
-                velocity += length / ((vec.FrameNumber / cameraFrameRate) * 1000);
+                velocity += vec.Length / vec.NeededTime;
             }
             return velocity / puckVectors.Count();
         }
