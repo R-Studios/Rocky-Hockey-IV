@@ -99,12 +99,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractCameraDetectionFramework.cs" />
+    <Compile Include="new\CameraReader.cs" />
     <Compile Include="GameCameraDetectionFramework.cs" />
     <Compile Include="CalibrationCameraDetectionFramework.cs" />
     <Compile Include="CalibrationFramework.cs" />
     <Compile Include="ICalibrationForCameraProvider.cs" />
+    <Compile Include="new\ImageProvider.cs" />
     <Compile Include="IMotionCaptureProvider.cs" />
     <Compile Include="MotionCaptureProvider.cs" />
+    <Compile Include="new\PositionCalculator.cs" />
+    <Compile Include="new\PositionCollector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

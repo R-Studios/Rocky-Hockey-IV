@@ -15,7 +15,7 @@ namespace RockyHockey.MoveCalculationFramework
         /// Constructs a new instance of the VectorCalculationProvider
         /// </summary>
         /// <param name="motionCaptureProvider">motionCaptureProvider to get the positions of the puck</param>
-        public VectorCalculationProvider(IMotionCaptureProvider motionCaptureProvider)
+        public VectorCalculationProvider(PositionCollector motionCaptureProvider)
         {
             this.motionCaptureProvider = motionCaptureProvider;
         }
@@ -25,7 +25,7 @@ namespace RockyHockey.MoveCalculationFramework
         /// </summary>
         private double cameraFrameRate = Config.Instance.FrameRate;
 
-        private readonly IMotionCaptureProvider motionCaptureProvider;
+        private readonly PositionCollector motionCaptureProvider;
 
         private readonly double tolerance = Config.Instance.Tolerance;
 
