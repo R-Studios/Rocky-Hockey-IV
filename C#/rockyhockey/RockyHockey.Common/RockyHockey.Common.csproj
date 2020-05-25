@@ -48,8 +48,8 @@
     <Compile Include="Config\ObjectSerializer.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="Difficulties.cs" />
-    <Compile Include="FrameVector.cs" />
     <Compile Include="TimedCoordinate.cs" />
+    <Compile Include="TimedVector.cs" />
     <Compile Include="GameFieldPosition.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />

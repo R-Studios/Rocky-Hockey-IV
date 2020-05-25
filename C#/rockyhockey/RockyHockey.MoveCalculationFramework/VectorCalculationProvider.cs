@@ -38,27 +38,7 @@ namespace RockyHockey.MoveCalculationFramework
             List<TimedCoordinate> puckPositions = motionCaptureProvider.GetPuckPositions();
 
             // Vector should start at the last point because the puck has been detected there for the last time
-            var puckVector = new VelocityVector
-            {
-                Position = new GameFieldPosition { X = puckPositions.Last().X, Y = puckPositions.Last().Y }
-            };
-
-            IEnumerable<FrameVector> puckVectors = await CreateVectors(puckPositions).ConfigureAwait(false);
-            // Vector has the average pitch of all detected vectors
-            puckVector.Direction = new GameFieldPosition
-            {
-                Y = puckPositions.Last().Y + CalculateAveragePitch(puckVectors)
-            };
-
-            // Direction of the puckVector
-            if (puckPositions.Last().X >= puckPositions.First().X)
-            {
-                puckVector.Direction.X = puckVector.Position.X + 1;
-            }
-            else
-            {
-                puckVector.Direction.X = puckVector.Position.X - 1;
-            }
+            var puckVector = new VelocityVector(puckPositions.First(), puckPositions.Last());
 
             puckVector.Velocity = CalculatePuckVelocity(puckVectors);
             return puckVector;
@@ -68,15 +48,11 @@ namespace RockyHockey.MoveCalculationFramework
         {
             return Task.Factory.StartNew(() =>
             {
-                var puckVectors = new List<FrameVector>();
+                var puckVectors = new List<VelocityVector>();
                 for (int i = 1; i < puckPositions.Count(); i++)
                 {
-                    var vec = new FrameVector
-                    {
-                        Position = puckPositions.ElementAt(i - 1),
-                        Direction = puckPositions.ElementAt(i),
-                        FrameNumber = puckPositions.ElementAt(i).FrameNumber - puckPositions.ElementAt(i - 1).FrameNumber
-                    };
+                    var vec = new VelocityVector(puckPositions[i - 1], puckPositions[0]);
+
                     puckVectors.Add(vec);
                 }
                 return puckVectors;
