@@ -13,12 +13,9 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="text">text to log</param>
         /// <returns>executeable Task</returns>
-        public override Task Log(string text)
+        public override void Log(string text)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                Console.WriteLine(text);
-            });
+            Console.WriteLine(text);
         }
     }
 }

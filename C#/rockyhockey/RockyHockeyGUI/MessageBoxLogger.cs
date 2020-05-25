@@ -17,12 +17,9 @@ namespace RockyHockeyGUI
         /// </summary>
         /// <param name="text">text to write</param>
         /// <returns>executeable Task</returns>
-        public override Task Log(string text)
+        public override void Log(string text)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                displayText += text + Environment.NewLine;
-            });
+            displayText += text + Environment.NewLine;
         }
 
         /// <summary>

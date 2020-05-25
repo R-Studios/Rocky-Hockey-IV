@@ -78,7 +78,7 @@ namespace RockyHockeyGUI
             }
             catch
             {
-                await MsgBoxLogger?.Log("Please enter valid values");
+                MsgBoxLogger?.Log("Please enter valid values");
                 MsgBoxLogger?.Show();
             }
         }

@@ -47,7 +47,7 @@ namespace RockyHockeyGUI
             catch (Exception ex)
             {
                 var initException = new Exception("Error while initializing GUI", ex);
-                MsgBoxLogger?.Log(ex).Wait();
+                MsgBoxLogger?.Log(ex);
                 MsgBoxLogger.Show();
             }
         }
@@ -114,7 +114,7 @@ namespace RockyHockeyGUI
             }
             catch (Exception ex)
             {
-                await MsgBoxLogger?.Log(ex);
+                MsgBoxLogger?.Log(ex);
                 MsgBoxLogger?.Show();
             }
         }
@@ -203,7 +203,7 @@ namespace RockyHockeyGUI
             catch (Exception ex)
             {
                 var startException = new Exception("Error while stopping RockyHockey", ex);
-                await MsgBoxLogger?.Log(startException);
+                MsgBoxLogger?.Log(startException);
                 MsgBoxLogger.Show();
             }
         }

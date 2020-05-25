@@ -14,21 +14,21 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="text">String to log</param>
         /// <returns>executeable Task</returns>
-        public abstract Task Log(string text);
+        public abstract void Log(string text);
 
         /// <summary>
         ///  Writes the exception and its inner exceptions into the log
         /// </summary>
         /// <param name="ex">Exception to log</param>
         /// <returns>executeable Task</returns>
-        public async Task Log(Exception ex)
+        public async void Log(Exception ex)
         {
             string message = ex.Message + "\n" + ex.StackTrace;
-            await Log(message).ConfigureAwait(false);
+            Log(message);
             Exception innerException = ex.InnerException;
             while (innerException != null)
             {
-                await Log($"inner exception: {innerException.Message}").ConfigureAwait(false);
+                Log($"inner exception: {innerException.Message}");
                 innerException = innerException.InnerException;
             }
         }

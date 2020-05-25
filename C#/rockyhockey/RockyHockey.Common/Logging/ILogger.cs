@@ -13,13 +13,13 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="text">String to log</param>
         /// <returns>executeable Task</returns>
-        Task Log(string text);
+        void Log(string text);
 
         /// <summary>
         ///  Writes the exception into the log
         /// </summary>
         /// <param name="ex">Exception to log</param>
         /// <returns>executeable Task</returns>
-        Task Log(Exception ex);
+        void Log(Exception ex);
     }
 }

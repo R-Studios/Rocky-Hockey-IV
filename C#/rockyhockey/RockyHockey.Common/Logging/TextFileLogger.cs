@@ -8,28 +8,33 @@ namespace RockyHockey.Common
     /// </summary>
     public class TextFileLogger : Logger
     {
+        public static TextFileLogger Instance { get; } =  new TextFileLogger("errors.txt");
+
         /// <summary>
         /// Creates a new Instance of the TextFileLogger with the surpassed file
         /// </summary>
         /// <param name="logFile">file with its path</param>
         public TextFileLogger(string logFile)
         {
-            this.logFile = logFile;
+            if (!File.Exists(logFile))
+                File.Create(logFile);
+
+            this.logFile = new StreamWriter(logFile, true);
         }
 
-        private string logFile;
+        private StreamWriter logFile;
 
         /// <summary>
         /// Writes the String into the Logfile
         /// </summary>
         /// <param name="text">String to log</param>
         /// <returns>executeable Task</returns>
-        public override async Task Log(string text)
+        public override void Log(string text)
         {
-            using (var streamWriter = new StreamWriter(logFile, true))
+            lock (logFile)
             {
-                await streamWriter.WriteLineAsync(text).ConfigureAwait(false);
-                streamWriter.Flush();
+                logFile.WriteLine(text);
+                logFile.Flush();
             }
         }
     }

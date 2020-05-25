@@ -124,7 +124,7 @@ namespace RockyHockey.MovementFramework
                 }
                 catch (Exception ex)
                 {
-                    MovementControllerLogger?.Log(ex).Wait();
+                    MovementControllerLogger?.Log(ex);
                 }
             });
         }
@@ -166,7 +166,7 @@ namespace RockyHockey.MovementFramework
             }
             catch (Exception ex)
             {
-                MovementControllerLogger?.Log(ex).Wait();
+                MovementControllerLogger?.Log(ex);
             }
         }
     }
