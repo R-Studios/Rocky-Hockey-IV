@@ -69,7 +69,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
                 };
                 if (count % 2 == 0)
                 {
-                    pos.X = count + (count * 0.9);
+                    pos.X = count + (count * 0.9f);
                     pos.Timestamp = count;
                 }
                 count += 1;

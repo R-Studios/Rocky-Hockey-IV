@@ -65,7 +65,7 @@ namespace RockyHockey.Common
         /// <summary>
         /// Singleton instance
         /// </summary>
-        public static Config Instance => instance ?? (instance = Load());
+        public static Config Instance { get; } = Load();
 
         /// <summary>
         /// config of camera 1
