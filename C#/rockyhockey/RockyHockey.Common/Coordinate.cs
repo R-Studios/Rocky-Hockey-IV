@@ -17,7 +17,7 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="x">x of the coordinate</param>
         /// <param name="y">y of the coordinate</param>
-        public Coordinate(int x, int y)
+        public Coordinate(float x, float y)
         {
             X = x;
             Y = y;
@@ -31,11 +31,59 @@ namespace RockyHockey.Common
         /// <summary>
         /// X-Coordinate
         /// </summary>
-        public int X { get; set; } = 0;
+        public float X { get; set; } = 0;
 
         /// <summary>
         /// Y-Coordinate
         /// </summary>
-        public int Y { get; set; } = 0;
+        public float Y { get; set; } = 0;
+
+        public static bool operator ==(Coordinate obj1, Coordinate obj2)
+        {
+            bool leftIsNull = ReferenceEquals(obj1, null);
+            bool rightIsNull = ReferenceEquals(obj2, null);
+
+            bool retVal = leftIsNull ^ rightIsNull;
+            retVal = !retVal;
+
+            if (retVal && !leftIsNull)
+                retVal = obj1.Equals(obj2);
+
+            return retVal;
+        }
+
+        public static bool operator !=(Coordinate obj1, Coordinate obj2)
+        {
+            return !(obj1 == obj2);
+        }
+
+        public bool Equals(Coordinate other)
+        {
+            bool retVal = false;
+
+            if (!ReferenceEquals(null, other))
+            {
+                if (ReferenceEquals(this, other))
+                {
+                    retVal = true;
+                }
+                else
+                {
+                    retVal = this.X == other.X && this.Y == other.Y;
+                }
+            }
+
+            return retVal;
+        }
+
+        public override bool Equals(object other)
+        {
+            bool retVal = false;
+
+            if (other.GetType().IsAssignableFrom(typeof(Coordinate)))
+                retVal = this.Equals((Coordinate)other);
+
+            return retVal;
+        }
     }
 }
