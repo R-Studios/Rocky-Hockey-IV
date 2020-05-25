@@ -98,6 +98,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="License-LGPL.txt" />
+    <Content Include="MotionCaptureFramework\testimages\0.png" />
+    <Content Include="MotionCaptureFramework\testimages\1.png" />
+    <Content Include="MotionCaptureFramework\testimages\2.png" />
+    <Content Include="MotionCaptureFramework\testimages\3.png" />
+    <Content Include="MotionCaptureFramework\testimages\4.png" />
+    <Content Include="MotionCaptureFramework\testimages\5.png" />
+    <Content Include="MotionCaptureFramework\testimages\6.png" />
+    <Content Include="MotionCaptureFramework\testimages\7.png" />
+    <Content Include="MotionCaptureFramework\testimages\original.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="TestImages\" />
