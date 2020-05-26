@@ -40,7 +40,6 @@ namespace RockyHockey.MoveCalculationFramework
             // Vector should start at the last point because the puck has been detected there for the last time
             var puckVector = new VelocityVector(puckPositions.First(), puckPositions.Last());
 
-            puckVector.Velocity = CalculatePuckVelocity(puckVectors);
             return puckVector;
         }
 

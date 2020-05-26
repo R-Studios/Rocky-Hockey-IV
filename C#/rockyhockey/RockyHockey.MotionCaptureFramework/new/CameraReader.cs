@@ -25,7 +25,7 @@ namespace RockyHockey.MotionCaptureFramework
 
         public override TimedImage getTimedImage()
         {
-            image = new TimedImage();
+            TimedImage image = new TimedImage();
             image.image = new Mat();
             camera.Read(image.image);
             image.timeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();

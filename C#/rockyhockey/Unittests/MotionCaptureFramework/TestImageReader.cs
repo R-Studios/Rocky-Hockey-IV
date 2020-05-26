@@ -34,7 +34,7 @@ namespace RockyHockey.MotionCaptureFramework
 
         public TimedImage getTimedImage(int number)
         {
-            retval = new TimedImage();
+            TimedImage retval = new TimedImage();
 
             if (number < 8)
                 retval.image = CvInvoke.Imread(names[number]);
