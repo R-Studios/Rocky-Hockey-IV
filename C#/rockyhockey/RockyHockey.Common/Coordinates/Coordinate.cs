@@ -17,10 +17,20 @@ namespace RockyHockey.Common
         /// </summary>
         /// <param name="x">x of the coordinate</param>
         /// <param name="y">y of the coordinate</param>
-        public Coordinate(float x, float y)
+        public Coordinate(double x, double y)
         {
             X = x;
             Y = y;
+        }
+
+        /// <summary>
+        /// the constructor constructs an instance of the class of which it is the constructor (copies given coordinate)
+        /// </summary>
+        /// <param name="original">the coordinate to be copied</param>
+        public Coordinate(Coordinate original)
+        {
+            X = original.X;
+            Y = original.Y;
         }
 
         /// <summary>
@@ -31,12 +41,12 @@ namespace RockyHockey.Common
         /// <summary>
         /// X-Coordinate
         /// </summary>
-        public float X { get; set; } = 0;
+        public double X { get; set; } = 0;
 
         /// <summary>
         /// Y-Coordinate
         /// </summary>
-        public float Y { get; set; } = 0;
+        public double Y { get; set; } = 0;
 
         public static bool operator ==(Coordinate obj1, Coordinate obj2)
         {
@@ -84,6 +94,28 @@ namespace RockyHockey.Common
                 retVal = this.Equals((Coordinate)other);
 
             return retVal;
+        }
+
+        public static bool insideBounds(Coordinate pos)
+        {
+            double radius = Config.Instance.BatRadius - 2;
+
+            bool retval = pos.X >= radius;
+
+            if (retval)
+            {
+                retval = pos.X <= Config.Instance.GameFieldSize.Width - radius;
+
+                if (retval)
+                {
+                    retval = pos.Y >= radius;
+
+                    if (retval)
+                        retval = pos.Y <= Config.Instance.GameFieldSize.Height - radius;
+                }
+            }
+
+            return retval;
         }
     }
 }

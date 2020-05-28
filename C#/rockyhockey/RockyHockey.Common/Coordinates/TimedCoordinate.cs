@@ -5,6 +5,16 @@
     /// </summary>
     public class TimedCoordinate : Coordinate
     {
+        public TimedCoordinate() { }
+        public TimedCoordinate(Coordinate coord, long timestamp = 0) : base(coord)
+        {
+            Timestamp = timestamp;
+        }
+        public TimedCoordinate(double x, double y, long timestamp = 0) : base(x, y)
+        {
+            Timestamp = timestamp;
+        }
+
         /// <summary>
         /// timestamp when the position has been detected
         /// </summary>

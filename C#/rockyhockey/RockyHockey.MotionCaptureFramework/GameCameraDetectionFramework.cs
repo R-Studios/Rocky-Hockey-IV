@@ -86,10 +86,10 @@ namespace RockyHockey.MotionCaptureFramework
             var config = Config.Instance;
 
             var sourcePointsMat = new PointF[4];
-            sourcePointsMat[0] = new PointF(config.Camera1.UpperLeft.X, config.Camera1.UpperLeft.Y);
-            sourcePointsMat[1] = new PointF(config.Camera1.UpperRight.X, config.Camera1.UpperLeft.Y);
-            sourcePointsMat[2] = new PointF(config.Camera1.LowerLeft.X, config.Camera1.UpperLeft.Y);
-            sourcePointsMat[3] = new PointF(config.Camera1.LowerRight.X, config.Camera1.UpperLeft.Y);
+            sourcePointsMat[0] = new PointF((float)config.Camera1.UpperLeft.X, (float)config.Camera1.UpperLeft.Y);
+            sourcePointsMat[1] = new PointF((float)config.Camera1.UpperRight.X, (float)config.Camera1.UpperLeft.Y);
+            sourcePointsMat[2] = new PointF((float)config.Camera1.LowerLeft.X, (float)config.Camera1.UpperLeft.Y);
+            sourcePointsMat[3] = new PointF((float)config.Camera1.LowerRight.X, (float)config.Camera1.UpperLeft.Y);
 
             var destinationPointsMat = new PointF[4];
             destinationPointsMat[0] = new PointF(0, 0);
