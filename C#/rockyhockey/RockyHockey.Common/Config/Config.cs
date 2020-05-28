@@ -32,26 +32,17 @@ namespace RockyHockey.Common
             Camera2.LowerRight = new Coordinate(320, 240);
         }
 
-        private static Config instance;
-
         private static string configFile = "RockyHockeyConfig.xml";
 
-        /// <summary>
-        /// tries to load config from file
-        /// if none exists a new config gets created
-        /// </summary>
-        /// <returns></returns>
-        private static Config Load()
+        static Config()
         {
-            Config config = ObjectSerializer.DeserializeObject<Config>(configFile);
+            Instance = ObjectSerializer.DeserializeObject<Config>(configFile);
 
-            if (config == null)
+            if (Instance == null)
             {
-                config = new Config();
-                config.save();
+                Instance = new Config();
+                Instance.save();
             }
-
-            return config;
         }
 
         /// <summary>
@@ -65,7 +56,7 @@ namespace RockyHockey.Common
         /// <summary>
         /// Singleton instance
         /// </summary>
-        public static Config Instance { get; } = Load();
+        public static Config Instance { get; private set; }
 
         /// <summary>
         /// config of camera 1
@@ -96,6 +87,11 @@ namespace RockyHockey.Common
         /// Framerate of the camera
         /// </summary>
         public int FrameRate { get; set; }
+
+        /// <summary>
+        /// radius of the bat
+        /// </summary>
+        public double BatRadius { get; set; }
 
         /// <summary>
         /// Difficulty of the RockyHockey game
