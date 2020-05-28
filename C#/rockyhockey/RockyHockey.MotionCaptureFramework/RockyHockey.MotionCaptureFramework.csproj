@@ -109,6 +109,7 @@
     <Compile Include="MotionCaptureProvider.cs" />
     <Compile Include="new\PositionCalculator.cs" />
     <Compile Include="new\ImagePositionCollector.cs" />
+    <Compile Include="new\PositionCollector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

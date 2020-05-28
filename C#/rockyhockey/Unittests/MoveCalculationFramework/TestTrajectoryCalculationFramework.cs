@@ -11,7 +11,7 @@ namespace RockyHockey.MoveCalculationFramework
     {
         public TestTrajectoryCalculationFramework()
         {
-            motionCaptureProvider = new PositionCollector(new TestImageReader());
+            motionCaptureProvider = new ImagePositionCollector(new TestImageReader());
             vectorCalculationProvider = new VectorCalculationProvider(motionCaptureProvider);
         }
     }

@@ -19,7 +19,7 @@ namespace RockyHockey.MoveCalculationFramework
         /// </summary>
         public TrajectoryCalculationFramework()
         {
-            motionCaptureProvider = new PositionCollector();
+            motionCaptureProvider = new ImagePositionCollector();
             gameFieldSize = Config.Instance.GameFieldSize;
             vectorCalculationProvider = new VectorCalculationProvider(motionCaptureProvider);
             movementController = MovementController.Instance;

@@ -35,7 +35,7 @@ namespace RockyHockey.MotionCaptureFramework
         [Test]
         public void checkPositionList()
         {
-            PositionCollector collector = new PositionCollector(new TestImageReader());
+            ImagePositionCollector collector = new ImagePositionCollector(new TestImageReader());
 
             List<TimedCoordinate> posList = collector.GetPuckPositions();
 
@@ -45,7 +45,7 @@ namespace RockyHockey.MotionCaptureFramework
         [Test]
         public void checkVector()
         {
-            VectorCalculationProvider test = new VectorCalculationProvider(new PositionCollector(new TestImageReader()));
+            VectorCalculationProvider test = new VectorCalculationProvider(new ImagePositionCollector(new TestImageReader()));
 
             Task<VelocityVector> vecTask = test.CalculatePuckVector();
             vecTask.Wait();

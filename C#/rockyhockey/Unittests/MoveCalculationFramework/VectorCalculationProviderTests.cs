@@ -24,7 +24,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         [Test]
         public async Task TestCalculatePuckVelocity()
         {
-            var vectorCalculationProvider = new VectorCalculationProvider(new PositionCollector());
+            var vectorCalculationProvider = new VectorCalculationProvider(new ImagePositionCollector());
             VelocityVector vec = await vectorCalculationProvider.CalculatePuckVector().ConfigureAwait(false);
             double expectedVelocity = 0.485054301382442;
             Assert.AreEqual(expectedVelocity, vec.Velocity);
@@ -33,7 +33,7 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         [Test]
         public async Task TestCalculatedDirection()
         {
-            var vectorCalculationProvider = new VectorCalculationProvider(new PositionCollector());
+            var vectorCalculationProvider = new VectorCalculationProvider(new ImagePositionCollector());
             VelocityVector vec = await vectorCalculationProvider.CalculatePuckVector().ConfigureAwait(false);
             Assert.AreEqual(1, vec.Direction.X);
             Assert.AreEqual(0.081133540372670773, vec.Direction.Y);

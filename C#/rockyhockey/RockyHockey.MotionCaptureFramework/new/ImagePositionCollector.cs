@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RockyHockey.MotionCaptureFramework
 {
-    public class ImagePositionCollector
+    public class ImagePositionCollector : PositionCollector
     {
         private ImageProvider imageProvider;
         public ImagePositionCollector(ImageProvider imageProvider = null)
