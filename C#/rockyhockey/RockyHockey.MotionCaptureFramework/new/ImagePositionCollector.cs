@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace RockyHockey.MotionCaptureFramework
 {
-    public class PositionCollector
+    public class ImagePositionCollector
     {
         private ImageProvider imageProvider;
-        public PositionCollector(ImageProvider imageProvider = null)
+        public ImagePositionCollector(ImageProvider imageProvider = null)
         {
             this.imageProvider = imageProvider ?? new CameraReader();
         }
@@ -32,6 +32,20 @@ namespace RockyHockey.MotionCaptureFramework
             }
 
             return coordinates;
+        }
+
+        public TimedCoordinate GetPuckPosition()
+        {
+            TimedCoordinate coordinate;
+
+            do
+            {
+                Task<TimedCoordinate> detectionTask = PositionCalculator.ProcessImage(imageProvider.getTimedImage(), imageProvider.SliceImage);
+                detectionTask.Wait();
+                coordinate = detectionTask.Result;
+            } while (coordinate == null);
+
+            return coordinate;
         }
 
         public void StopMotionCapturing()
