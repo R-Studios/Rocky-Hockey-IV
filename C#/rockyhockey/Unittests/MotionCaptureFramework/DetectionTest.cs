@@ -55,5 +55,31 @@ namespace RockyHockey.MotionCaptureFramework
             int a = 0;
             a++;
         }
+
+        [Test]
+        public async Task direct_pathPrediction()
+        {
+            Config config = Config.Instance;
+            new PathPrediction(new TestImageReader()).init();
+            config.BatRadius = 10;
+        }
+
+        [Test]
+        public async Task reflected_pathPrediction()
+        {
+            Config config = Config.Instance;
+            new PathPrediction(new TestImageReader().setcounter(0)).init();
+            config.BatRadius = 10;
+        }
+
+        [Test]
+        public void testPathSimulation()
+        {
+            Config config = Config.Instance;
+            SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), 225, 0.03125, 20);
+            PathPrediction predictionTest = new PathPrediction(test);
+            predictionTest.init();
+            config.BatRadius = 10;
+        }
     }
 }

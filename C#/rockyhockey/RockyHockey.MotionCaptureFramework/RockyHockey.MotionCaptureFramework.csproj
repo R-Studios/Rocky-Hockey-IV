@@ -107,6 +107,7 @@
     <Compile Include="new\ImageProvider.cs" />
     <Compile Include="IMotionCaptureProvider.cs" />
     <Compile Include="MotionCaptureProvider.cs" />
+    <Compile Include="new\PathPrediction.cs" />
     <Compile Include="new\PositionCalculator.cs" />
     <Compile Include="new\ImagePositionCollector.cs" />
     <Compile Include="new\PositionCollector.cs" />

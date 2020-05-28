@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MotionCaptureFramework\DetectionTest.cs" />
+    <Compile Include="MotionCaptureFramework\SimulationPositionCollector.cs" />
     <Compile Include="MotionCaptureFramework\TestImageReader.cs" />
     <Compile Include="MoveCalculationFramework\TestTrajectoryCalculationFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
