@@ -6,6 +6,7 @@ using RockyHockey.MoveCalculationFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,13 +24,13 @@ namespace RockyHockey.MotionCaptureFramework
             Assert.True(pos == new Coordinate(368.5f, 168.5f));
 
             pos = await PositionCalculator.ProcessImage(reader.getTimedImage(2), false);
-            Assert.True(pos == new Coordinate(334.5f, 203.5f));
+            Assert.True(pos == new Coordinate(330.5f, 206.5f));
 
             pos = await PositionCalculator.ProcessImage(reader.getTimedImage(4), false);
             Assert.True(pos == new Coordinate(292.5f, 244.5f));
 
             pos = await PositionCalculator.ProcessImage(reader.getTimedImage(6), false);
-            Assert.True(pos == new Coordinate(249.5f, 286.5f));
+            Assert.True(pos == new Coordinate(254.5f, 282.5f));
         }
 
         [Test]
@@ -39,7 +40,7 @@ namespace RockyHockey.MotionCaptureFramework
 
             List<TimedCoordinate> posList = collector.GetPuckPositions();
 
-            Assert.True(posList.Count == 8);
+            Assert.True(posList.Count == 10);
         }
 
         [Test]
@@ -53,13 +54,6 @@ namespace RockyHockey.MotionCaptureFramework
             VelocityVector vec = vecTask.Result;
             int a = 0;
             a++;
-        }
-
-        [Test]
-        public async Task detectPosition()
-        {
-            TestTrajectoryCalculationFramework test = new TestTrajectoryCalculationFramework();
-            await test.BeginCalculationLoop(null).ConfigureAwait(false);
         }
     }
 }

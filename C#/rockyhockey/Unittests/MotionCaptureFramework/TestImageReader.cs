@@ -9,18 +9,19 @@ namespace RockyHockey.MotionCaptureFramework
 {
     public class TestImageReader : ImageProvider
     {
-        int count = 0;
-        string[] names;
+        int count = -2;
+        string prefix = "P:\\testImages\\";
 
         public TestImageReader()
         {
             SliceImage = false;
-            string prefix = "P:\\testImages\\";
+        }
 
-            names = new string[10];
+        public TestImageReader setcounter(int newCounter)
+        {
+            count = newCounter;
 
-            for (int a = 0; a < 10; a++)
-                names[a] = prefix + a + ".png";
+            return this;
         }
 
         public override void finalize()
@@ -36,8 +37,8 @@ namespace RockyHockey.MotionCaptureFramework
         {
             TimedImage retval = new TimedImage();
 
-            if (number < 8)
-                retval.image = CvInvoke.Imread(names[number]);
+            if (number < 13)
+                retval.image = CvInvoke.Imread(prefix + number + ".png");
             else
                 retval.image = new Mat();
 
