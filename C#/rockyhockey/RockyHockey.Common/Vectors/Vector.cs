@@ -25,7 +25,7 @@ namespace RockyHockey.Common
             calcLength();
         }
 
-        public double calcLength()
+        private double calcLength()
         {
             if (VectorDirection == null)
                 calcDirection();
@@ -66,5 +66,19 @@ namespace RockyHockey.Common
         public Coordinate End { get; private set; }
         public Coordinate VectorDirection { get; private set; }
         public double Length { get; private set; }
+
+        /// <summary>
+        /// checks if motion is towards robot side
+        /// </summary>
+        /// <returns></returns>
+        public bool towardsRobot()
+        {
+            bool retval = false;
+
+            if (Direction.Y < 0)
+                retval = true;
+
+            return retval;
+        }
     }
 }

@@ -49,17 +49,17 @@
     <Compile Include="Coordinate.cs" />
     <Compile Include="Difficulties.cs" />
     <Compile Include="TimedCoordinate.cs" />
-    <Compile Include="TimedVector.cs" />
     <Compile Include="GameFieldPosition.cs" />
+    <Compile Include="Vectors\TimedVector.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\TextFileLogger.cs" />
     <Compile Include="Score.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Vector.cs" />
-    <Compile Include="VectorExtensions.cs" />
-    <Compile Include="VelocityVector.cs" />
+    <Compile Include="Vectors\Vector.cs" />
+    <Compile Include="Vectors\VectorExtensions.cs" />
+    <Compile Include="Vectors\VelocityVector.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

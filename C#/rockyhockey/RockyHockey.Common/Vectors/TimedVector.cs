@@ -18,12 +18,14 @@
 
         public long calcTime()
         {
-            return NeededTime = ((TimedCoordinate)End).Timestamp - ((TimedCoordinate)Start).Timestamp;
+            return NeededTime = TimedEnd.Timestamp - TimedStart.Timestamp;
         }
 
         /// <summary>
         /// time that passed while bat moved from start to end position
         /// </summary>
         public long NeededTime { get; private set; }
+        public TimedCoordinate TimedStart { get => (TimedCoordinate)Start; }
+        public TimedCoordinate TimedEnd { get => (TimedCoordinate)End; }
     }
 }
