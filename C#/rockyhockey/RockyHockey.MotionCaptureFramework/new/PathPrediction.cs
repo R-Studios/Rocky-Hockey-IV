@@ -103,9 +103,9 @@ namespace RockyHockey.MotionCaptureFramework
         }
 
         /// <summary>
-        /// calculates position on the motion prediction and time when the bat reaches the calculated position
+        /// calculates position on the motion prediction at given x and time when the bat reaches the calculated position
         /// </summary>
-        public TimedCoordinate getTimeForPosition(double y)
+        public TimedCoordinate getTimeForPosition(double x)
         {
             TimedCoordinate retval = null;
             double length = 0;
@@ -119,7 +119,7 @@ namespace RockyHockey.MotionCaptureFramework
             int a;
             for (a = localpathParts.Count - 1; a > -1; a--)
             {
-                retval = new TimedCoordinate(localpathParts[a].reachesX(y));
+                retval = new TimedCoordinate(localpathParts[a].reachesX(x));
 
                 if (Coordinate.insideBounds(retval))
                     break;
