@@ -42,7 +42,7 @@ namespace RockyHockey.MotionCaptureFramework
                 if (coordinates.Count >= 5)
                     break;
                 else
-                    Thread.Sleep((int)(timestamp + 250 - DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    Thread.Sleep(Math.Abs((int)(timestamp + 250 - DateTimeOffset.Now.ToUnixTimeMilliseconds())));
             }
 
             return coordinates;
