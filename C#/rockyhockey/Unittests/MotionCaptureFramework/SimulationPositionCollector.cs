@@ -68,7 +68,7 @@ namespace RockyHockey.MotionCaptureFramework
                 motion.Add(motion.Last().reflectedLine());
         }
 
-        public TimedCoordinate GetPuckPosition()
+        public override TimedCoordinate GetPuckPosition()
         {
             //get current time
             long timeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -128,7 +128,7 @@ namespace RockyHockey.MotionCaptureFramework
             return newPosition;
         }
 
-        public List<TimedCoordinate> GetPuckPositions()
+        public override List<TimedCoordinate> GetPuckPositions()
         {
             List<TimedCoordinate> positions = new List<TimedCoordinate>();
 
@@ -138,7 +138,7 @@ namespace RockyHockey.MotionCaptureFramework
             return positions;
         }
 
-        public void StopMotionCapturing()
+        public override void StopMotionCapturing()
         {
         }
     }

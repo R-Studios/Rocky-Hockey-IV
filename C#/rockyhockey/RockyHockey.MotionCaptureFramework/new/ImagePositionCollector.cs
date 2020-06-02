@@ -9,13 +9,12 @@ namespace RockyHockey.MotionCaptureFramework
 {
     public class ImagePositionCollector : PositionCollector
     {
-        private ImageProvider imageProvider;
         public ImagePositionCollector(ImageProvider imageProvider = null)
         {
             this.imageProvider = imageProvider ?? new CameraReader();
         }
 
-        public List<TimedCoordinate> GetPuckPositions()
+        public override List<TimedCoordinate> GetPuckPositions()
         {
             List<Task<TimedCoordinate>> detectionTasks = new List<Task<TimedCoordinate>>();
             for (int a = 0; a < 10; a++)
@@ -34,7 +33,7 @@ namespace RockyHockey.MotionCaptureFramework
             return coordinates;
         }
 
-        public TimedCoordinate GetPuckPosition()
+        public override TimedCoordinate GetPuckPosition()
         {
             TimedCoordinate coordinate;
 
@@ -48,7 +47,7 @@ namespace RockyHockey.MotionCaptureFramework
             return coordinate;
         }
 
-        public void StopMotionCapturing()
+        public override void StopMotionCapturing()
         {
             imageProvider.finalize();
         }

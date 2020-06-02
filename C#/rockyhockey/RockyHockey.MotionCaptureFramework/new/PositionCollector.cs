@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace RockyHockey.MotionCaptureFramework
 {
-    public interface PositionCollector
+    public abstract class PositionCollector
     {
-        List<TimedCoordinate> GetPuckPositions();
-        TimedCoordinate GetPuckPosition();
-        void StopMotionCapturing();
+        public ImageProvider imageProvider { get; protected set; }
+
+        public abstract List<TimedCoordinate> GetPuckPositions();
+        public abstract TimedCoordinate GetPuckPosition();
+        public abstract void StopMotionCapturing();
     }
 }

@@ -35,7 +35,7 @@ namespace RockyHockey.MoveCalculationFramework
 
         private readonly Size gameFieldSize;
 
-        protected PositionCollector motionCaptureProvider;
+        public PositionCollector motionCaptureProvider { get; protected set; }
 
         protected IMovementController movementController;
 
