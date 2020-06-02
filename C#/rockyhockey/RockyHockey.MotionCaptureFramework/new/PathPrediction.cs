@@ -395,7 +395,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// <returns>coordinate of the next impact</returns>
         public Coordinate nextImpactOnShortSide()
         {
-            double distance = Config.Instance.BatRadius;
+            double distance = Config.Instance.PuckRadius;
             if (increasingX)
                 distance = Config.Instance.GameFieldSize.Width - 1 - distance;
 
@@ -408,7 +408,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// <returns>coordinate of the next impact</returns>
         public Coordinate previousImpactOnShortSide()
         {
-            double distance = Config.Instance.BatRadius;
+            double distance = Config.Instance.PuckRadius;
             if (!increasingX)
                 distance = Config.Instance.GameFieldSize.Width - 1 - distance;
 
@@ -453,7 +453,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// <returns>coordinate of the next impact</returns>
         public Coordinate nextImpactOnLongSide()
         {
-            double distance = Config.Instance.BatRadius;
+            double distance = Config.Instance.PuckRadius;
             if (increasingY)
                 distance = Config.Instance.GameFieldSize.Height - 1 - distance;
 
@@ -466,7 +466,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// <returns>coordinate of the previous impact</returns>
         public Coordinate previousImpactOnLongSide()
         {
-            double distance = Config.Instance.BatRadius;
+            double distance = Config.Instance.PuckRadius;
             if (!increasingY)
                 distance = Config.Instance.GameFieldSize.Height - 1 - distance;
 

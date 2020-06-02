@@ -16,7 +16,7 @@ namespace RockyHockey.MotionCaptureFramework
         public CameraReader()
         {
             SliceImage = true;
-            camera = new VideoCapture(1);
+            camera = new VideoCapture(Config.Instance.Camera1.index);
             camera.SetCaptureProperty(CapProp.Fps, Config.Instance.FrameRate);
             camera.SetCaptureProperty(CapProp.FrameWidth, Config.Instance.Camera1.FieldSize.Width);
             camera.SetCaptureProperty(CapProp.FrameHeight, Config.Instance.Camera1.FieldSize.Height);

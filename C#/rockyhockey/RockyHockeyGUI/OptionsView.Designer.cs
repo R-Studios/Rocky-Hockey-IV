@@ -35,26 +35,26 @@
             this.HeightTextBox = new System.Windows.Forms.TextBox();
             this.WidthLabel = new System.Windows.Forms.Label();
             this.HeightLabel = new System.Windows.Forms.Label();
-            this.RestPositionDivisorTextBox = new System.Windows.Forms.TextBox();
-            this.MaximumBatVelocityTextBox = new System.Windows.Forms.TextBox();
             this.Camera1IndexTextBox = new System.Windows.Forms.TextBox();
             this.ToleranceTextBox = new System.Windows.Forms.TextBox();
             this.PunchAxisPositionTextBox = new System.Windows.Forms.TextBox();
             this.DifficultyComboBox = new System.Windows.Forms.ComboBox();
             this.FrameRateTextBox = new System.Windows.Forms.TextBox();
-            this.RestPositionDivisorLabel = new System.Windows.Forms.Label();
-            this.MaxBatVelocityLabel = new System.Windows.Forms.Label();
             this.Camera1IndexLabel = new System.Windows.Forms.Label();
             this.ToleranceLabel = new System.Windows.Forms.Label();
             this.PunchAxisLabel = new System.Windows.Forms.Label();
             this.DifficultyLabel = new System.Windows.Forms.Label();
             this.FrameRateLabel = new System.Windows.Forms.Label();
-            this.PuckRadiusLabel = new System.Windows.Forms.Label();
+            this.MaxBatVelocityLabel = new System.Windows.Forms.Label();
+            this.MaximumBatVelocityTextBox = new System.Windows.Forms.TextBox();
+            this.RestPositionDivisorTextBox = new System.Windows.Forms.TextBox();
             this.PuckRadiusTextBox = new System.Windows.Forms.TextBox();
+            this.SizeRatioTextBox = new System.Windows.Forms.TextBox();
+            this.RestPositionDivisorLabel = new System.Windows.Forms.Label();
+            this.PuckRadiusLabel = new System.Windows.Forms.Label();
             this.SizeRatioLabel = new System.Windows.Forms.Label();
             this.OKButton = new System.Windows.Forms.Button();
             this.AbortButton = new System.Windows.Forms.Button();
-            this.SizeRatioTextBox = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,7 +121,7 @@
             // 
             // WidthTextBox
             // 
-            this.WidthTextBox.Location = new System.Drawing.Point(166, 52);
+            this.WidthTextBox.Location = new System.Drawing.Point(166, 50);
             this.WidthTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.WidthTextBox.Name = "WidthTextBox";
             this.WidthTextBox.Size = new System.Drawing.Size(68, 20);
@@ -129,7 +129,7 @@
             // 
             // HeightTextBox
             // 
-            this.HeightTextBox.Location = new System.Drawing.Point(166, 27);
+            this.HeightTextBox.Location = new System.Drawing.Point(166, 26);
             this.HeightTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.HeightTextBox.Name = "HeightTextBox";
             this.HeightTextBox.Size = new System.Drawing.Size(68, 20);
@@ -138,7 +138,7 @@
             // WidthLabel
             // 
             this.WidthLabel.AutoSize = true;
-            this.WidthLabel.Location = new System.Drawing.Point(2, 50);
+            this.WidthLabel.Location = new System.Drawing.Point(2, 48);
             this.WidthLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.WidthLabel.Name = "WidthLabel";
             this.WidthLabel.Size = new System.Drawing.Size(80, 13);
@@ -148,32 +148,16 @@
             // HeightLabel
             // 
             this.HeightLabel.AutoSize = true;
-            this.HeightLabel.Location = new System.Drawing.Point(2, 25);
+            this.HeightLabel.Location = new System.Drawing.Point(2, 24);
             this.HeightLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.HeightLabel.Name = "HeightLabel";
             this.HeightLabel.Size = new System.Drawing.Size(84, 13);
             this.HeightLabel.TabIndex = 0;
             this.HeightLabel.Text = "                height";
             // 
-            // RestPositionDivisorTextBox
-            // 
-            this.RestPositionDivisorTextBox.Location = new System.Drawing.Point(166, 227);
-            this.RestPositionDivisorTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.RestPositionDivisorTextBox.Name = "RestPositionDivisorTextBox";
-            this.RestPositionDivisorTextBox.Size = new System.Drawing.Size(53, 20);
-            this.RestPositionDivisorTextBox.TabIndex = 10;
-            // 
-            // MaximumBatVelocityTextBox
-            // 
-            this.MaximumBatVelocityTextBox.Location = new System.Drawing.Point(166, 202);
-            this.MaximumBatVelocityTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximumBatVelocityTextBox.Name = "MaximumBatVelocityTextBox";
-            this.MaximumBatVelocityTextBox.Size = new System.Drawing.Size(74, 20);
-            this.MaximumBatVelocityTextBox.TabIndex = 9;
-            // 
             // Camera1IndexTextBox
             // 
-            this.Camera1IndexTextBox.Location = new System.Drawing.Point(166, 177);
+            this.Camera1IndexTextBox.Location = new System.Drawing.Point(166, 170);
             this.Camera1IndexTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.Camera1IndexTextBox.Name = "Camera1IndexTextBox";
             this.Camera1IndexTextBox.Size = new System.Drawing.Size(35, 20);
@@ -181,7 +165,7 @@
             // 
             // ToleranceTextBox
             // 
-            this.ToleranceTextBox.Location = new System.Drawing.Point(166, 152);
+            this.ToleranceTextBox.Location = new System.Drawing.Point(166, 146);
             this.ToleranceTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.ToleranceTextBox.Name = "ToleranceTextBox";
             this.ToleranceTextBox.Size = new System.Drawing.Size(88, 20);
@@ -189,7 +173,7 @@
             // 
             // PunchAxisPositionTextBox
             // 
-            this.PunchAxisPositionTextBox.Location = new System.Drawing.Point(166, 127);
+            this.PunchAxisPositionTextBox.Location = new System.Drawing.Point(166, 122);
             this.PunchAxisPositionTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.PunchAxisPositionTextBox.Name = "PunchAxisPositionTextBox";
             this.PunchAxisPositionTextBox.Size = new System.Drawing.Size(53, 20);
@@ -198,7 +182,7 @@
             // DifficultyComboBox
             // 
             this.DifficultyComboBox.FormattingEnabled = true;
-            this.DifficultyComboBox.Location = new System.Drawing.Point(166, 102);
+            this.DifficultyComboBox.Location = new System.Drawing.Point(166, 98);
             this.DifficultyComboBox.Margin = new System.Windows.Forms.Padding(2);
             this.DifficultyComboBox.Name = "DifficultyComboBox";
             this.DifficultyComboBox.Size = new System.Drawing.Size(134, 21);
@@ -206,36 +190,16 @@
             // 
             // FrameRateTextBox
             // 
-            this.FrameRateTextBox.Location = new System.Drawing.Point(166, 77);
+            this.FrameRateTextBox.Location = new System.Drawing.Point(166, 74);
             this.FrameRateTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.FrameRateTextBox.Name = "FrameRateTextBox";
             this.FrameRateTextBox.Size = new System.Drawing.Size(53, 20);
             this.FrameRateTextBox.TabIndex = 3;
             // 
-            // RestPositionDivisorLabel
-            // 
-            this.RestPositionDivisorLabel.AutoSize = true;
-            this.RestPositionDivisorLabel.Location = new System.Drawing.Point(2, 225);
-            this.RestPositionDivisorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RestPositionDivisorLabel.Name = "RestPositionDivisorLabel";
-            this.RestPositionDivisorLabel.Size = new System.Drawing.Size(101, 13);
-            this.RestPositionDivisorLabel.TabIndex = 19;
-            this.RestPositionDivisorLabel.Text = "Rest position divisor";
-            // 
-            // MaxBatVelocityLabel
-            // 
-            this.MaxBatVelocityLabel.AutoSize = true;
-            this.MaxBatVelocityLabel.Location = new System.Drawing.Point(2, 200);
-            this.MaxBatVelocityLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.MaxBatVelocityLabel.Name = "MaxBatVelocityLabel";
-            this.MaxBatVelocityLabel.Size = new System.Drawing.Size(110, 13);
-            this.MaxBatVelocityLabel.TabIndex = 18;
-            this.MaxBatVelocityLabel.Text = "Maximum Bat Velocity";
-            // 
             // Camera1IndexLabel
             // 
             this.Camera1IndexLabel.AutoSize = true;
-            this.Camera1IndexLabel.Location = new System.Drawing.Point(2, 175);
+            this.Camera1IndexLabel.Location = new System.Drawing.Point(2, 168);
             this.Camera1IndexLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Camera1IndexLabel.Name = "Camera1IndexLabel";
             this.Camera1IndexLabel.Size = new System.Drawing.Size(72, 13);
@@ -245,7 +209,7 @@
             // ToleranceLabel
             // 
             this.ToleranceLabel.AutoSize = true;
-            this.ToleranceLabel.Location = new System.Drawing.Point(2, 150);
+            this.ToleranceLabel.Location = new System.Drawing.Point(2, 144);
             this.ToleranceLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.ToleranceLabel.Name = "ToleranceLabel";
             this.ToleranceLabel.Size = new System.Drawing.Size(55, 13);
@@ -255,7 +219,7 @@
             // PunchAxisLabel
             // 
             this.PunchAxisLabel.AutoSize = true;
-            this.PunchAxisLabel.Location = new System.Drawing.Point(2, 125);
+            this.PunchAxisLabel.Location = new System.Drawing.Point(2, 120);
             this.PunchAxisLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PunchAxisLabel.Name = "PunchAxisLabel";
             this.PunchAxisLabel.Size = new System.Drawing.Size(100, 13);
@@ -265,7 +229,7 @@
             // DifficultyLabel
             // 
             this.DifficultyLabel.AutoSize = true;
-            this.DifficultyLabel.Location = new System.Drawing.Point(2, 100);
+            this.DifficultyLabel.Location = new System.Drawing.Point(2, 96);
             this.DifficultyLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.DifficultyLabel.Name = "DifficultyLabel";
             this.DifficultyLabel.Size = new System.Drawing.Size(47, 13);
@@ -275,35 +239,79 @@
             // FrameRateLabel
             // 
             this.FrameRateLabel.AutoSize = true;
-            this.FrameRateLabel.Location = new System.Drawing.Point(2, 75);
+            this.FrameRateLabel.Location = new System.Drawing.Point(2, 72);
             this.FrameRateLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.FrameRateLabel.Name = "FrameRateLabel";
             this.FrameRateLabel.Size = new System.Drawing.Size(57, 13);
             this.FrameRateLabel.TabIndex = 12;
             this.FrameRateLabel.Text = "Frame rate";
             // 
+            // MaxBatVelocityLabel
+            // 
+            this.MaxBatVelocityLabel.AutoSize = true;
+            this.MaxBatVelocityLabel.Location = new System.Drawing.Point(2, 192);
+            this.MaxBatVelocityLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.MaxBatVelocityLabel.Name = "MaxBatVelocityLabel";
+            this.MaxBatVelocityLabel.Size = new System.Drawing.Size(110, 13);
+            this.MaxBatVelocityLabel.TabIndex = 18;
+            this.MaxBatVelocityLabel.Text = "Maximum Bat Velocity";
+            // 
+            // MaximumBatVelocityTextBox
+            // 
+            this.MaximumBatVelocityTextBox.Location = new System.Drawing.Point(166, 194);
+            this.MaximumBatVelocityTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximumBatVelocityTextBox.Name = "MaximumBatVelocityTextBox";
+            this.MaximumBatVelocityTextBox.Size = new System.Drawing.Size(74, 20);
+            this.MaximumBatVelocityTextBox.TabIndex = 9;
+            // 
+            // RestPositionDivisorTextBox
+            // 
+            this.RestPositionDivisorTextBox.Location = new System.Drawing.Point(166, 218);
+            this.RestPositionDivisorTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.RestPositionDivisorTextBox.Name = "RestPositionDivisorTextBox";
+            this.RestPositionDivisorTextBox.Size = new System.Drawing.Size(53, 20);
+            this.RestPositionDivisorTextBox.TabIndex = 10;
+            // 
+            // PuckRadiusTextBox
+            // 
+            this.PuckRadiusTextBox.Location = new System.Drawing.Point(166, 242);
+            this.PuckRadiusTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.PuckRadiusTextBox.Name = "PuckRadiusTextBox";
+            this.PuckRadiusTextBox.Size = new System.Drawing.Size(53, 20);
+            this.PuckRadiusTextBox.TabIndex = 10;
+            // 
+            // SizeRatioTextBox
+            // 
+            this.SizeRatioTextBox.Location = new System.Drawing.Point(166, 266);
+            this.SizeRatioTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.SizeRatioTextBox.Name = "SizeRatioTextBox";
+            this.SizeRatioTextBox.Size = new System.Drawing.Size(53, 20);
+            this.SizeRatioTextBox.TabIndex = 10;
+            // 
+            // RestPositionDivisorLabel
+            // 
+            this.RestPositionDivisorLabel.AutoSize = true;
+            this.RestPositionDivisorLabel.Location = new System.Drawing.Point(2, 216);
+            this.RestPositionDivisorLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RestPositionDivisorLabel.Name = "RestPositionDivisorLabel";
+            this.RestPositionDivisorLabel.Size = new System.Drawing.Size(101, 13);
+            this.RestPositionDivisorLabel.TabIndex = 19;
+            this.RestPositionDivisorLabel.Text = "Rest position divisor";
+            // 
             // PuckRadiusLabel
             // 
             this.PuckRadiusLabel.AutoSize = true;
-            this.PuckRadiusLabel.Location = new System.Drawing.Point(2, 250);
+            this.PuckRadiusLabel.Location = new System.Drawing.Point(2, 240);
             this.PuckRadiusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PuckRadiusLabel.Name = "PuckRadiusLabel";
             this.PuckRadiusLabel.Size = new System.Drawing.Size(160, 13);
             this.PuckRadiusLabel.TabIndex = 19;
             this.PuckRadiusLabel.Text = "Puck Radius (Game Field Pixels)";
             // 
-            // PuckRadiusTextBox
-            // 
-            this.PuckRadiusTextBox.Location = new System.Drawing.Point(166, 252);
-            this.PuckRadiusTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.PuckRadiusTextBox.Name = "PuckRadiusTextBox";
-            this.PuckRadiusTextBox.Size = new System.Drawing.Size(53, 20);
-            this.PuckRadiusTextBox.TabIndex = 10;
-            // 
             // SizeRatioLabel
             // 
             this.SizeRatioLabel.AutoSize = true;
-            this.SizeRatioLabel.Location = new System.Drawing.Point(2, 275);
+            this.SizeRatioLabel.Location = new System.Drawing.Point(2, 264);
             this.SizeRatioLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SizeRatioLabel.Name = "SizeRatioLabel";
             this.SizeRatioLabel.Size = new System.Drawing.Size(107, 13);
@@ -334,14 +342,6 @@
             this.AbortButton.Text = "Abort";
             this.AbortButton.UseVisualStyleBackColor = true;
             this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
-            // 
-            // SizeRatioTextBox
-            // 
-            this.SizeRatioTextBox.Location = new System.Drawing.Point(166, 277);
-            this.SizeRatioTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.SizeRatioTextBox.Name = "SizeRatioTextBox";
-            this.SizeRatioTextBox.Size = new System.Drawing.Size(53, 20);
-            this.SizeRatioTextBox.TabIndex = 10;
             // 
             // OptionsView
             // 

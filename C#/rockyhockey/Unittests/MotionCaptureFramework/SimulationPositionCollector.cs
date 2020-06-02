@@ -42,7 +42,7 @@ namespace RockyHockey.MotionCaptureFramework
             motionIterator = 0;
 
             //calculate direction of first line
-            Coordinate direction = new Coordinate(0, start.Y - Config.Instance.BatRadius);
+            Coordinate direction = new Coordinate(0, start.Y - Config.Instance.PuckRadius);
 
             if (angleToLongSide == 180)
                 direction = new Coordinate(-1, 0);

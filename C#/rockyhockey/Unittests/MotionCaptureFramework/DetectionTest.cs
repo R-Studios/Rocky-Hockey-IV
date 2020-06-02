@@ -61,7 +61,7 @@ namespace RockyHockey.MotionCaptureFramework
         {
             Config config = Config.Instance;
             new PathPrediction(new TestImageReader()).init();
-            config.BatRadius = 10;
+            config.PuckRadius = 10;
         }
 
         [Test]
@@ -69,7 +69,7 @@ namespace RockyHockey.MotionCaptureFramework
         {
             Config config = Config.Instance;
             new PathPrediction(new TestImageReader().setcounter(0)).init();
-            config.BatRadius = 10;
+            config.PuckRadius = 10;
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace RockyHockey.MotionCaptureFramework
             SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), 225, 0.03125, 20);
             PathPrediction predictionTest = new PathPrediction(test);
             predictionTest.init();
-            config.BatRadius = 10;
+            config.PuckRadius = 10;
         }
     }
 }

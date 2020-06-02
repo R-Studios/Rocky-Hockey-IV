@@ -48,9 +48,10 @@ namespace RockyHockeyGUI
             PunchAxisPositionTextBox.Text = Config.Instance.ImaginaryAxePosition.ToString();
             ToleranceTextBox.Text = Config.Instance.Tolerance.ToString();
             Camera1IndexTextBox.Text = Config.Instance.Camera1.index.ToString();
-            //Camera2IndexTextBox.Text = Config.Instance.Camera2.index.ToString();
             MaximumBatVelocityTextBox.Text = Config.Instance.MaxBatVelocity.ToString();
             RestPositionDivisorTextBox.Text = Config.Instance.RestPositionDivisor.ToString();
+            PuckRadiusTextBox.Text = Config.Instance.PuckRadius.ToString();
+            SizeRatioTextBox.Text = Config.Instance.SizeRatio.ToString();
         }
 
         private void AbortButton_Click(object sender, EventArgs e)
@@ -69,9 +70,10 @@ namespace RockyHockeyGUI
                 Config.Instance.ImaginaryAxePosition = Convert.ToInt32(PunchAxisPositionTextBox.Text);
                 Config.Instance.Tolerance = Convert.ToInt32(ToleranceTextBox.Text);
                 Config.Instance.Camera1.index = Convert.ToInt32(Camera1IndexTextBox.Text);
-                //Config.Instance.Camera2.index = Convert.ToInt32(Camera2IndexTextBox.Text);
                 Config.Instance.MaxBatVelocity = Convert.ToDouble(MaximumBatVelocityTextBox.Text);
                 Config.Instance.RestPositionDivisor = Convert.ToDouble(RestPositionDivisorTextBox.Text);
+                Config.Instance.PuckRadius = Convert.ToDouble(PuckRadiusTextBox.Text);
+                Config.Instance.SizeRatio = Convert.ToDouble(SizeRatioTextBox.Text);
 
                 Config.Instance.save();
                 Close();

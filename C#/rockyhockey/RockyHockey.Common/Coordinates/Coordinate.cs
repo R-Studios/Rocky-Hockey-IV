@@ -98,7 +98,7 @@ namespace RockyHockey.Common
 
         public static bool insideBounds(Coordinate pos)
         {
-            double radius = Config.Instance.BatRadius - 2;
+            double radius = Config.Instance.PuckRadius - 2;
 
             bool retval = pos.X >= radius;
 

@@ -89,9 +89,9 @@ namespace RockyHockey.Common
         public int FrameRate { get; set; }
 
         /// <summary>
-        /// radius of the bat
+        /// radius of the puck
         /// </summary>
-        public double BatRadius { get; set; }
+        public double PuckRadius { get; set; }
 
         /// <summary>
         /// Difficulty of the RockyHockey game
@@ -107,5 +107,10 @@ namespace RockyHockey.Common
         /// Determines the Bat Rest Position on the X-Axis
         /// </summary>
         public double RestPositionDivisor { get; set; }
+        
+        /// <summary>
+        /// How many millimeters of table a pixel of the game field represents (table size / game field size)
+        /// </summary>
+        public double SizeRatio { get; set; }
     }
 }
