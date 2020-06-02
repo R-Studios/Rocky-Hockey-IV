@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RockyHockey.MotionCaptureFramework
@@ -16,18 +17,32 @@ namespace RockyHockey.MotionCaptureFramework
 
         public override List<TimedCoordinate> GetPuckPositions()
         {
-            List<Task<TimedCoordinate>> detectionTasks = new List<Task<TimedCoordinate>>();
-            for (int a = 0; a < 10; a++)
-                detectionTasks.Add(PositionCalculator.ProcessImage(imageProvider.getTimedImage(), imageProvider.SliceImage));
+            List<TimedCoordinate> coordinates;
 
-            List<TimedCoordinate> coordinates = new List<TimedCoordinate>();
-            foreach (Task<TimedCoordinate> detectionTask in detectionTasks)
+            long timestamp;
+            
+            while (true)
             {
-                detectionTask.Wait();
-                TimedCoordinate detectedPosition = detectionTask.Result;
+                timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-                if (detectedPosition != null)
-                    coordinates.Add(detectedPosition);
+                List<Task<TimedCoordinate>> detectionTasks = new List<Task<TimedCoordinate>>();
+                for (int a = 0; a < 10; a++)
+                    detectionTasks.Add(PositionCalculator.ProcessImage(imageProvider.getTimedImage(), imageProvider.SliceImage));
+
+                coordinates = new List<TimedCoordinate>();
+                foreach (Task<TimedCoordinate> detectionTask in detectionTasks)
+                {
+                    detectionTask.Wait();
+                    TimedCoordinate detectedPosition = detectionTask.Result;
+
+                    if (detectedPosition != null)
+                        coordinates.Add(detectedPosition);
+                }
+
+                if (coordinates.Count >= 5)
+                    break;
+                else
+                    Thread.Sleep(Math.Abs((int)(timestamp + 250 - DateTimeOffset.Now.ToUnixTimeMilliseconds())));
             }
 
             return coordinates;

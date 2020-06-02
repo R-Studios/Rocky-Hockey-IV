@@ -28,6 +28,8 @@ namespace RockyHockey.MotionCaptureFramework
 
                         Mat slicedMat;
 
+                        image.image = image.image.Clone();
+
                         if (sliceImage)
                             slicedMat = SliceSingleMat(image.image);
                         else
