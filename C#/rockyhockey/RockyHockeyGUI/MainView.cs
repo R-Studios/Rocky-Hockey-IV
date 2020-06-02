@@ -61,8 +61,8 @@ namespace RockyHockeyGUI
         private Stopwatch stopwatch;
 
         private ScoreInitializer socreInitializer;
-
-        private IMoveCalculationProvider moveCalculationProvider;
+        
+        private TrajectoryCalculationFramework trajectoryCalculationFramework;
 
         /// <summary>
         /// Logger for displaying a MessageBox
@@ -94,7 +94,6 @@ namespace RockyHockeyGUI
             try
             {
                 await LEDController.Instance.DoStartLEDShow();
-                moveCalculationProvider = new MoveCalculationProvider();
 
                 socreInitializer = new ScoreInitializer(ScoreLabel);
                 if (optionsView != null)
@@ -110,7 +109,9 @@ namespace RockyHockeyGUI
                 StartGameTime();
 
                 GoalDetectionProvider.Instance.StartGoalDetection();
-                await moveCalculationProvider.StartCalculation(progress).ConfigureAwait(false);
+                
+                trajectoryCalculationFramework = new TrajectoryCalculationFramework();
+                await trajectoryCalculationFramework.BeginCalculationLoop(progress).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -192,7 +193,17 @@ namespace RockyHockeyGUI
         {
             try
             {
-                await moveCalculationProvider.StopCalculation();
+                await Task.Factory.StartNew(() =>
+                {
+                    if (trajectoryCalculationFramework.KeepPlaying)
+                    {
+                        trajectoryCalculationFramework.KeepPlaying = false;
+                        GoalDetectionProvider.Instance.DetectGoals = false;
+                        while (trajectoryCalculationFramework.KeepPlaying == false) { }
+                        trajectoryCalculationFramework.StopAllUsedFrameworks().Wait();
+                    }
+                });
+                
                 stopwatch.Stop();
 
                 OptionsButton.Enabled = true;
@@ -230,6 +241,9 @@ namespace RockyHockeyGUI
             {
                 GameTimeLabel.Text = $"Game time: {stopwatch.Elapsed.ToString().Split('.').FirstOrDefault()}";
             }
+
+            pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider.lastCapture.GetImage();
+
             Refresh();
         }
 

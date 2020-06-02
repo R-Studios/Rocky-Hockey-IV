@@ -36,6 +36,8 @@
             this.GameTimeLabel = new System.Windows.Forms.Label();
             this.ScoreLabel = new System.Windows.Forms.Label();
             this.CalibrateButton = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // StartButton
@@ -114,11 +116,21 @@
             this.CalibrateButton.UseVisualStyleBackColor = true;
             this.CalibrateButton.Click += new System.EventHandler(this.CalibrateButton_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pictureBox1.Location = new System.Drawing.Point(778, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(320, 240);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 441);
+            this.ClientSize = new System.Drawing.Size(1106, 442);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.CalibrateButton);
             this.Controls.Add(this.ScoreLabel);
             this.Controls.Add(this.GameTimeLabel);
@@ -126,13 +138,13 @@
             this.Controls.Add(this.StopButton);
             this.Controls.Add(this.StartButton);
             this.Controls.Add(this.PlotView);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximumSize = new System.Drawing.Size(800, 480);
-            this.MinimumSize = new System.Drawing.Size(800, 480);
+            this.MaximizeBox = false;
             this.Name = "MainView";
             this.Text = "RockyHockey";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -147,6 +159,7 @@
         private System.Windows.Forms.Label GameTimeLabel;
         private System.Windows.Forms.Label ScoreLabel;
         private System.Windows.Forms.Button CalibrateButton;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

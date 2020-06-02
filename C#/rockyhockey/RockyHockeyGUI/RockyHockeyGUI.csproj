@@ -122,6 +122,10 @@
       <Project>{6b01d597-e5ba-41eb-a7cb-9c271afb51ba}</Project>
       <Name>RockyHockey.GoalDetectionFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RockyHockey.MotionCaptureFramework\RockyHockey.MotionCaptureFramework.csproj">
+      <Project>{B4CEF20C-19D3-4989-9F27-12DC0F4E85A1}</Project>
+      <Name>RockyHockey.MotionCaptureFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RockyHockey.MoveCalculationFramework\RockyHockey.MoveCalculationFramework.csproj">
       <Project>{9901d7aa-14ae-4411-a34c-5293819fb560}</Project>
       <Name>RockyHockey.MoveCalculationFramework</Name>
