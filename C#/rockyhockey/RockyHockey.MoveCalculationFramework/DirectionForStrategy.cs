@@ -99,7 +99,7 @@ namespace RockyHockey.MoveCalculationFramework
          *      4.
          *       |[RB]| = (|[TB]| * |[AB]|) / (|[SA]| + |[TB]|)
          *       
-         * to calculate result for any other bankHitCount => create something similar to the situatio above:
+         * to calculate result for any other bankHitCount => create something similar to the situation above:
          * 
          * -------------------
          * |   /\    /\    /\|

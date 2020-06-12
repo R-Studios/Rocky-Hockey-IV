@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DirectionForStrategy.cs" />
     <Compile Include="IStrategy.cs" />
     <Compile Include="IStrategyCalculationFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
