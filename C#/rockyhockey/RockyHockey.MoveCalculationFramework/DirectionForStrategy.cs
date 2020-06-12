@@ -64,7 +64,7 @@ namespace RockyHockey.MoveCalculationFramework
          * first hit in bank at x=max => toTop=true
          * 
          * 
-         * calculation logic:
+         * base calculation logic:
          * 
          *       S ---------------- C       [SR] ∩ [TT'] = X
          *         |\             |	
@@ -99,7 +99,7 @@ namespace RockyHockey.MoveCalculationFramework
          *      4.
          *       |[RB]| = (|[TB]| * |[AB]|) / (|[SA]| + |[TB]|)
          *       
-         * to calculate point for any other bankHitCount => create something similar to the situatio above:
+         * to calculate result for any other bankHitCount => create something similar to the situatio above:
          * 
          * -------------------
          * |   /\    /\    /\|
