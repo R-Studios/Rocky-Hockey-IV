@@ -18,17 +18,17 @@ namespace RockyHockey.MoveCalculationFramework
         /// <param name="bankHitCounter">how often the puck soulh hit the bank on its way</param>
         /// <param name="toXMax">necessary if bankHitCounter > 0; on false: puck hits bank first at x=0; on true: puck hits bank first at x=height</param>
         /// <returns>direction the puck needs</returns>
-        public static Coordinate getPuckDirection(Coordinate start, Coordinate target, int bankHitCounter = 0, bool toXMax = false)
+        public static Vector getPuckDirection(Coordinate start, Coordinate target, int bankHitCounter = 0, bool toXMax = false)
         {
             if (bankHitCounter < 0)
                 bankHitCounter = 0;
 
-            Coordinate direction;
+            Vector direction;
 
             if (bankHitCounter == 0)
-                direction = new Vector(start, target).VectorDirection;
+                direction = new Vector(start, target);
             else
-                direction = new StraightLine(new Vector(start, getPointOnIntersectionLine(start.Y, target.Y, Math.Abs(start.X - target.X), bankHitCounter, toXMax))).Direction;
+                direction = new Vector(start, getPointOnIntersectionLine(start.Y, target.Y, Math.Abs(start.X - target.X), bankHitCounter, toXMax));
 
             return direction;
         }
