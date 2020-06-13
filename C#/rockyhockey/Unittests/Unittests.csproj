@@ -62,6 +62,7 @@
     <Compile Include="MotionCaptureFramework\DetectionTest.cs" />
     <Compile Include="MotionCaptureFramework\SimulationPositionCollector.cs" />
     <Compile Include="MotionCaptureFramework\TestImageReader.cs" />
+    <Compile Include="MoveCalculationFramework\PuckMotionInstrategy.cs" />
     <Compile Include="MoveCalculationFramework\TestTrajectoryCalculationFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MoveCalculationFramework\MockMotionCaptureProvider.cs" />
