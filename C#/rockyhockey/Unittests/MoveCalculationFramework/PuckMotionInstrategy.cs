@@ -14,6 +14,9 @@ namespace RockyHockey.MoveCalculationFramework
         [Test]
         public void testDirectionForStrategy()
         {
+            Config config = Config.Instance;
+            Config.Instance.GameFieldSize = new System.Drawing.Size(22, 5);
+
             /* 
              *    first result
              *    
@@ -35,14 +38,56 @@ namespace RockyHockey.MoveCalculationFramework
              * 
              *         second result
              */
-            Config config = Config.Instance;
-            Config.Instance.GameFieldSize = new System.Drawing.Size(22, 5);
             Coordinate start = new Coordinate(2, 1);
             Coordinate end = new Coordinate(20, 3);
             Vector testVec = DirectionForStrategy.getPuckDirection(start, end, 4);
             Assert.AreEqual(testVec.End, new Coordinate(8, -5));
             testVec = DirectionForStrategy.getPuckDirection(end, start, 4, true);
             Assert.AreEqual(testVec.End, new Coordinate(13, 10));
+
+            /* 
+             *      first & second result
+             *    
+             * -5             /\              
+             * -4            /  \             
+             * -3           /    \            
+             * -2          /      \           
+             * -1 ------------------------
+             *  1 |      /\        /\    |
+             *  2 |     /  \      /  \   |
+             *  3 |    /    \    /    \  |
+             *  4 |   /      \  /        |
+             *  5 |  /        \/         |
+             *  6 ------------------------
+             */
+            start = new Coordinate(2, 5);
+            end = new Coordinate(20, 3);
+            testVec = DirectionForStrategy.getPuckDirection(start, end, 3);
+            Assert.AreEqual(testVec.End, new Coordinate(12, -5));
+            testVec = DirectionForStrategy.getPuckDirection(end, start, 3);
+            Assert.AreEqual(testVec.End, new Coordinate(12, -5));
+
+            /*        
+             * -1 ------------------------
+             *  1 |          /\          |
+             *  2 |  \      /  \      /  |
+             *  3 |   \    /    \    /   |
+             *  4 |    \  /      \  /    |
+             *  5 |     \/        \/     |
+             *  6 ------------------------
+             *  7         \      /      
+             *  8          \    /       
+             *  9           \  /        
+             * 10            \/         
+             * 
+             *      first & second result
+             */
+            start = new Coordinate(2, 1);
+            end = new Coordinate(20, 1);
+            testVec = DirectionForStrategy.getPuckDirection(start, end, 3, true);
+            Assert.AreEqual(testVec.End, new Coordinate(11, 10));
+            testVec = DirectionForStrategy.getPuckDirection(end, start, 3, true);
+            Assert.AreEqual(testVec.End, new Coordinate(11, 10));
         }
     }
 }
