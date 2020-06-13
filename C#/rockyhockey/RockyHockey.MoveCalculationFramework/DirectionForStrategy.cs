@@ -28,7 +28,16 @@ namespace RockyHockey.MoveCalculationFramework
             if (bankHitCounter == 0)
                 direction = new Vector(start, target);
             else
-                direction = new Vector(start, getPointOnIntersectionLine(start.Y, target.Y, Math.Abs(start.X - target.X), bankHitCounter, toXMax));
+            {
+                Coordinate pointOnIntersectionLine = getPointOnIntersectionLine(start.Y, target.Y, Math.Abs(start.X - target.X), bankHitCounter, toXMax);
+
+                if (start.X <= target.X)
+                    pointOnIntersectionLine.X += start.X;
+                else
+                    pointOnIntersectionLine.X = start.X - pointOnIntersectionLine.X;
+
+                direction = new Vector(start, pointOnIntersectionLine);
+            }
 
             return direction;
         }
