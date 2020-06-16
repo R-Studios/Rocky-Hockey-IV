@@ -51,11 +51,6 @@ namespace RockyHockey.MotionCaptureFramework
         public void finalize()
         {
             validationFlag = false;
-            current = null;
-            pathParts = null;
-            collector.StopMotionCapturing();
-            collector = null;
-            rwl = null;
         }
 
         /// <summary>
@@ -89,6 +84,12 @@ namespace RockyHockey.MotionCaptureFramework
                     }
                     rwl.ReleaseReaderLock();
                 }
+
+                current = null;
+                pathParts = null;
+                collector.StopMotionCapturing();
+                collector = null;
+                rwl = null;
             });
         }
 
