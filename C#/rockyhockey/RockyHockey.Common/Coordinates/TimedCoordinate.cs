@@ -14,6 +14,10 @@
         {
             Timestamp = timestamp;
         }
+        public TimedCoordinate(TimedCoordinate original) : base(original)
+        {
+            Timestamp = original.Timestamp;
+        }
 
         /// <summary>
         /// timestamp when the position has been detected
