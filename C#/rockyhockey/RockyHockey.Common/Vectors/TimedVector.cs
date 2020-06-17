@@ -6,17 +6,20 @@
     public class TimedVector : Vector
     {
         public TimedVector() { }
-        public TimedVector(TimedCoordinate start, TimedCoordinate end, Coordinate direction) : base(start, end, direction)
+
+        public TimedVector(TimedCoordinate start, TimedCoordinate end)
         {
+            init(start, end);
             calcTime();
         }
 
-        public TimedVector(TimedCoordinate start, TimedCoordinate end) : base(start, end)
+        public TimedVector(TimedVector original)
         {
+            init(original.Start, original.End);
             calcTime();
         }
 
-        public long calcTime()
+        private long calcTime()
         {
             return NeededTime = TimedEnd.Timestamp - TimedStart.Timestamp;
         }

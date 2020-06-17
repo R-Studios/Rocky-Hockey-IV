@@ -8,20 +8,26 @@ namespace RockyHockey.Common
     public class Vector
     {
         public Vector() { }
-        public Vector(Coordinate start, Coordinate end, Coordinate direction)
-        {
-            Start = start;
-            End = end;
-            VectorDirection = direction;
-
-            calcLength();
-        }
 
         public Vector(Coordinate start, Coordinate end)
         {
-            Start = start;
-            End = end;
+            init(start, end);
+        }
 
+        public Vector(Vector original)
+        {
+            init(original.Start, original.End);
+        }
+
+        protected void init<T>(T start, T end) where T : Coordinate
+        {
+            object[] args = { start };
+            Start = (T)Activator.CreateInstance(typeof(T), args);
+
+            args[0] = end;
+            End = (T)Activator.CreateInstance(typeof(T), args);
+
+            calcDirection();
             calcLength();
         }
 
