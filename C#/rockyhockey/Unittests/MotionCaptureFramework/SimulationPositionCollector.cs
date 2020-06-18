@@ -76,7 +76,7 @@ namespace RockyHockey.MotionCaptureFramework
             newPosition.Y += direction.Y;
 
             //check if new position is inside game field
-            if (!Coordinate.insideBounds(newPosition))
+            if (!newPosition.insideBounds())
             {
                 //calculate position of next impact
                 Coordinate next = currentMotion.nextImpact();

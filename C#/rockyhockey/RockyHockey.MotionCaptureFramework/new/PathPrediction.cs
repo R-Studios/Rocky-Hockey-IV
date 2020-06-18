@@ -62,36 +62,43 @@ namespace RockyHockey.MotionCaptureFramework
         {
             Task.Factory.StartNew(() =>
             {
-                while (validationFlag)
+                try
                 {
-                    //get current position
-                    TimedCoordinate localCurrent = collector.GetPuckPosition();
-
-                    rwl.AcquireWriterLock(int.MaxValue);
-                    current = localCurrent;
-                    rwl.ReleaseWriterLock();
-
-                    //check if it is on last ckecked line
-                    rwl.AcquireReaderLock(int.MaxValue);
-                    if (!pathParts[pathPartPointer].isOnLine(current))
+                    while (validationFlag)
                     {
-                        //check if it is on next line
-                        if (!pathParts[++pathPartPointer].isOnLine(current))
-                        {
-                            //update path prediction
-                            rwl.ReleaseReaderLock();
-                            init();
-                            break;
-                        }
-                    }
-                    rwl.ReleaseReaderLock();
-                }
+                        //get current position
+                        TimedCoordinate localCurrent = collector.GetPuckPosition();
 
-                current = null;
-                pathParts = null;
-                collector.StopMotionCapturing();
-                collector = null;
-                rwl = null;
+                        rwl.AcquireWriterLock(int.MaxValue);
+                        current = localCurrent;
+                        rwl.ReleaseWriterLock();
+
+                        //check if it is on last ckecked line
+                        rwl.AcquireReaderLock(int.MaxValue);
+                        if (!pathParts[pathPartPointer].isOnLine(current, 5))
+                        {
+                            //check if it is on next line
+                            if (!pathParts[++pathPartPointer].isOnLine(current, 5))
+                            {
+                                //update path prediction
+                                rwl.ReleaseReaderLock();
+                                init();
+                                break;
+                            }
+                        }
+                        rwl.ReleaseReaderLock();
+                    }
+
+                    current = null;
+                    pathParts = null;
+                    collector.StopMotionCapturing();
+                    collector = null;
+                    rwl = null;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             });
         }
 
@@ -124,7 +131,7 @@ namespace RockyHockey.MotionCaptureFramework
             {
                 retval = new TimedCoordinate(localpathParts[a].reachesX(x));
 
-                if (Coordinate.insideBounds(retval))
+                if (retval.insideBounds())
                     break;
             }
 
@@ -307,13 +314,16 @@ namespace RockyHockey.MotionCaptureFramework
             return median;
         }
 
+        /// <summary>
+        /// calculates the position where the puck hit the bank
+        /// </summary>
+        /// <param name="movementLine">the motion line created from the previous positions</param>
+        /// <param name="incorrectVector">vector that were created from the positions before and after the puck hit the banlk</param>
+        /// <returns></returns>
         private TimedCoordinate getImpactCoordinate(StraightLine movementLine, TimedVector incorrectVector)
         {
             //get impact on border
-            TimedCoordinate impact = new TimedCoordinate(movementLine.nextImpactOnLongSide());
-
-            if (!Coordinate.insideBounds(impact))
-                impact = new TimedCoordinate(movementLine.nextImpactOnShortSide());
+            TimedCoordinate impact = new TimedCoordinate(movementLine.nextImpact());
 
             //create vector between last valid position and border
             Vector impactVector = new Vector(incorrectVector.Start, impact);
@@ -330,7 +340,7 @@ namespace RockyHockey.MotionCaptureFramework
 
             StraightLine current = motionStart.Last();
 
-            while (Coordinate.insideBounds(current.nextImpactOnLongSide()))
+            while (current.nextImpactOnLongSide().insideBounds())
                 motionStart.Add(current = current.onLongSideReflected());
 
             return motionStart;
@@ -339,7 +349,7 @@ namespace RockyHockey.MotionCaptureFramework
 
     public class TimingException : Exception
     {
-        public TimingException() : base("bat is past point") { }
+        public TimingException() : base("puck is is past point") { }
     }
 
     class CompareData
@@ -530,7 +540,7 @@ namespace RockyHockey.MotionCaptureFramework
             try
             {
                 retval = previousImpactOnLongSide();
-                if (!Coordinate.insideBounds(retval))
+                if (!retval.insideBounds())
                     retval = previousImpactOnShortSide();
             }
             catch (Exception e)
@@ -552,7 +562,7 @@ namespace RockyHockey.MotionCaptureFramework
             try
             {
                 retval = nextImpactOnLongSide();
-                if (!Coordinate.insideBounds(retval))
+                if (!retval.insideBounds())
                     retval = nextImpactOnShortSide();
             }
             catch (Exception e)
@@ -573,7 +583,7 @@ namespace RockyHockey.MotionCaptureFramework
 
             try
             {
-                if (Coordinate.insideBounds(nextImpactOnLongSide()))
+                if (nextImpactOnLongSide().insideBounds())
                     retval = onLongSideReflected();
                 else
                     retval = onShortSideReflected();
@@ -591,7 +601,13 @@ namespace RockyHockey.MotionCaptureFramework
             return increasingX == other.increasingX && increasingY == other.increasingY;
         }
 
-        public bool isOnLine(Coordinate position)
+        /// <summary>
+        /// checks if given position is on line; checks if distance of given position to the line is lower than the jitter
+        /// </summary>
+        /// <param name="position">position to check</param>
+        /// <param name="jitter">max allowed distance to the line</param>
+        /// <returns>true if distance to line < jitter</returns>
+        public bool isOnLine(Coordinate position, double jitter = 0)
         {
             Coordinate orthogonalDirection = new Coordinate();
             orthogonalDirection.X = Direction.Y;
@@ -600,7 +616,7 @@ namespace RockyHockey.MotionCaptureFramework
             StraightLine orthogonalLine = new StraightLine(position, orthogonalDirection);
             Vector distanceVector = new Vector(position, intersection(orthogonalLine));
 
-            return distanceVector.Length < 5;
+            return distanceVector.Length < jitter;
         }
 
         public Coordinate intersection(StraightLine other)
