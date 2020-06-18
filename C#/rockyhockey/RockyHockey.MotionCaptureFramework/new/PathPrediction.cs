@@ -39,7 +39,9 @@ namespace RockyHockey.MotionCaptureFramework
         /// </summary>
         public void init()
         {
-            List<StraightLine> localpathParts = predict(parallelCompare(collector.GetPuckPositions()));
+            List<StraightLine> localpathParts = new List<StraightLine>();
+            parallelCompare(collector.GetPuckPositions(), ref localpathParts);
+            localpathParts = predict(localpathParts);
 
             rwl.AcquireWriterLock(int.MaxValue);
             pathParts = localpathParts;
@@ -172,80 +174,87 @@ namespace RockyHockey.MotionCaptureFramework
             return retval;
         }
 
-        //parallel part
-        private List<StraightLine> parallelCompare(List<TimedCoordinate> detectedPosition)
+        /// <summary>
+        /// checks if given coordinates are in the same line
+        /// </summary>
+        /// <param name="detectedPosition">detected positions</param>
+        /// <returns>puck motion parts</returns>
+        private void parallelCompare(List<TimedCoordinate> detectedPosition, ref List<StraightLine> motionLines)
         {
+            //make sure the minimum amount of positions are in the list
             fillListToMinLength(ref detectedPosition);
 
+            //start check if first and last point are on the same line
             Task<CompareData> simpleComparisionTask = comparePositions(detectedPosition[0], detectedPosition[1], detectedPosition.Last());
 
             List<Task<CompareData>> comparisons = new List<Task<CompareData>>();
 
+            //start evaluation of other points
             for (int a = 1; a < detectedPosition.Count;)
                 comparisons.Add(comparePositions(detectedPosition[a - 1], detectedPosition[a++], detectedPosition[a < detectedPosition.Count ? a : detectedPosition.Count - 1]));
 
-            return parallelAnalysis(detectedPosition, comparisons, simpleComparisionTask);
+            //evaluate results
+            parallelAnalysis(comparisons, simpleComparisionTask, ref motionLines);
         }
 
-        private List<StraightLine> parallelAnalysis<T>(List<TimedCoordinate> detectedPosition, List<T> comparisons, Task<CompareData> simpleCheck)
+        /// <summary>
+        /// evaluates a set of ComparisonData structs
+        /// </summary>
+        /// <param name="comparisons">comparison data or tasks</param>
+        /// <param name="simpleCheck">comparison data that evaluates first and last position in list</param>
+        /// <returns></returns>
+        private void parallelAnalysis(List<Task<CompareData>> comparisons, Task<CompareData> simpleCheck, ref List<StraightLine> motionLines)
         {
-            List<StraightLine> motionStart = new List<StraightLine>();
-
             simpleCheck.Wait();
             CompareData simpleCheckResult = simpleCheck.Result;
 
+            //check if puck was played over bank or if position are on the same line
             if (simpleCheckResult.posOnVecLine)
             {
                 VelocityVector velocity = new VelocityVector(simpleCheckResult.vec.TimedStart, simpleCheckResult.pos);
                 batVelocity = velocity.Velocity;
-                motionStart.Add(new StraightLine(velocity));
+                motionLines.Add(new StraightLine(velocity));
             }
             else
             {
                 int length = comparisons.Count;
                 int impactIndex = length;
                 List<CompareData> comparisonData = new List<CompareData>();
-                int a = 0;
 
-                for (; a < length; a++)
+                //evaluates the comparison data
+                for (int a = 0; a < length; a++)
                 {
-                    CompareData currentComparisonResult;
+                    //extract data structs into new Lists
+                    Task<CompareData> currentComparisonTask = (Task<CompareData>)(object)comparisons[a];
+                    currentComparisonTask.Wait();
 
-                    if (comparisons is List<CompareData>)
-                        currentComparisonResult = (CompareData)(object)comparisons[a];
-                    else if (comparisons is List<Task<CompareData>>)
-                    {
-                        Task<CompareData> currentComparisonTask = (Task<CompareData>)((object)comparisons[a]);
-                        currentComparisonTask.Wait();
-                        currentComparisonResult = currentComparisonTask.Result;
-                    }
-                    else
-                        throw new ArgumentException("type " + typeof(T) + " not allowed");
+                    CompareData currentComparisonResult = currentComparisonTask.Result;
 
                     comparisonData.Add(currentComparisonResult);
 
+                    //checks if an impact on
                     if (!currentComparisonResult.posOnVecLine && impactIndex == length)
                         impactIndex = a;
                 }
 
-                if (a == length)
-                    motionStart.Add(new StraightLine(comparisonData.First().vec.Start, directionMedian(comparisonData)));
-                else
-                {
-                    motionStart.Add(parallelAnalysis(detectedPosition, comparisonData.GetRange(0, a), comparePositions(detectedPosition[0], detectedPosition[1], comparisonData[a].vec.TimedStart)).Last());
+                //create motion line from correct vectors
+                motionLines.Add(new StraightLine(comparisonData.First().vec.Start, directionMedian(comparisonData.GetRange(0, impactIndex))));
 
+                if (impactIndex != length)
+                {
                     List<TimedCoordinate> positions = new List<TimedCoordinate>();
 
-                    positions.Add(getImpactCoordinate(motionStart.Last(), comparisonData[a + 1].vec));
+                    //calculate impact position on bank
+                    positions.Add(getImpactCoordinate(motionLines.Last(), comparisonData[impactIndex].vec));
 
-                    for (a++; a < comparisonData.Count; a++)
+                    //extract positions after impact on bank
+                    for (int a = impactIndex + 1; a < comparisonData.Count; a++)
                         positions.Add(comparisonData[a].vec.TimedEnd);
 
-                    motionStart.Add(parallelCompare(positions).Last());
+                    //reevaluate positions
+                    parallelCompare(positions, ref motionLines);
                 }
             }
-
-            return motionStart;
         }
 
         private Task<CompareData> comparePositions(TimedCoordinate start, TimedCoordinate end, TimedCoordinate position)
