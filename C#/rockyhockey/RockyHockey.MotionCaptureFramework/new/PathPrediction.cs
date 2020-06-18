@@ -257,18 +257,39 @@ namespace RockyHockey.MotionCaptureFramework
             }
         }
 
+        /// <summary>
+        /// checks if given coordinates are on the same line
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         private Task<CompareData> comparePositions(TimedCoordinate start, TimedCoordinate end, TimedCoordinate position)
         {
             return Task<CompareData>.Factory.StartNew(() =>
             {
+                //create struct that holds comparison data
                 CompareData data = new CompareData();
+
+                //create a vector from the first two positions
                 data.vec = new TimedVector(start, end);
+
+                //create a line out of the vector
                 data.vecLine = new StraightLine(data.vec);
+
+                //check if third position is on line
+                data.posOnVecLine = data.vecLine.isOnLine(position, 5);
+
+                //makes sure an impact on the bank is not ignored due to the allowed jitter
+                data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
+
+                //store third position in comparison struct
                 data.pos = position;
-                data.posOnVecLine = data.vecLine.isOnLine(data.pos);
+
                 return data;
             });
         }
+
 
         private Coordinate directionMedian(List<CompareData> motionVectors)
         {
