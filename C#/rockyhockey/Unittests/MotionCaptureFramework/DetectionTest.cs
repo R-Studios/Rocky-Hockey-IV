@@ -65,7 +65,7 @@ namespace RockyHockey.MotionCaptureFramework
         [Test]
         public void testPathSimulation()
         {
-            SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), 225, 0.03125, 20);
+            SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), new Coordinate(406, 132), 0.03125, 20);
             PathPrediction predictionTest = new PathPrediction(test);
             predictionTest.init();
 
