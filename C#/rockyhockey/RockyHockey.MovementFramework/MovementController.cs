@@ -35,6 +35,8 @@ namespace RockyHockey.MovementFramework
 
         private PixelToMMConverter pixelToMMConverter = new PixelToMMConverter();
 
+        public Action<double, double> OnMove { get; set; }
+
         /// <summary>
         /// Singleton instance
         /// </summary>
@@ -115,6 +117,8 @@ namespace RockyHockey.MovementFramework
             {
                 try
                 {
+                    OnMove?.Invoke(pos.X, pos.Y);
+
                     xAxis.Write(Convert.ToInt32(pos.X * pixelToMMFactor).ToString() + ",");
                     yAxis.Write(Convert.ToInt32(pos.Y * pixelToMMFactor).ToString() + ",");
                 }

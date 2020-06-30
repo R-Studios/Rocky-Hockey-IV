@@ -17,9 +17,9 @@ namespace RockyHockey.MoveCalculationFramework
         /// <summary>
         /// Constructs a new Instance of the TrajectoryCalculationFramework
         /// </summary>
-        public TrajectoryCalculationFramework()
+        public TrajectoryCalculationFramework(PositionCollector overrideCollector = null)
         {
-            motionCaptureProvider = new ImagePositionCollector();
+            motionCaptureProvider = overrideCollector ?? new ImagePositionCollector();
             gameFieldSize = Config.Instance.GameFieldSize;
             vectorCalculationProvider = new VectorCalculationProvider(motionCaptureProvider);
             movementController = MovementController.Instance;

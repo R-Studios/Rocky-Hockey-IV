@@ -17,6 +17,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using RockyHockey.MotionCaptureFramework;
+using RockyHockeyGUI.VirtualTable;
 
 namespace RockyHockeyGUI
 {
@@ -85,6 +87,11 @@ namespace RockyHockeyGUI
         public LineSeries BorderLine { get; set; }
 
         /// <summary>
+        /// An alternative position collector to use, like a virtual table.
+        /// </summary>
+        public PositionCollector OverridePositionCollector { get; set; }
+
+        /// <summary>
         /// Starts the calculation of the Rocky Hockey game
         /// </summary>
         /// <param name="sender"></param>
@@ -110,13 +117,19 @@ namespace RockyHockeyGUI
 
                 GoalDetectionProvider.Instance.StartGoalDetection();
                 
-                trajectoryCalculationFramework = new TrajectoryCalculationFramework();
+                trajectoryCalculationFramework = new TrajectoryCalculationFramework(OverridePositionCollector);
                 await trajectoryCalculationFramework.BeginCalculationLoop(progress).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 MsgBoxLogger?.Log(ex);
                 MsgBoxLogger?.Show();
+
+                // Rethrow so the debugger can break on exceptions properly
+                if (Debugger.IsAttached)
+                {
+                    throw;
+                }
             }
         }
 
@@ -242,7 +255,7 @@ namespace RockyHockeyGUI
                 GameTimeLabel.Text = $"Game time: {stopwatch.Elapsed.ToString().Split('.').FirstOrDefault()}";
             }
 
-            pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider.lastCapture.GetImage();
+            pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider?.lastCapture.GetImage();
 
             Refresh();
         }
@@ -272,6 +285,16 @@ namespace RockyHockeyGUI
         private void CalibrateButton_Click(object sender, EventArgs e)
         {
             MovementController.Instance.OnGoalDetected(this, new DetectedGoalEventArgs(true));
+        }
+
+        private void VirtualTableButtonClick(object sender, EventArgs e)
+        {
+            var tableView = new VirtualTableView();
+            
+            OverridePositionCollector = tableView.Table;
+            tableView.Closing += (o, args) => OverridePositionCollector = null;
+
+            tableView.Show();
         }
     }
 }
