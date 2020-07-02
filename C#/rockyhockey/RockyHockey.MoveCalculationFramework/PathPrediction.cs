@@ -1,5 +1,5 @@
-﻿using Emgu.CV;
-using RockyHockey.Common;
+﻿using RockyHockey.Common;
+using RockyHockey.MotionCaptureFramework;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
@@ -8,13 +8,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RockyHockey.MotionCaptureFramework
+namespace RockyHockey.MoveCalculationFramework
 {
     public class PathPrediction
     {
         ReaderWriterLock rwl;
 
-        private PositionCollector collector;
+        public PositionCollector collector { get; private set; }
         TimedCoordinate current;
         List<StraightLine> pathParts;
         int pathPartPointer;
@@ -40,14 +40,36 @@ namespace RockyHockey.MotionCaptureFramework
         public void init()
         {
             List<StraightLine> localpathParts = new List<StraightLine>();
-            parallelCompare(collector.GetPuckPositions(), ref localpathParts);
-            localpathParts = predict(localpathParts);
+            List<TimedCoordinate> positions = collector.GetPuckPositions();
 
-            rwl.AcquireWriterLock(int.MaxValue);
-            pathParts = localpathParts;
-            rwl.ReleaseWriterLock();
+            if (positions.Any())
+            {
+                parallelCompare(positions, ref localpathParts);
+                localpathParts = predict(localpathParts);
 
-            validate();
+                rwl.AcquireWriterLock(int.MaxValue);
+                pathParts = localpathParts;
+                rwl.ReleaseWriterLock();
+
+                validate();
+            }
+        }
+
+        public bool towardsRobot()
+        {
+            bool retval = false;
+
+            if (pathParts?.Count > 0)
+                retval = pathParts.First().Direction.X < 0;
+
+            return retval;
+        }
+
+        private void fillPositionListToMinLength(ref List<TimedCoordinate> positions)
+        {
+            int tryCounter = 0;
+            while (positions.Count() < 3 && tryCounter++ < 50)
+                positions.Add(collector.GetPuckPosition());
         }
 
         public void finalize()
@@ -69,16 +91,19 @@ namespace RockyHockey.MotionCaptureFramework
                         //get current position
                         TimedCoordinate localCurrent = collector.GetPuckPosition();
 
+                        if (localCurrent == null)
+                            continue;
+
                         rwl.AcquireWriterLock(int.MaxValue);
                         current = localCurrent;
                         rwl.ReleaseWriterLock();
 
                         //check if it is on last ckecked line
                         rwl.AcquireReaderLock(int.MaxValue);
-                        if (!pathParts[pathPartPointer].isOnLine(current, 5))
+                        if (!pathParts[pathPartPointer].isOnLine(current, Config.Instance.Tolerance))
                         {
                             //check if it is on next line
-                            if (!pathParts[++pathPartPointer].isOnLine(current, 5))
+                            if (!pathParts[++pathPartPointer].isOnLine(current, Config.Instance.Tolerance))
                             {
                                 //update path prediction
                                 rwl.ReleaseReaderLock();
@@ -91,8 +116,6 @@ namespace RockyHockey.MotionCaptureFramework
 
                     current = null;
                     pathParts = null;
-                    collector.StopMotionCapturing();
-                    collector = null;
                     rwl = null;
                 }
                 catch (Exception e)
@@ -103,19 +126,9 @@ namespace RockyHockey.MotionCaptureFramework
         }
 
         /// <summary>
-        /// guarantees minimum number of detected positions to make prediction more accurate
-        /// </summary>
-        /// <param name="detectedPosition"></param>
-        private void fillListToMinLength(ref List<TimedCoordinate> detectedPosition)
-        {
-            while (detectedPosition.Count < 5)
-                detectedPosition.Add(collector.GetPuckPosition());
-        }
-
-        /// <summary>
         /// calculates position on the motion prediction at given x and time when the bat reaches the calculated position
         /// </summary>
-        public TimedCoordinate getTimeForPosition(double x)
+        public TimedVector getTimeForPosition(double x)
         {
             TimedCoordinate retval = null;
             double length = 0;
@@ -178,7 +191,7 @@ namespace RockyHockey.MotionCaptureFramework
             //calculate when bat will be at requested position
             retval.Timestamp = localCurrent.Timestamp + (long)(length / batVelocity);
 
-            return retval;
+            return new TimedVector(new TimedCoordinate(localpathParts[a].previousImpact()), retval);
         }
 
         /// <summary>
@@ -188,8 +201,7 @@ namespace RockyHockey.MotionCaptureFramework
         /// <returns>puck motion parts</returns>
         private void parallelCompare(List<TimedCoordinate> detectedPosition, ref List<StraightLine> motionLines)
         {
-            //make sure the minimum amount of positions are in the list
-            fillListToMinLength(ref detectedPosition);
+            fillPositionListToMinLength(ref detectedPosition);
 
             //start check if first and last point are on the same line
             Task<CompareData> simpleComparisionTask = comparePositions(detectedPosition[0], detectedPosition[1], detectedPosition.Last());
@@ -285,7 +297,7 @@ namespace RockyHockey.MotionCaptureFramework
                 data.vecLine = new StraightLine(data.vec);
 
                 //check if third position is on line
-                data.posOnVecLine = data.vecLine.isOnLine(position, 5);
+                data.posOnVecLine = data.vecLine.isOnLine(position, Config.Instance.Tolerance);
 
                 //makes sure an impact on the bank is not ignored due to the allowed jitter
                 data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
@@ -345,6 +357,26 @@ namespace RockyHockey.MotionCaptureFramework
 
             return motionStart;
         }
+
+        public void reportProgress(IProgress<List<Vector>> progress)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                //make local copy so that validation of path does not interfere with calculation
+                rwl.AcquireReaderLock(int.MaxValue);
+                List<StraightLine> localpathParts = new List<StraightLine>(pathParts ?? new List<StraightLine>());
+                rwl.ReleaseReaderLock();
+
+                if (localpathParts.Any())
+                {
+                    List<Vector> motionVectors = new List<Vector>();
+                    foreach (StraightLine pathPart in localpathParts)
+                        motionVectors.Add(new Vector(pathPart.previousImpact(), pathPart.nextImpact()));
+
+                    progress.Report(motionVectors);
+                }
+            });
+        }
     }
 
     public class TimingException : Exception
@@ -358,273 +390,5 @@ namespace RockyHockey.MotionCaptureFramework
         public StraightLine vecLine;
         public TimedCoordinate pos;
         public bool posOnVecLine;
-    }
-
-    public class StraightLine
-    {
-        public Coordinate Direction { get; private set; }
-        private double gradient = 0;
-        private double yIntercept;
-        private bool increasingX;
-        private bool increasingY;
-
-        /// <summary>
-        /// initializes Line from a Vector
-        /// </summary>
-        /// <param name="vec"></param>
-        public StraightLine(Vector vec)
-        {
-            init(vec.Start, vec.VectorDirection);
-        }
-
-        /// <summary>
-        /// initializes Line from a direction and a yIntercept
-        /// </summary>
-        /// <param name="direction"></param>
-        /// <param name="yIntercept"></param>
-        public StraightLine(Coordinate direction, double yIntercept)
-        {
-            init(new Coordinate(), direction);
-            this.yIntercept = yIntercept;
-        }
-
-        /// <summary>
-        /// initializes Line from a position and a direction
-        /// </summary>
-        /// <param name="position"></param>
-        /// <param name="direction"></param>
-        public StraightLine(Coordinate position, Coordinate direction)
-        {
-            init(position, direction);
-        }
-
-        private void init(Coordinate position, Coordinate direction)
-        {
-            this.Direction = direction;
-
-            if (direction.Y != 0)
-                gradient = direction.Y / direction.X;
-
-            increasingX = direction.X >= 0;
-            increasingY = direction.Y >= 0;
-
-            yIntercept = position.Y - gradient * position.X;
-        }
-
-
-
-
-
-        /// <summary>
-        /// returns a position on the line at the given x value
-        /// </summary>
-        /// <param name="x">x value</param>
-        /// <returns>position on the line</returns>
-        public Coordinate reachesX(double x)
-        {
-            Coordinate reach = new Coordinate(x, yIntercept);
-
-            if (gradient != 0)
-                reach.Y += gradient * x;
-
-            return reach;
-        }
-
-        /// <summary>
-        /// calculates the coordinate of the next impact on a short side (player or robot side); return value depends on the direction with which the line has been initialized
-        /// </summary>
-        /// <returns>coordinate of the next impact</returns>
-        public Coordinate nextImpactOnShortSide()
-        {
-            double distance = Config.Instance.PuckRadius;
-            if (increasingX)
-                distance = Config.Instance.GameFieldSize.Width - 1 - distance;
-
-            return reachesX(distance);
-        }
-
-        /// <summary>
-        /// calculates the coordinate of the previous impact on a short side (player or robot side); return value depends on the direction with which the line has been initialized
-        /// </summary>
-        /// <returns>coordinate of the next impact</returns>
-        public Coordinate previousImpactOnShortSide()
-        {
-            double distance = Config.Instance.PuckRadius;
-            if (!increasingX)
-                distance = Config.Instance.GameFieldSize.Width - 1 - distance;
-
-            return reachesX(distance);
-        }
-
-        /// <summary>
-        /// creates the next motion line after the bat hit a short side (player or robot side)
-        /// </summary>
-        /// <returns>next motion line after the bat hit a short side</returns>
-        public StraightLine onShortSideReflected()
-        {
-            Coordinate invertedDirection = new Coordinate(Direction);
-            invertedDirection.X *= -1;
-            return new StraightLine(nextImpactOnShortSide(), invertedDirection);
-        }
-
-
-
-
-
-        /// <summary>
-        /// returns a position on the line at the given y value
-        /// </summary>
-        /// <param name="y">y value</param>
-        /// <returns>position on the line</returns>
-        public Coordinate reachesY(double y)
-        {
-            Coordinate reach = new Coordinate(0, y);
-
-            if (gradient != 0)
-                reach.X = (y - yIntercept) / gradient;
-            else
-                throw new ArgumentOutOfRangeException("given y unreachable");
-
-            return reach;
-        }
-
-        /// <summary>
-        /// calculates the coordinate of the next impact on a long side; return value depends on the direction with which the line has been initialized
-        /// </summary>
-        /// <returns>coordinate of the next impact</returns>
-        public Coordinate nextImpactOnLongSide()
-        {
-            double distance = Config.Instance.PuckRadius;
-            if (increasingY)
-                distance = Config.Instance.GameFieldSize.Height - 1 - distance;
-
-            return reachesY(distance);
-        }
-
-        /// <summary>
-        /// calculates the coordinate of the previous impact on a long side; return value depends on the direction with which the line has been initialized
-        /// </summary>
-        /// <returns>coordinate of the previous impact</returns>
-        public Coordinate previousImpactOnLongSide()
-        {
-            double distance = Config.Instance.PuckRadius;
-            if (!increasingY)
-                distance = Config.Instance.GameFieldSize.Height - 1 - distance;
-
-            return reachesY(distance);
-        }
-
-        /// <summary>
-        /// creates the next motion line after the bat hit a long side
-        /// </summary>
-        /// <returns>next motion line after the bat hit a short side</returns>
-        public StraightLine onLongSideReflected()
-        {
-            Coordinate invertedDirection = new Coordinate(Direction);
-            invertedDirection.Y *= -1;
-            return new StraightLine(nextImpactOnLongSide(), invertedDirection);
-        }
-
-
-
-
-
-        /// <summary>
-        /// calculates previous impact on a long or short side; return value depends on the direction with which the line has been initialized
-        /// </summary>
-        /// <returns>coordinate of the next impact</returns>
-        public Coordinate previousImpact()
-        {
-            Coordinate retval;
-
-            try
-            {
-                retval = previousImpactOnLongSide();
-                if (!retval.insideBounds())
-                    retval = previousImpactOnShortSide();
-            }
-            catch (Exception e)
-            {
-                retval = previousImpactOnShortSide();
-            }
-
-            return retval;
-        }
-
-        /// <summary>
-        /// calculates next impact on a long or short side; return value depends on the direction with which the line has been initialized
-        /// </summary>
-        /// <returns>coordinate of the next impact</returns>
-        public Coordinate nextImpact()
-        {
-            Coordinate retval;
-
-            try
-            {
-                retval = nextImpactOnLongSide();
-                if (!retval.insideBounds())
-                    retval = nextImpactOnShortSide();
-            }
-            catch (Exception e)
-            {
-                retval = nextImpactOnShortSide();
-            }
-
-            return retval;
-        }
-
-        /// <summary>
-        /// calculates reflected line on next impact
-        /// </summary>
-        /// <returns></returns>
-        public StraightLine reflectedLine()
-        {
-            StraightLine retval;
-
-            try
-            {
-                if (nextImpactOnLongSide().insideBounds())
-                    retval = onLongSideReflected();
-                else
-                    retval = onShortSideReflected();
-            }
-            catch (Exception e)
-            {
-                retval = onShortSideReflected();
-            }
-
-            return retval;
-        }
-
-        public bool isSimilarDirection(StraightLine other)
-        {
-            return increasingX == other.increasingX && increasingY == other.increasingY;
-        }
-
-        /// <summary>
-        /// checks if given position is on line; checks if distance of given position to the line is lower than the jitter
-        /// </summary>
-        /// <param name="position">position to check</param>
-        /// <param name="jitter">max allowed distance to the line</param>
-        /// <returns>true if distance to line < jitter</returns>
-        public bool isOnLine(Coordinate position, double jitter = 0)
-        {
-            Coordinate orthogonalDirection = new Coordinate();
-            orthogonalDirection.X = Direction.Y;
-            orthogonalDirection.Y = -1 * Direction.X;
-
-            StraightLine orthogonalLine = new StraightLine(position, orthogonalDirection);
-            Vector distanceVector = new Vector(position, intersection(orthogonalLine));
-
-            return distanceVector.Length < jitter;
-        }
-
-        public Coordinate intersection(StraightLine other)
-        {
-            Coordinate intersection = new Coordinate();
-            intersection.X = (other.yIntercept - yIntercept) / (gradient - other.gradient);
-            intersection.Y = gradient * intersection.X + yIntercept;
-            return intersection;
-        }
     }
 }

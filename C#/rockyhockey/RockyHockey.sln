@@ -13,10 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockyHockey.MovementFramewo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockyHockeyGUI", "RockyHockeyGUI\RockyHockeyGUI.csproj", "{C710EEAF-3077-438D-B133-E2D679E90FA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockyHockey.SoundFramework", "RockyHockey.SoundFramework\RockyHockey.SoundFramework.csproj", "{F06446C8-6562-47D7-8B98-71D2D5F212E1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RockyHockey.GoalDetectionFramework", "RockyHockey.GoalDetectionFramework\RockyHockey.GoalDetectionFramework.csproj", "{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unittests", "Unittests\Unittests.csproj", "{1245F3FF-336A-4A5F-ADB6-76BB7E9DDB3A}"
 EndProject
 Global
@@ -67,22 +63,6 @@ Global
 		{C710EEAF-3077-438D-B133-E2D679E90FA2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C710EEAF-3077-438D-B133-E2D679E90FA2}.Release|x86.ActiveCfg = Release|Any CPU
 		{C710EEAF-3077-438D-B133-E2D679E90FA2}.Release|x86.Build.0 = Release|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Debug|x86.Build.0 = Debug|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Release|x86.ActiveCfg = Release|Any CPU
-		{F06446C8-6562-47D7-8B98-71D2D5F212E1}.Release|x86.Build.0 = Release|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Debug|x86.Build.0 = Debug|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Release|x86.ActiveCfg = Release|Any CPU
-		{6B01D597-E5BA-41EB-A7CB-9C271AFB51BA}.Release|x86.Build.0 = Release|Any CPU
 		{1245F3FF-336A-4A5F-ADB6-76BB7E9DDB3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1245F3FF-336A-4A5F-ADB6-76BB7E9DDB3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1245F3FF-336A-4A5F-ADB6-76BB7E9DDB3A}.Debug|x86.ActiveCfg = Debug|Any CPU

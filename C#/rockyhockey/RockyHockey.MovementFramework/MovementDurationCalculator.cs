@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RockyHockey.MovementFramework
 {
-    static class MovementDurationCalculator
+    public static class MovementDurationCalculator
     {
         public static long getMovementDuration(Coordinate start, Coordinate end)
         {

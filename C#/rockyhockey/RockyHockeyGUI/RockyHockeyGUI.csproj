@@ -11,6 +11,8 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,6 +41,12 @@
     <ApplicationIcon>rocky_logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Emgu.CV.UI, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV.World, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.World.dll</HintPath>
+    </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
@@ -66,8 +74,29 @@
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CameraCalibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CameraCalibration.Designer.cs">
+      <DependentUpon>CameraCalibration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CircleDetectionCalibration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CircleDetectionCalibration.Designer.cs">
+      <DependentUpon>CircleDetectionCalibration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImageDebugging.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImageDebugging.Designer.cs">
+      <DependentUpon>ImageDebugging.cs</DependentUpon>
+    </Compile>
     <Compile Include="OptionsView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -83,7 +112,15 @@
     <Compile Include="MessageBoxLogger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScoreInitializer.cs" />
+    <EmbeddedResource Include="CameraCalibration.resx">
+      <DependentUpon>CameraCalibration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CircleDetectionCalibration.resx">
+      <DependentUpon>CircleDetectionCalibration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImageDebugging.resx">
+      <DependentUpon>ImageDebugging.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
     </EmbeddedResource>
@@ -118,10 +155,6 @@
       <Project>{124d54b6-d88a-49c7-9241-25e46c4e9c27}</Project>
       <Name>RockyHockey.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RockyHockey.GoalDetectionFramework\RockyHockey.GoalDetectionFramework.csproj">
-      <Project>{6b01d597-e5ba-41eb-a7cb-9c271afb51ba}</Project>
-      <Name>RockyHockey.GoalDetectionFramework</Name>
-    </ProjectReference>
     <ProjectReference Include="..\RockyHockey.MotionCaptureFramework\RockyHockey.MotionCaptureFramework.csproj">
       <Project>{B4CEF20C-19D3-4989-9F27-12DC0F4E85A1}</Project>
       <Name>RockyHockey.MotionCaptureFramework</Name>
@@ -134,13 +167,17 @@
       <Project>{3e6577bc-4681-4916-8115-fd1f3add092d}</Project>
       <Name>RockyHockey.MovementFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\RockyHockey.SoundFramework\RockyHockey.SoundFramework.csproj">
-      <Project>{f06446c8-6562-47d7-8b98-71d2d5f212e1}</Project>
-      <Name>RockyHockey.SoundFramework</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="License-LGPL.txt" />
     <Content Include="rocky_logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets" Condition="Exists('..\packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EMGU.CV.3.4.1.2976\build\EMGU.CV.targets'))" />
+  </Target>
 </Project>

@@ -13,13 +13,22 @@ namespace RockyHockey.MotionCaptureFramework
     {
         private VideoCapture camera;
 
-        public CameraReader()
+        /// <summary>
+        /// initializes the camera
+        /// </summary>
+        /// <param name="withConfigBorders">weather or not the width and height from the config should be used</param>
+        public CameraReader(bool withConfigBorders = true)
         {
             SliceImage = true;
             camera = new VideoCapture(Config.Instance.Camera1.index);
+
+            if (withConfigBorders)
+            {
+                camera.SetCaptureProperty(CapProp.FrameWidth, Config.Instance.Camera1.Resolution.Width);
+                camera.SetCaptureProperty(CapProp.FrameHeight, Config.Instance.Camera1.Resolution.Height);
+            }
+
             camera.SetCaptureProperty(CapProp.Fps, Config.Instance.FrameRate);
-            camera.SetCaptureProperty(CapProp.FrameWidth, Config.Instance.Camera1.FieldSize.Width);
-            camera.SetCaptureProperty(CapProp.FrameHeight, Config.Instance.Camera1.FieldSize.Height);
             camera.Start();
         }
 
@@ -35,9 +44,14 @@ namespace RockyHockey.MotionCaptureFramework
 
         public override void finalize()
         {
-            camera.Stop();
-            camera.Dispose();
+            camera?.Stop();
+            camera?.Dispose();
             camera = null;
+        }
+
+        public override int getFPS()
+        {
+            return (int)camera.GetCaptureProperty(CapProp.Fps);
         }
     }
 }

@@ -37,6 +37,9 @@
             this.ScoreLabel = new System.Windows.Forms.Label();
             this.CalibrateButton = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.ImageDebuggingButton = new System.Windows.Forms.Button();
+            this.CameraCalibrationButton = new System.Windows.Forms.Button();
+            this.ImageProcessingCalibration_Button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -125,11 +128,44 @@
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
+            // ImageDebuggingButton
+            // 
+            this.ImageDebuggingButton.Location = new System.Drawing.Point(778, 255);
+            this.ImageDebuggingButton.Name = "ImageDebuggingButton";
+            this.ImageDebuggingButton.Size = new System.Drawing.Size(130, 23);
+            this.ImageDebuggingButton.TabIndex = 7;
+            this.ImageDebuggingButton.Text = "image debugging";
+            this.ImageDebuggingButton.UseVisualStyleBackColor = true;
+            this.ImageDebuggingButton.Click += new System.EventHandler(this.ImageDebuggingButton_Click);
+            // 
+            // CameraCalibrationButton
+            // 
+            this.CameraCalibrationButton.Location = new System.Drawing.Point(778, 285);
+            this.CameraCalibrationButton.Name = "CameraCalibrationButton";
+            this.CameraCalibrationButton.Size = new System.Drawing.Size(130, 23);
+            this.CameraCalibrationButton.TabIndex = 8;
+            this.CameraCalibrationButton.Text = "camera calibration";
+            this.CameraCalibrationButton.UseVisualStyleBackColor = true;
+            this.CameraCalibrationButton.Click += new System.EventHandler(this.CameraCalibrationButton_Click);
+            // 
+            // ImageProcessingCalibration_Button
+            // 
+            this.ImageProcessingCalibration_Button.Location = new System.Drawing.Point(778, 314);
+            this.ImageProcessingCalibration_Button.Name = "ImageProcessingCalibration_Button";
+            this.ImageProcessingCalibration_Button.Size = new System.Drawing.Size(130, 23);
+            this.ImageProcessingCalibration_Button.TabIndex = 9;
+            this.ImageProcessingCalibration_Button.Text = "image processing calibration";
+            this.ImageProcessingCalibration_Button.UseVisualStyleBackColor = true;
+            this.ImageProcessingCalibration_Button.Click += new System.EventHandler(this.ImageProcessingCalibration_Button_Click);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1106, 442);
+            this.Controls.Add(this.ImageProcessingCalibration_Button);
+            this.Controls.Add(this.CameraCalibrationButton);
+            this.Controls.Add(this.ImageDebuggingButton);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.CalibrateButton);
             this.Controls.Add(this.ScoreLabel);
@@ -143,7 +179,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "MainView";
-            this.Text = "RockyHockey";
+            this.Text = "bu";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -160,6 +196,9 @@
         private System.Windows.Forms.Label ScoreLabel;
         private System.Windows.Forms.Button CalibrateButton;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button ImageDebuggingButton;
+        private System.Windows.Forms.Button CameraCalibrationButton;
+        private System.Windows.Forms.Button ImageProcessingCalibration_Button;
     }
 }
 

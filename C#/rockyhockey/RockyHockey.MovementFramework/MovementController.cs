@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using RockyHockey.Common;
 using System.IO.Ports;
 using System.Drawing;
-using RockyHockey.GoalDetectionFramework;
 using System.Windows.Forms;
 using System.Threading;
 using System.Linq;
@@ -16,24 +15,11 @@ namespace RockyHockey.MovementFramework
     /// </summary>
     public class MovementController : IMovementController
     {
-        private MovementController()
-        {
-            // Method needs to be called when a goal was shot
-            GoalDetectionProvider.Instance.DetectedGoalEvent += OnGoalDetected;
-            pixelToMMFactor = pixelToMMConverter.GetFactor(Config.Instance.GameFieldSize);
-        }
-
         private static MovementController instance;
 
         private SerialPort xAxis;
 
         private SerialPort yAxis;
-
-        private double pixelToMMFactor;
-
-        private TimeCalculator timeCalculator = new TimeCalculator();
-
-        private PixelToMMConverter pixelToMMConverter = new PixelToMMConverter();
 
         /// <summary>
         /// Singleton instance
@@ -43,7 +29,7 @@ namespace RockyHockey.MovementFramework
         /// <summary>
         /// Position of the RockyHockey Bat
         /// </summary>
-        public GameFieldPosition BatPosition { get; private set; } = new GameFieldPosition()
+        public Coordinate BatPosition { get; private set; } = new Coordinate()
         {
             X = Config.Instance.GameFieldSize.Width - 50,
             Y = Config.Instance.GameFieldSize.Height - 110
@@ -82,47 +68,38 @@ namespace RockyHockey.MovementFramework
         /// <summary>
         /// Moves the bat to in the direction of the surpassed vectors
         /// </summary>
-        /// <param name="vec">enumerable of vectors that describe the movement of the bat</param>
+        /// <param name="vecList">enumerable of vectors that describe the movement of the bat</param>
         /// <param name="delayBeforePunch">delay in milliseconds before the punch mevement should start</param>
         /// <returns>executeable Task</returns>
-        public async Task MoveStrategy(IEnumerable<VelocityVector> vec, int delayBeforePunch)
+        public void MoveStrategy(IEnumerable<TimedVector> vecList, int delayBeforePunch)
         {
-            for (int i = 0; i < vec.Count(); i++)
+            foreach (TimedVector vec in vecList)
             {
-                var next = vec.ElementAt(i);
+                BatPosition = vec.End;
 
-                BatPosition = next.Direction;
+                Move(BatPosition);
 
-                var movePosition = new GameFieldPosition()
-                {
-                    X = Config.Instance.GameFieldSize.Width - next.Direction.X,
-                    Y = Config.Instance.GameFieldSize.Height - next.Direction.Y
-                };
-                await Move(movePosition).ConfigureAwait(false);
+                long delay = vec.TimedEnd.Timestamp - DateTimeOffset.Now.ToUnixTimeMilliseconds() + delayBeforePunch;
 
                 // no waiting after the last punch
-                if (!(i == vec.Count() - 1))
+                if (delay > 0)
                 {
-                    var neededTime = await timeCalculator.CalculateTimeOfVelocityVector(next).ConfigureAwait(false);
-                    Task.Delay(Convert.ToInt32(neededTime)).Wait();
+                    Task.Delay(Convert.ToInt32(delay)).Wait();
                 }
             }
         }
 
-        private Task Move(GameFieldPosition pos)
+        public void Move(Coordinate pos)
         {
-            return Task.Factory.StartNew(() =>
+            try
             {
-                try
-                {
-                    xAxis.Write(Convert.ToInt32(pos.X * pixelToMMFactor).ToString() + ",");
-                    yAxis.Write(Convert.ToInt32(pos.Y * pixelToMMFactor).ToString() + ",");
-                }
-                catch (Exception ex)
-                {
-                    MovementControllerLogger?.Log(ex);
-                }
-            });
+                xAxis.Write(Convert.ToInt32(pos.X).ToString() + ",");
+                yAxis.Write(Convert.ToInt32(pos.Y).ToString() + ",");
+            }
+            catch (Exception ex)
+            {
+                MovementControllerLogger?.Log(ex);
+            }
         }
 
         /// <summary>
@@ -143,27 +120,15 @@ namespace RockyHockey.MovementFramework
             });
         }
 
-        /// <summary>
-        /// Calibrates the Bat and sets the BatPosition back to default
-        /// </summary>
-        /// <param name="sender">sender of the Event</param>
-        /// <param name="e">Event arguments</param>
-        public void OnGoalDetected(object sender, DetectedGoalEventArgs e)
+        public void init()
         {
-            try
+            xAxis.Write("calibrate");
+            yAxis.Write("calibrate");
+            BatPosition = new Coordinate()
             {
-                xAxis.Write("calibrate");
-                yAxis.Write("calibrate");
-                BatPosition = new GameFieldPosition()
-                {
-                    X = Config.Instance.GameFieldSize.Width - 50,
-                    Y = Config.Instance.GameFieldSize.Height - 110
-                };
-            }
-            catch (Exception ex)
-            {
-                MovementControllerLogger?.Log(ex);
-            }
+                X = Config.Instance.GameFieldSize.Width - 50,
+                Y = Config.Instance.GameFieldSize.Height - 110
+            };
         }
     }
 }

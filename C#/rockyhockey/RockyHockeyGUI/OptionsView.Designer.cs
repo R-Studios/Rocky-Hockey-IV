@@ -49,7 +49,7 @@
             this.MaximumBatVelocityTextBox = new System.Windows.Forms.TextBox();
             this.RestPositionDivisorTextBox = new System.Windows.Forms.TextBox();
             this.PuckRadiusTextBox = new System.Windows.Forms.TextBox();
-            this.SizeRatioTextBox = new System.Windows.Forms.TextBox();
+            this.BatRadiusTextBox = new System.Windows.Forms.TextBox();
             this.RestPositionDivisorLabel = new System.Windows.Forms.Label();
             this.PuckRadiusLabel = new System.Windows.Forms.Label();
             this.SizeRatioLabel = new System.Windows.Forms.Label();
@@ -64,9 +64,9 @@
             this.GameFieldSizeLabel.Location = new System.Drawing.Point(2, 0);
             this.GameFieldSizeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.GameFieldSizeLabel.Name = "GameFieldSizeLabel";
-            this.GameFieldSizeLabel.Size = new System.Drawing.Size(78, 13);
+            this.GameFieldSizeLabel.Size = new System.Drawing.Size(103, 13);
             this.GameFieldSizeLabel.TabIndex = 0;
-            this.GameFieldSizeLabel.Text = "Game field size";
+            this.GameFieldSizeLabel.Text = "Game field size (mm)";
             // 
             // tableLayoutPanel1
             // 
@@ -95,7 +95,7 @@
             this.tableLayoutPanel1.Controls.Add(this.MaximumBatVelocityTextBox, 1, 8);
             this.tableLayoutPanel1.Controls.Add(this.RestPositionDivisorTextBox, 1, 9);
             this.tableLayoutPanel1.Controls.Add(this.PuckRadiusTextBox, 1, 10);
-            this.tableLayoutPanel1.Controls.Add(this.SizeRatioTextBox, 1, 11);
+            this.tableLayoutPanel1.Controls.Add(this.BatRadiusTextBox, 1, 11);
             this.tableLayoutPanel1.Controls.Add(this.RestPositionDivisorLabel, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.PuckRadiusLabel, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.SizeRatioLabel, 0, 11);
@@ -280,13 +280,13 @@
             this.PuckRadiusTextBox.Size = new System.Drawing.Size(53, 20);
             this.PuckRadiusTextBox.TabIndex = 10;
             // 
-            // SizeRatioTextBox
+            // BatRadiusTextBox
             // 
-            this.SizeRatioTextBox.Location = new System.Drawing.Point(166, 266);
-            this.SizeRatioTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.SizeRatioTextBox.Name = "SizeRatioTextBox";
-            this.SizeRatioTextBox.Size = new System.Drawing.Size(53, 20);
-            this.SizeRatioTextBox.TabIndex = 10;
+            this.BatRadiusTextBox.Location = new System.Drawing.Point(166, 266);
+            this.BatRadiusTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.BatRadiusTextBox.Name = "BatRadiusTextBox";
+            this.BatRadiusTextBox.Size = new System.Drawing.Size(53, 20);
+            this.BatRadiusTextBox.TabIndex = 10;
             // 
             // RestPositionDivisorLabel
             // 
@@ -304,9 +304,9 @@
             this.PuckRadiusLabel.Location = new System.Drawing.Point(2, 240);
             this.PuckRadiusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.PuckRadiusLabel.Name = "PuckRadiusLabel";
-            this.PuckRadiusLabel.Size = new System.Drawing.Size(160, 13);
+            this.PuckRadiusLabel.Size = new System.Drawing.Size(93, 13);
             this.PuckRadiusLabel.TabIndex = 19;
-            this.PuckRadiusLabel.Text = "Puck Radius (Game Field Pixels)";
+            this.PuckRadiusLabel.Text = "Puck Radius (mm)";
             // 
             // SizeRatioLabel
             // 
@@ -314,9 +314,9 @@
             this.SizeRatioLabel.Location = new System.Drawing.Point(2, 264);
             this.SizeRatioLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.SizeRatioLabel.Name = "SizeRatioLabel";
-            this.SizeRatioLabel.Size = new System.Drawing.Size(107, 13);
+            this.SizeRatioLabel.Size = new System.Drawing.Size(84, 13);
             this.SizeRatioLabel.TabIndex = 19;
-            this.SizeRatioLabel.Text = "Size Ratio (mm/Pixel)";
+            this.SizeRatioLabel.Text = "Bat Radius (mm)";
             // 
             // OKButton
             // 
@@ -393,6 +393,6 @@
         private System.Windows.Forms.Label PuckRadiusLabel;
         private System.Windows.Forms.TextBox PuckRadiusTextBox;
         private System.Windows.Forms.Label SizeRatioLabel;
-        private System.Windows.Forms.TextBox SizeRatioTextBox;
+        private System.Windows.Forms.TextBox BatRadiusTextBox;
     }
 }

@@ -14,6 +14,7 @@ namespace RockyHockey.MotionCaptureFramework
         public bool SliceImage { get; protected set; }
         public abstract TimedImage getTimedImage();
         public abstract void finalize();
+        public abstract int getFPS();
     }
 
     public struct TimedImage
