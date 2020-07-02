@@ -19,16 +19,29 @@ namespace RockyHockey.MoveCalculationFramework
 
         bool calculationFinished = false;
 
+        /// <summary>
+        /// checks if enough time is left to use a strategy or just to block
+        /// </summary>
+        /// <returns>true if a strategy is faster than the remaining time /returns>
         public bool enoughTimeLeft()
         {
             return calculationFinished && batMotionVectors.First().TimedStart.Timestamp - DateTimeOffset.Now.ToUnixTimeMilliseconds() > 0;
         }
 
+        /// <summary>
+        /// Works out the given Strategy; moves the bat to the calculated hitpoint given by the strategy
+        /// </summary>
         public void execute()
         {
             movementController.MoveStrategy(batMotionVectors, 0);
         }
 
+        /// <summary>
+        /// initalizes the parameters
+        /// </summary>
+        /// <param name="movementController"> Instance of the movementController</param>
+        /// <param name="prediction">the trajectory of the puck</param>
+        /// <param name="x">Coordinate to set where the Puck should be hit in a coutnerattack</param>
         public void init(IMovementController movementController, PathPrediction prediction, double x)
         {
             xCoordinate = x;
@@ -36,11 +49,18 @@ namespace RockyHockey.MoveCalculationFramework
             this.movementController = movementController;
         }
 
+        /// <summary>
+        /// starts the calculation different counterattacks
+        /// </summary>
+        /// <returns></returns>
         public Task startCalculation()
         {
             return Task.Factory.StartNew(calculate);
         }
 
+        /// <summary>
+        /// calculates different strategy based on the pucks trajectory
+        /// </summary>
         private void calculate()
         {
             batMotionVectors = new List<TimedVector>();

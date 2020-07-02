@@ -18,11 +18,17 @@ namespace RockyHockey.MoveCalculationFramework
 
         int distanceParts;
 
+        /// <summary>
+        /// creates an instance of the StrategyManager
+        /// </summary>
         public StrategyManager()
         {
             distanceParts = 10;
         }
 
+        /// <summary>
+        /// moves the bat to a defensive position if the left time is not enough to work out a counterattack
+        /// </summary>
         private void moveToDefensePosition()
         {
             defense = prediction.getTimeForPosition(Config.Instance.BatRadius + Config.Instance.Tolerance).TimedEnd;
@@ -30,6 +36,11 @@ namespace RockyHockey.MoveCalculationFramework
             movementController.Move(defense);
         }
 
+        /// <summary>
+        /// calculates based on the trajectory and velocity of the puck different strategies
+        /// </summary>
+        /// <param name="movementController">Instance of the movement controller</param>
+        /// <param name="prediction">Instance of the trajectory prediction</param>
         public void calculate(IMovementController movementController, PathPrediction prediction)
         {
             this.movementController = movementController;
@@ -50,6 +61,11 @@ namespace RockyHockey.MoveCalculationFramework
             }
         }
 
+        /// <summary>
+        /// calculates different strategies for counterattacks
+        /// </summary>
+        /// <param name="distanceFactor">a factor for rng strategies</param>
+        /// <returns>different strategies to hit the puck on its trajectory</returns>
         private int createStrategies(int distanceFactor)
         {
             int numberOfStrategies = 4;
