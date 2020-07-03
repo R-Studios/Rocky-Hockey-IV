@@ -67,6 +67,8 @@ namespace RockyHockey.MoveCalculationFramework
 
         private void fillPositionListToMinLength(ref List<TimedCoordinate> positions)
         {
+            positions = positions.Where(x => x != null).ToList();
+
             int tryCounter = 0;
             while (positions.Count() < 3 && tryCounter++ < 50)
                 positions.Add(collector.GetPuckPosition());
@@ -228,7 +230,7 @@ namespace RockyHockey.MoveCalculationFramework
             CompareData simpleCheckResult = simpleCheck.Result;
 
             //check if puck was played over bank or if position are on the same line
-            if (simpleCheckResult.posOnVecLine)
+            if (simpleCheckResult != null && simpleCheckResult.posOnVecLine)
             {
                 VelocityVector velocity = new VelocityVector(simpleCheckResult.vec.TimedStart, simpleCheckResult.pos);
                 batVelocity = velocity.Velocity;
@@ -249,11 +251,14 @@ namespace RockyHockey.MoveCalculationFramework
 
                     CompareData currentComparisonResult = currentComparisonTask.Result;
 
-                    comparisonData.Add(currentComparisonResult);
+                    if (currentComparisonResult != null)
+                    {
+                        comparisonData.Add(currentComparisonResult);
 
-                    //checks if an impact on
-                    if (!currentComparisonResult.posOnVecLine && impactIndex == length)
-                        impactIndex = a;
+                        //checks if an impact on
+                        if (!currentComparisonResult.posOnVecLine && impactIndex == length)
+                            impactIndex = a;
+                    }
                 }
 
                 //create motion line from correct vectors
@@ -287,23 +292,28 @@ namespace RockyHockey.MoveCalculationFramework
         {
             return Task<CompareData>.Factory.StartNew(() =>
             {
-                //create struct that holds comparison data
-                CompareData data = new CompareData();
+                CompareData data = null;
 
-                //create a vector from the first two positions
-                data.vec = new TimedVector(start, end);
+                if (start != null && end != null && position != null)
+                {
+                    //create struct that holds comparison data
+                    data = new CompareData();
 
-                //create a line out of the vector
-                data.vecLine = new StraightLine(data.vec);
+                    //create a vector from the first two positions
+                    data.vec = new TimedVector(start, end);
 
-                //check if third position is on line
-                data.posOnVecLine = data.vecLine.isOnLine(position, Config.Instance.Tolerance);
+                    //create a line out of the vector
+                    data.vecLine = new StraightLine(data.vec);
 
-                //makes sure an impact on the bank is not ignored due to the allowed jitter
-                data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
+                    //check if third position is on line
+                    data.posOnVecLine = data.vecLine.isOnLine(position, Config.Instance.Tolerance);
 
-                //store third position in comparison struct
-                data.pos = position;
+                    //makes sure an impact on the bank is not ignored due to the allowed jitter
+                    data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
+
+                    //store third position in comparison struct
+                    data.pos = position;
+                }
 
                 return data;
             });
