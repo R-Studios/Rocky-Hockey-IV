@@ -34,8 +34,11 @@ namespace RockyHockey.MovementFramework
         private TimeCalculator timeCalculator = new TimeCalculator();
 
         private PixelToMMConverter pixelToMMConverter = new PixelToMMConverter();
-
-        public Action<double, double> OnMove { get; set; }
+        
+        /// <summary>
+        /// Hook used to grab axis movement for the virtual table.
+        /// </summary>
+        public event Action<double, double> OnMove;
 
         /// <summary>
         /// Singleton instance

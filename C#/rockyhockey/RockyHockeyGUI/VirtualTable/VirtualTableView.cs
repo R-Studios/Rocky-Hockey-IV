@@ -38,34 +38,55 @@ namespace RockyHockeyGUI.VirtualTable
             TrackBarScroll(trackBar, EventArgs.Empty);
             ActiveControl = label1;
 
+            MovementController.Instance.OnMove += MyAxisOnMove;
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            MovementController.Instance.OnMove -= MyAxisOnMove;
             Table.Stop();
             base.OnFormClosing(e);
         }
 
-        protected void PanelPaint(object sender, PaintEventArgs e)
+        private void PanelPaint(object sender, PaintEventArgs e)
         {
-            var position = Table.Position;
+            var puckPos = Vector2.Zero;
+            var batPos = Vector2.Zero;
+
+            Table.AccessState(state =>
+            {
+                puckPos = state.Position;
+                batPos = state.BatPosition;
+            });
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            e.Graphics.FillEllipse(new SolidBrush(Color.Black), position.X - puckDiameter / 2f, position.Y - puckDiameter / 2f,
+            e.Graphics.FillEllipse(new SolidBrush(Color.DarkGreen), puckPos.X - puckRadius, puckPos.Y - puckRadius,
+                puckDiameter, puckDiameter);
+            e.Graphics.FillEllipse(new SolidBrush(Color.MediumBlue), batPos.X - puckRadius, batPos.Y - puckRadius,
                 puckDiameter, puckDiameter);
 
             if (hasVelocityLine)
             {
-                e.Graphics.DrawLine(new Pen(Color.Red, 3), position.X, position.Y, mouseHeldX, mouseHeldY);
+                e.Graphics.DrawLine(new Pen(Color.Red, 3), puckPos.X, puckPos.Y, mouseHeldX, mouseHeldY);
             }
         }
 
-        protected void PanelMouseDown(object sender, MouseEventArgs e)
+        private void PanelMouseDown(object sender, MouseEventArgs e)
         {
-            if (Table.IsPuckStationary)
-            {
-                Table.Position = new Vector2(e.X, e.Y);
+            var isStationary = false;
 
+            Table.AccessState(state =>
+            {
+                isStationary = state.IsPuckStationary;
+
+                if (isStationary)
+                {
+                    state.Position = new Vector2(e.X, e.Y);
+                }
+            });
+
+            if (isStationary)
+            {
                 mouseHeldX = e.X;
                 mouseHeldY = e.Y;
 
@@ -77,7 +98,7 @@ namespace RockyHockeyGUI.VirtualTable
             }
         }
 
-        protected void PanelMouseMove(object sender, MouseEventArgs e)
+        private void PanelMouseMove(object sender, MouseEventArgs e)
         {
             if (isMouseHeld)
             {
@@ -89,7 +110,7 @@ namespace RockyHockeyGUI.VirtualTable
             }
         }
 
-        protected void PanelMouseUp(object sender, MouseEventArgs e)
+        private void PanelMouseUp(object sender, MouseEventArgs e)
         {
             if (isMouseHeld)
             {
@@ -106,9 +127,11 @@ namespace RockyHockeyGUI.VirtualTable
         {
             if (hasVelocityLine)
             {
-                var position = Table.Position;
-
-                Table.Velocity = new Vector2(mouseHeldX - position.X, mouseHeldY - position.Y) / 25; // 1/4 * ticks/s
+                Table.AccessState(state =>
+                {
+                    var position = state.Position;
+                    state.Velocity = new Vector2(mouseHeldX - position.X, mouseHeldY - position.Y) / 25; // 1/4 * ticks/s
+                });
 
                 hasVelocityLine = false;
 
@@ -119,18 +142,18 @@ namespace RockyHockeyGUI.VirtualTable
 
         private void StopButtonClick(object sender, EventArgs e)
         {
-            Table.IsPuckStationary = true;
+            Table.AccessState(state => state.IsPuckStationary = true);
             stopButton.Enabled = false;
         }
 
         private void TrackBarScroll(object sender, EventArgs e)
         {
-            Table.Friction = trackBar.Value * 0.001f;
+            Table.AccessState(state => state.Friction = trackBar.Value * 0.001f);
         }
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (Table.IsPuckStationary)
+            if (Table.Evaluate(state => state.IsPuckStationary))
             {
                 stopButton.Enabled = false;
             }
@@ -140,13 +163,22 @@ namespace RockyHockeyGUI.VirtualTable
 
         private void UpdateTextboxes()
         {
-            var position = Table.Position;
+            var position = Table.Evaluate(state => state.Position);
 
-            //x0TextBox.Text = position.X.ToString();
-            //y0TextBox.Text = position.Y.ToString();
+            x0TextBox.Text = position.X.ToString();
+            y0TextBox.Text = position.Y.ToString();
 
-            //x1TextBox.Text = mouseHeldX.ToString();
-            //y1TextBox.Text = mouseHeldY.ToString();
+            x1TextBox.Text = mouseHeldX.ToString();
+            y1TextBox.Text = mouseHeldY.ToString();
+        }
+
+        private void MyAxisOnMove(double x, double y)
+        {
+            Invoke(new Action(() =>
+            {
+                xBatTextBox.Text = x.ToString();
+                yBatTextBox.Text = y.ToString();
+            }));
         }
     }
 }

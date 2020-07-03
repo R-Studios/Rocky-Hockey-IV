@@ -13,114 +13,13 @@ namespace RockyHockeyGUI.VirtualTable
     {
         private readonly int fieldWidth, fieldHeight, puckRadius;
         private readonly object lockObj = new object();
+        
+        private readonly TableState tableState;
 
         private bool shouldStop;
         private long targetElapsedMillis;
         private Stopwatch stopwatch;
         private Thread workerThread;
-
-        private TableState tableState;
-
-        private Vector2 position;
-        private Vector2 velocity;
-        private float friction;
-
-        internal TableState TableState
-        {
-            get
-            {
-                lock (lockObj)
-                {
-                    return tableState;
-                }
-            }
-            set
-            {
-                lock (lockObj)
-                {
-                    tableState = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Position of the puck on the play field.
-        /// </summary>
-        internal Vector2 Position
-        {
-            get
-            {
-                lock (lockObj)
-                {
-                    return position;
-                }
-            }
-            set
-            {
-                lock (lockObj)
-                {
-                    position = value;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Velocity of the puck.
-        /// <c>Vector2.Zero</c> means the puck is stationary.
-        /// </summary>
-        internal Vector2 Velocity
-        {
-            get
-            {
-                lock (lockObj)
-                {
-                    return velocity;
-                }
-            }
-            set
-            {
-                lock (lockObj)
-                {
-                    velocity = value;
-                }
-            }
-        }
-
-        internal bool IsPuckStationary
-        {
-            get => Velocity == Vector2.Zero;
-            set
-            {
-                if (value)
-                {
-                    Velocity = Vector2.Zero;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Reduces puck velocity to simulate friction.
-        /// Measured in relative speed lost per tick.
-        /// Not super realistic but should work well enough.
-        /// Should be within the range of 0.00 to 0.01.
-        /// </summary>
-        internal float Friction
-        {
-            get
-            {
-                lock (lockObj)
-                {
-                    return friction;
-                }
-            }
-            set
-            {
-                lock (lockObj)
-                {
-                    friction = value;
-                }
-            }
-        }
 
         internal VirtualTableWorker(int fieldWidth, int fieldHeight, int puckRadius)
         {
@@ -128,7 +27,23 @@ namespace RockyHockeyGUI.VirtualTable
             this.fieldHeight = fieldHeight;
             this.puckRadius = puckRadius;
 
-            position = new Vector2(fieldWidth * 0.25f, fieldHeight * 0.5f);
+            tableState = new TableState(new Vector2(fieldWidth * 0.25f, fieldHeight * 0.5f));
+        }
+
+        internal void AccessState(Action<TableState> action)
+        {
+            lock (lockObj)
+            {
+                action.Invoke(tableState);
+            }
+        }
+
+        internal T Evaluate<T>(Func<TableState, T> func)
+        {
+            lock (lockObj)
+            {
+                return func.Invoke(tableState);
+            }
         }
 
         internal void Start()
@@ -136,17 +51,22 @@ namespace RockyHockeyGUI.VirtualTable
             workerThread = new Thread(RunLoop) {Name = "Virtual Table Worker Thread", IsBackground = true};
             workerThread.Start();
 
-            MovementController.Instance.OnMove = (x, y) => 
-            {
-                x0TextBox.Text = x.ToString();
-                y0TextBox.Text = y.ToString();
-            };
+            MovementController.Instance.OnMove += AxisOnMove;
         }
 
         internal void Stop()
         {
             shouldStop = true;
+            MovementController.Instance.OnMove -= AxisOnMove;
             workerThread.Join();
+        }
+
+        private void AxisOnMove(double x, double y)
+        {
+            lock (lockObj)
+            {
+                tableState.BatPosition = new Vector2((float) x, (float) y);
+            }
         }
 
         private void RunLoop()
@@ -201,7 +121,7 @@ namespace RockyHockeyGUI.VirtualTable
                     velocity.Y *= -1;
                 }
 
-                velocity *= 1 - friction;
+                velocity *= 1 - tableState.Friction;
 
                 if (velocity.Length() < 0.2)
                 {
@@ -222,7 +142,7 @@ namespace RockyHockeyGUI.VirtualTable
             {
                 lock (lockObj)
                 {
-                    positions.Add(new TimedCoordinate(position.X, fieldHeight - position.Y, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    positions.Add(new TimedCoordinate(tableState.Position.X, fieldHeight - tableState.Position.Y, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                 }
 
                 Thread.Sleep(10);

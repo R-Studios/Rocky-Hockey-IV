@@ -47,6 +47,10 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.xBatTextBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.yBatTextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -210,6 +214,38 @@
             this.label8.TabIndex = 6;
             this.label8.Text = "Y1";
             // 
+            // xBatTextBox
+            // 
+            this.xBatTextBox.Location = new System.Drawing.Point(842, 87);
+            this.xBatTextBox.Name = "xBatTextBox";
+            this.xBatTextBox.Size = new System.Drawing.Size(86, 20);
+            this.xBatTextBox.TabIndex = 0;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(933, 90);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(30, 13);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "YBat";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(806, 90);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(30, 13);
+            this.label10.TabIndex = 7;
+            this.label10.Text = "XBat";
+            // 
+            // yBatTextBox
+            // 
+            this.yBatTextBox.Location = new System.Drawing.Point(969, 87);
+            this.yBatTextBox.Name = "yBatTextBox";
+            this.yBatTextBox.Size = new System.Drawing.Size(88, 20);
+            this.yBatTextBox.TabIndex = 0;
+            // 
             // VirtualTableView
             // 
             this.AcceptButton = this.goButton;
@@ -217,7 +253,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ClientSize = new System.Drawing.Size(1069, 460);
+            this.Controls.Add(this.label10);
             this.Controls.Add(this.label7);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label4);
@@ -229,6 +267,8 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.panel);
+            this.Controls.Add(this.yBatTextBox);
+            this.Controls.Add(this.xBatTextBox);
             this.Controls.Add(this.y0TextBox);
             this.Controls.Add(this.textBox5);
             this.Controls.Add(this.y1TextBox);
@@ -264,5 +304,9 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox xBatTextBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox yBatTextBox;
     }
 }
