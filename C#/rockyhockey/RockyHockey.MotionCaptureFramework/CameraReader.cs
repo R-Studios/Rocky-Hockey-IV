@@ -17,15 +17,16 @@ namespace RockyHockey.MotionCaptureFramework
         /// initializes the camera
         /// </summary>
         /// <param name="withConfigBorders">weather or not the width and height from the config should be used</param>
-        public CameraReader(bool withConfigBorders = true)
+        public CameraReader(bool withConfigBorders = true, CameraConfig cameraConfig = null)
         {
+            cameraConfig = cameraConfig ?? Config.Instance.Camera1;
             SliceImage = true;
             camera = new VideoCapture(Config.Instance.Camera1.index);
 
             if (withConfigBorders)
             {
-                camera.SetCaptureProperty(CapProp.FrameWidth, Config.Instance.Camera1.Resolution.Width);
-                camera.SetCaptureProperty(CapProp.FrameHeight, Config.Instance.Camera1.Resolution.Height);
+                camera.SetCaptureProperty(CapProp.FrameWidth, cameraConfig.Resolution.Width);
+                camera.SetCaptureProperty(CapProp.FrameHeight, cameraConfig.Resolution.Height);
             }
 
             camera.SetCaptureProperty(CapProp.Fps, Config.Instance.FrameRate);

@@ -211,8 +211,7 @@ namespace RockyHockeyGUI
                         .Append(radius).Append("\r\n");
                 }
 
-                FoundCircles_Box.Clear();
-                FoundCircles_Box.Text = builder.ToString();
+                FoundCircles_Box.Text += builder.ToString();
 
                 CurrentFrame.Image = tempMap;
 
