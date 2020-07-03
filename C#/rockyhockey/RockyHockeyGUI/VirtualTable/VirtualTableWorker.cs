@@ -9,9 +9,16 @@ using RockyHockey.MovementFramework;
 
 namespace RockyHockeyGUI.VirtualTable
 {
+    /// <summary>
+    /// This class is doing the actual "simulation" work for the virtual table.
+    /// Since GDI rendering with WinForms is limited to 30 fps, the simulation is running on its own thread.
+    /// It is using fixed time steps of 10 ms (100 ticks per second).
+    /// Also see <see cref="VirtualTableView"/> for the window hosting this simulation.
+    /// </summary>
     internal class VirtualTableWorker : PositionCollector
     {
-        private readonly int fieldWidth, fieldHeight, puckRadius;
+        private readonly int fieldWidth, fieldHeight;
+        private readonly float puckRadius;
         private readonly object lockObj = new object();
         
         private readonly TableState tableState;
@@ -21,7 +28,7 @@ namespace RockyHockeyGUI.VirtualTable
         private Stopwatch stopwatch;
         private Thread workerThread;
 
-        internal VirtualTableWorker(int fieldWidth, int fieldHeight, int puckRadius)
+        internal VirtualTableWorker(int fieldWidth, int fieldHeight, float puckRadius)
         {
             this.fieldWidth = fieldWidth;
             this.fieldHeight = fieldHeight;
@@ -30,6 +37,13 @@ namespace RockyHockeyGUI.VirtualTable
             tableState = new TableState(new Vector2(fieldWidth * 0.25f, fieldHeight * 0.5f));
         }
 
+        /// <summary>
+        /// Allows safe access to the table state.
+        /// Ensures that the code within the passed function has atomic access.
+        /// (Meaning that the table simulation code can't modify the state while your code is being processed.)
+        /// Example use in <see cref="VirtualTableView.GoButtonClick"/>.
+        /// </summary>
+        /// <param name="action">A function to run. Has a single parameter of type <see cref="TableState"/> that is safe to modify.</param>
         internal void AccessState(Action<TableState> action)
         {
             lock (lockObj)
@@ -38,6 +52,14 @@ namespace RockyHockeyGUI.VirtualTable
             }
         }
 
+        /// <summary>
+        /// A convenience method to access the table state similar to <see cref="AccessState"/>.
+        /// It additionally transfers the returned value of your function to its own return value.
+        /// Example use in <see cref="VirtualTableView.TimerTick"/>.
+        /// </summary>
+        /// <typeparam name="T">The type that your function returns. Usually automatically inferred from your function.</typeparam>
+        /// <param name="func">A function to run. Has a single parameter of type <see cref="TableState"/> and can return anything.</param>
+        /// <returns>The value your function has returned.</returns>
         internal T Evaluate<T>(Func<TableState, T> func)
         {
             lock (lockObj)
@@ -46,6 +68,9 @@ namespace RockyHockeyGUI.VirtualTable
             }
         }
 
+        /// <summary>
+        /// Starts the table simulation and hooks into <see cref="MovementController.OnMove"/> for reading the bat position.
+        /// </summary>
         internal void Start()
         {
             workerThread = new Thread(RunLoop) {Name = "Virtual Table Worker Thread", IsBackground = true};
@@ -54,6 +79,11 @@ namespace RockyHockeyGUI.VirtualTable
             MovementController.Instance.OnMove += AxisOnMove;
         }
 
+        /// <summary>
+        /// Stops the table simulation and unhooks from the <see cref="MovementController.OnMove"/> event.
+        /// It is recommended to call this method, but not strictly necessary because the worker thread is marked as background,
+        /// therefore automatically terminating when the application is shutting down.
+        /// </summary>
         internal void Stop()
         {
             shouldStop = true;
@@ -61,10 +91,15 @@ namespace RockyHockeyGUI.VirtualTable
             workerThread.Join();
         }
 
-        private void AxisOnMove(double x, double y)
+        private void AxisOnMove(double axisX, double axisY)
         {
             lock (lockObj)
             {
+                var size = Config.Instance.GameFieldSize;
+                // Convert from "real" bat position to virtual table position. See VirtualTableView class summary for details about this.
+                var x = fieldWidth - axisX * fieldWidth / size.Width;
+                var y = axisY * fieldHeight / size.Height;
+
                 tableState.BatPosition = new Vector2((float) x, (float) y);
             }
         }
@@ -90,6 +125,9 @@ namespace RockyHockeyGUI.VirtualTable
             }
         }
 
+        /// <summary>
+        /// Runs a single simulation tick. Access to the state is safe in this entire method.
+        /// </summary>
         private void Tick()
         {
             var velocity = tableState.Velocity;
@@ -97,11 +135,17 @@ namespace RockyHockeyGUI.VirtualTable
 
             if (velocity != Vector2.Zero)
             {
+                // Try to get puck unstuck if it was placed inside a wall
+                position.X = Clamp(position.X, puckRadius, fieldWidth - puckRadius);
+                position.Y = Clamp(position.Y, puckRadius, fieldHeight - puckRadius);
+                
+                // Move puck
                 position += velocity;
             
+                // Bounce off the short sides
                 if (position.X < puckRadius)
                 {
-                    tableState.Position.X += 2 * (puckRadius - position.X);
+                    position.X += 2 * (puckRadius - position.X);
                     velocity.X *= -1;
                 }
                 else if (position.X > fieldWidth - puckRadius)
@@ -110,6 +154,7 @@ namespace RockyHockeyGUI.VirtualTable
                     velocity.X *= -1;
                 }
 
+                // Bounce off the long sides
                 if (position.Y < puckRadius)
                 {
                     position.Y += 2 * (puckRadius - position.Y);
@@ -121,19 +166,25 @@ namespace RockyHockeyGUI.VirtualTable
                     velocity.Y *= -1;
                 }
 
+                // Apply friction
                 velocity *= 1 - tableState.Friction;
-
+                
+                // Puck has become slow enough to completely stop
                 if (velocity.Length() < 0.2)
                 {
-                    // Puck has come to a halt
                     velocity = Vector2.Zero;
                 }
 
+                // Write the new values back to the state
                 tableState.Velocity = velocity;
                 tableState.Position = position;
             }
         }
 
+        /// <summary>
+        /// Used by path prediction.
+        /// </summary>
+        /// <returns>A list of seven <see cref="TimedCoordinate"/>s collected over 70 milliseconds from the table state.</returns>
         public override List<TimedCoordinate> GetPuckPositions()
         {
             var positions = new List<TimedCoordinate>(7);
@@ -142,25 +193,54 @@ namespace RockyHockeyGUI.VirtualTable
             {
                 lock (lockObj)
                 {
-                    positions.Add(new TimedCoordinate(tableState.Position.X, fieldHeight - tableState.Position.Y, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
+                    var size = Config.Instance.GameFieldSize;
+                    // Convert from virtual table position to "real" position. See VirtualTableView class summary for details about this.
+                    var x = tableState.Position.X * size.Width / fieldWidth;
+                    var y = (fieldHeight - tableState.Position.Y) * size.Height / fieldHeight;
+
+                    positions.Add(new TimedCoordinate(x, y, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                 }
 
                 Thread.Sleep(10);
             }
 
+            // Possibly simulate delay from image processing? Not sure if that's a good thing to do.
             //Thread.Sleep(20);
 
             return positions;
         }
 
+        /// <summary>
+        /// Also used by path prediction.
+        /// </summary>
+        /// <returns>A single <see cref="TimedCoordinate"/> derived from the current table state.</returns>
         public override TimedCoordinate GetPuckPosition()
         {
             lock (lockObj)
             {
-                return new TimedCoordinate(tableState.Position.X, fieldHeight - tableState.Position.Y);
+                var size = Config.Instance.GameFieldSize;
+                // Convert from virtual table position to "real" position. See VirtualTableView class summary for details about this.
+                var x = tableState.Position.X * size.Width / fieldWidth;
+                var y = (fieldHeight - tableState.Position.Y) * size.Height / fieldHeight;
+
+                return new TimedCoordinate(x, y);
             }
         }
 
         public override void StopMotionCapturing() { }
+
+        private static float Clamp(float value, float min, float max)
+        {
+            if (value < min)
+            {
+                value = min;
+            }
+            else if (value > max)
+            {
+                value = max;
+            }
+
+            return value;
+        }
     }
 }

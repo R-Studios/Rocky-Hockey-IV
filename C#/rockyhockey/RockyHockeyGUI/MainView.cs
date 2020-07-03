@@ -287,12 +287,22 @@ namespace RockyHockeyGUI
             MovementController.Instance.OnGoalDetected(this, new DetectedGoalEventArgs(true));
         }
 
+        /// <summary>
+        /// Creates a new virtual table window, and sets it as an alternative <see cref="PositionCollector"/> for the game.
+        /// </summary>
+        /// <param name="sender">The control that caused this event.</param>
+        /// <param name="e">Empty event args.</param>
         private void VirtualTableButtonClick(object sender, EventArgs e)
         {
+            virtualTableButton.Enabled = false;
             var tableView = new VirtualTableView();
             
             OverridePositionCollector = tableView.Table;
-            tableView.Closing += (o, args) => OverridePositionCollector = null;
+            tableView.Closing += (o, args) =>
+            {
+                OverridePositionCollector = null;
+                virtualTableButton.Enabled = true;
+            };
 
             tableView.Show();
         }
