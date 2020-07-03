@@ -28,6 +28,8 @@ namespace RockyHockeyGUI
                 cantChangeReader = true;
 
                 ConfigFieldsize_CheckBox.Enabled = false;
+
+                ResolutionCalibration_Panel.Visible = false;
             }
 
             this.reader = reader ?? new CameraReader();
@@ -72,6 +74,7 @@ namespace RockyHockeyGUI
             if (image != null)
             {
                 config.Resolution = new Size(image.Width, image.Height);
+                updateResolutionBoxes();
 
                 Bitmap tempMap = new Bitmap((int)(image.Width * zoomFactor), (int)(image.Height * zoomFactor));
                 tempMap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
@@ -114,6 +117,7 @@ namespace RockyHockeyGUI
             bottomLeftSet = true;
             Rotation_ComboBox.SelectedIndex = Rotation_ComboBox.FindStringExact(config.ImageRotation.ToString());
             DisplaysOrigin_CheckBox.Checked = config.displaysOrigin;
+            updateResolutionBoxes();
             pictureBox1.Invalidate();
         }
 
@@ -241,6 +245,11 @@ namespace RockyHockeyGUI
 
         private async void ConfigFieldsize_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            newReader();
+        }
+
+        private async void newReader()
+        {
             if (!cantChangeReader)
             {
                 GrabImage_Button.Enabled = false;
@@ -248,7 +257,7 @@ namespace RockyHockeyGUI
                 await Task.Factory.StartNew(() =>
                 {
                     reader.finalize();
-                    reader = new CameraReader(((CheckBox)sender).Checked);
+                    reader = new CameraReader(ConfigFieldsize_CheckBox.Checked, config);
                 });
 
                 GrabImage_Button.Enabled = true;
@@ -329,6 +338,19 @@ namespace RockyHockeyGUI
         {
             bool retval;
             if (retval = double.TryParse(sender.Text, out value))
+                sender.BackColor = Color.White;
+            else
+                sender.BackColor = Color.Red;
+
+            sender.Invalidate();
+
+            return retval;
+        }
+
+        private bool getInput(TextBox sender, out int value)
+        {
+            bool retval;
+            if (retval = int.TryParse(sender.Text, out value))
                 sender.BackColor = Color.White;
             else
                 sender.BackColor = Color.Red;
@@ -463,6 +485,26 @@ namespace RockyHockeyGUI
         private void DisplaysOrigin_CheckBox_CheckedChanged(object sender, EventArgs e)
         {
             config.displaysOrigin = ((CheckBox)sender).Checked;
+        }
+
+        private void ChangeResolution_Button_Click(object sender, EventArgs e)
+        {
+            int width;
+            if (getInput(ResolutionWidth_Box, out width))
+            {
+                int height;
+                if (getInput(ResolutionHeight_Box, out height))
+                {
+                    config.Resolution = new Size(width, height);
+                    newReader();
+                }
+            }
+        }
+
+        private void updateResolutionBoxes()
+        {
+            ResolutionWidth_Box.Text = config.Resolution.Width.ToString();
+            ResolutionHeight_Box.Text = config.Resolution.Height.ToString();
         }
     }
 }

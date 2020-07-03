@@ -72,6 +72,13 @@
             this.label9 = new System.Windows.Forms.Label();
             this.Cancel_Button = new System.Windows.Forms.Button();
             this.LoadConfig_Button = new System.Windows.Forms.Button();
+            this.ResolutionCalibration_Panel = new System.Windows.Forms.Panel();
+            this.label12 = new System.Windows.Forms.Label();
+            this.ResolutionHeight_Box = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.ResolutionWidth_Box = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.ChangeResolution_Button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -81,6 +88,7 @@
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.ResolutionCalibration_Panel.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox2
@@ -514,11 +522,76 @@
             this.LoadConfig_Button.UseVisualStyleBackColor = true;
             this.LoadConfig_Button.Click += new System.EventHandler(this.LoadConfig_Button_Click);
             // 
+            // ResolutionCalibration_Panel
+            // 
+            this.ResolutionCalibration_Panel.Controls.Add(this.ChangeResolution_Button);
+            this.ResolutionCalibration_Panel.Controls.Add(this.label12);
+            this.ResolutionCalibration_Panel.Controls.Add(this.ResolutionHeight_Box);
+            this.ResolutionCalibration_Panel.Controls.Add(this.label10);
+            this.ResolutionCalibration_Panel.Controls.Add(this.ResolutionWidth_Box);
+            this.ResolutionCalibration_Panel.Controls.Add(this.label11);
+            this.ResolutionCalibration_Panel.Location = new System.Drawing.Point(569, 4);
+            this.ResolutionCalibration_Panel.Name = "ResolutionCalibration_Panel";
+            this.ResolutionCalibration_Panel.Size = new System.Drawing.Size(316, 94);
+            this.ResolutionCalibration_Panel.TabIndex = 10;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(2, 5);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(57, 13);
+            this.label12.TabIndex = 3;
+            this.label12.Text = "Resolution";
+            // 
+            // ResolutionHeight_Box
+            // 
+            this.ResolutionHeight_Box.Location = new System.Drawing.Point(88, 52);
+            this.ResolutionHeight_Box.Name = "ResolutionHeight_Box";
+            this.ResolutionHeight_Box.Size = new System.Drawing.Size(100, 20);
+            this.ResolutionHeight_Box.TabIndex = 2;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(30, 55);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(38, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Height";
+            // 
+            // ResolutionWidth_Box
+            // 
+            this.ResolutionWidth_Box.Location = new System.Drawing.Point(88, 26);
+            this.ResolutionWidth_Box.Name = "ResolutionWidth_Box";
+            this.ResolutionWidth_Box.Size = new System.Drawing.Size(100, 20);
+            this.ResolutionWidth_Box.TabIndex = 1;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(27, 29);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(35, 13);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "Width";
+            // 
+            // ChangeResolution_Button
+            // 
+            this.ChangeResolution_Button.Location = new System.Drawing.Point(210, 68);
+            this.ChangeResolution_Button.Name = "ChangeResolution_Button";
+            this.ChangeResolution_Button.Size = new System.Drawing.Size(99, 23);
+            this.ChangeResolution_Button.TabIndex = 4;
+            this.ChangeResolution_Button.Text = "change resolution";
+            this.ChangeResolution_Button.UseVisualStyleBackColor = true;
+            this.ChangeResolution_Button.Click += new System.EventHandler(this.ChangeResolution_Button_Click);
+            // 
             // CameraCalibration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1005, 711);
+            this.Controls.Add(this.ResolutionCalibration_Panel);
             this.Controls.Add(this.LoadConfig_Button);
             this.Controls.Add(this.Cancel_Button);
             this.Controls.Add(this.label9);
@@ -544,6 +617,8 @@
             this.panel4.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.ResolutionCalibration_Panel.ResumeLayout(false);
+            this.ResolutionCalibration_Panel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -593,5 +668,12 @@
         private System.Windows.Forms.CheckBox DisplaysOrigin_CheckBox;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.TextBox PreciewClickLocation;
+        private System.Windows.Forms.Panel ResolutionCalibration_Panel;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox ResolutionHeight_Box;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox ResolutionWidth_Box;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button ChangeResolution_Button;
     }
 }
