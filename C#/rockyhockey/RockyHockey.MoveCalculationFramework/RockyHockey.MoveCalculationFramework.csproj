@@ -50,6 +50,7 @@
     <Compile Include="IStrategyCalculationFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StrategyCalculationFramework.cs" />
+    <Compile Include="StrategyCommunicationInterface.cs" />
     <Compile Include="StrategyDirect.cs" />
     <Compile Include="StrategyOneBank.cs" />
     <Compile Include="TrajectoryCalculationFramework.cs" />

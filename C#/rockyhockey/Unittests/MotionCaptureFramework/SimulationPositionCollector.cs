@@ -10,14 +10,13 @@ namespace RockyHockey.MotionCaptureFramework
 {
     class SimulationPositionCollector : PositionCollector
     {
-        //lines on which the bat moves
-        List<StraightLine> motion;
-        int motionIterator;
+        //the current calculated motion part
+        StraightLine currentMotion;
 
-        //last position of the bat
+        //last position of the puck
         TimedCoordinate last;
 
-        //speed of the simulated bat
+        //speed of the simulated puck
         double speed;
 
         //minimum duration for retreiving a position
@@ -28,44 +27,15 @@ namespace RockyHockey.MotionCaptureFramework
         /// </summary>
         /// <param name="start">start coordinate</param>
         /// <param name="angleToLongSide">angle to x-axis; 90 &lt; x &lt; 270</param>
-        /// <param name="speed">speed of bat in px/s</param>
+        /// <param name="speed">speed of puck in px/s</param>
         /// <param name="minDuration">minimal needed time pre position calculation</param>
-        public SimulationPositionCollector(Coordinate start, double angleToLongSide, double speed, int minDuration = 0)
+        public SimulationPositionCollector(Coordinate start, Coordinate end, double speed, int minDuration = 0)
         {
-            if (angleToLongSide <= 90 || angleToLongSide >= 270)
-                throw new ArgumentException("invalid value for angleToLongSide");
-
-            this.speed = speed;
+            this.speed = speed / 1000;
             this.minDuration = minDuration;
             last = new TimedCoordinate(start);
-            motion = new List<StraightLine>();
-            motionIterator = 0;
 
-            //calculate direction of first line
-            Coordinate direction = new Coordinate(0, start.Y - Config.Instance.PuckRadius);
-
-            if (angleToLongSide == 180)
-                direction = new Coordinate(-1, 0);
-            else
-            {
-                //get angle of triangle with x-axis
-                if (angleToLongSide > 180)
-                {
-                    direction.Y *= -1;
-                    angleToLongSide = 90 - (angleToLongSide - 180);
-                }
-                else
-                    angleToLongSide -= 90;
-
-                direction.X -= Math.Abs(direction.Y) * Math.Sin((Math.PI / 180) * angleToLongSide) / Math.Cos((Math.PI / 180) * angleToLongSide);
-            }
-
-            //creates first line
-            motion.Add(new StraightLine(start, direction));
-
-            //calculates other lines
-            while (motion.Last().nextImpact().X < start.X)
-                motion.Add(motion.Last().reflectedLine());
+            currentMotion = new StraightLine(new Vector(start, end));
         }
 
         public override TimedCoordinate GetPuckPosition()
@@ -77,7 +47,7 @@ namespace RockyHockey.MotionCaptureFramework
             if (last.Timestamp == 0)
                 last.Timestamp = timeStamp;
 
-            //calculate distance bat would have traveled
+            //calculate distance puck would have traveled
             double length = speed * (timeStamp - last.Timestamp);
 
             TimedCoordinate position = new TimedCoordinate(getCoordinateFromDistance(length), timeStamp);
@@ -93,12 +63,12 @@ namespace RockyHockey.MotionCaptureFramework
         private Coordinate getCoordinateFromDistance(double length)
         {
             //get direction of current line
-            Coordinate direction = new Coordinate(motion[motionIterator].Direction);
+            Coordinate direction = new Coordinate(currentMotion.Direction);
 
             //calculate vector to new position
-            double multiplicator = Math.Sqrt(Math.Pow(length, 2) / (Math.Pow(direction.X, 2) + Math.Pow(direction.X, 2)));
-            direction.X *= multiplicator;
-            direction.Y *= multiplicator;
+            double factor = length / new Vector(new Coordinate(), direction).Length;
+            direction.X *= factor;
+            direction.Y *= factor;
 
             //calculate next position
             Coordinate newPosition = new Coordinate(last);
@@ -106,17 +76,17 @@ namespace RockyHockey.MotionCaptureFramework
             newPosition.Y += direction.Y;
 
             //check if new position is inside game field
-            if (!Coordinate.insideBounds(newPosition))
+            if (!newPosition.insideBounds())
             {
                 //calculate position of next impact
-                Coordinate next = motion[motionIterator].nextImpact();
+                Coordinate next = currentMotion.nextImpact();
 
-                //get distance between lasp point and impact
+                //get distance between last point and impact
                 //substract that distance from given distance
                 length -= new Vector(last, next).Length;
 
-                //set line iterator to next line
-                motionIterator++;
+                //get next part of motion
+                currentMotion = currentMotion.reflectedLine();
 
                 //set impact as last
                 last = new TimedCoordinate(next);

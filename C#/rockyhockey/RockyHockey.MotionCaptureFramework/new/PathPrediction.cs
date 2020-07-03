@@ -39,7 +39,9 @@ namespace RockyHockey.MotionCaptureFramework
         /// </summary>
         public void init()
         {
-            List<StraightLine> localpathParts = predict(parallelCompare(collector.GetPuckPositions()));
+            List<StraightLine> localpathParts = new List<StraightLine>();
+            parallelCompare(collector.GetPuckPositions(), ref localpathParts);
+            localpathParts = predict(localpathParts);
 
             rwl.AcquireWriterLock(int.MaxValue);
             pathParts = localpathParts;
@@ -51,11 +53,6 @@ namespace RockyHockey.MotionCaptureFramework
         public void finalize()
         {
             validationFlag = false;
-            current = null;
-            pathParts = null;
-            collector.StopMotionCapturing();
-            collector = null;
-            rwl = null;
         }
 
         /// <summary>
@@ -65,29 +62,42 @@ namespace RockyHockey.MotionCaptureFramework
         {
             Task.Factory.StartNew(() =>
             {
-                while (validationFlag)
+                try
                 {
-                    //get current position
-                    TimedCoordinate localCurrent = collector.GetPuckPosition();
-
-                    rwl.AcquireWriterLock(int.MaxValue);
-                    current = localCurrent;
-                    rwl.ReleaseWriterLock();
-
-                    //check if it is on last ckecked line
-                    rwl.AcquireReaderLock(int.MaxValue);
-                    if (!pathParts[pathPartPointer].isOnLine(current))
+                    while (validationFlag)
                     {
-                        //check if it is on next line
-                        if (!pathParts[++pathPartPointer].isOnLine(current))
+                        //get current position
+                        TimedCoordinate localCurrent = collector.GetPuckPosition();
+
+                        rwl.AcquireWriterLock(int.MaxValue);
+                        current = localCurrent;
+                        rwl.ReleaseWriterLock();
+
+                        //check if it is on last ckecked line
+                        rwl.AcquireReaderLock(int.MaxValue);
+                        if (!pathParts[pathPartPointer].isOnLine(current, 5))
                         {
-                            //update path prediction
-                            rwl.ReleaseReaderLock();
-                            init();
-                            break;
+                            //check if it is on next line
+                            if (!pathParts[++pathPartPointer].isOnLine(current, 5))
+                            {
+                                //update path prediction
+                                rwl.ReleaseReaderLock();
+                                init();
+                                break;
+                            }
                         }
+                        rwl.ReleaseReaderLock();
                     }
-                    rwl.ReleaseReaderLock();
+
+                    current = null;
+                    pathParts = null;
+                    collector.StopMotionCapturing();
+                    collector = null;
+                    rwl = null;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
                 }
             });
         }
@@ -121,7 +131,7 @@ namespace RockyHockey.MotionCaptureFramework
             {
                 retval = new TimedCoordinate(localpathParts[a].reachesX(x));
 
-                if (Coordinate.insideBounds(retval))
+                if (retval.insideBounds())
                     break;
             }
 
@@ -171,94 +181,122 @@ namespace RockyHockey.MotionCaptureFramework
             return retval;
         }
 
-        //parallel part
-        private List<StraightLine> parallelCompare(List<TimedCoordinate> detectedPosition)
+        /// <summary>
+        /// checks if given coordinates are in the same line
+        /// </summary>
+        /// <param name="detectedPosition">detected positions</param>
+        /// <returns>puck motion parts</returns>
+        private void parallelCompare(List<TimedCoordinate> detectedPosition, ref List<StraightLine> motionLines)
         {
+            //make sure the minimum amount of positions are in the list
             fillListToMinLength(ref detectedPosition);
 
+            //start check if first and last point are on the same line
             Task<CompareData> simpleComparisionTask = comparePositions(detectedPosition[0], detectedPosition[1], detectedPosition.Last());
 
             List<Task<CompareData>> comparisons = new List<Task<CompareData>>();
 
+            //start evaluation of other points
             for (int a = 1; a < detectedPosition.Count;)
                 comparisons.Add(comparePositions(detectedPosition[a - 1], detectedPosition[a++], detectedPosition[a < detectedPosition.Count ? a : detectedPosition.Count - 1]));
 
-            return parallelAnalysis(detectedPosition, comparisons, simpleComparisionTask);
+            //evaluate results
+            parallelAnalysis(comparisons, simpleComparisionTask, ref motionLines);
         }
 
-        private List<StraightLine> parallelAnalysis<T>(List<TimedCoordinate> detectedPosition, List<T> comparisons, Task<CompareData> simpleCheck)
+        /// <summary>
+        /// evaluates a set of ComparisonData structs
+        /// </summary>
+        /// <param name="comparisons">comparison data or tasks</param>
+        /// <param name="simpleCheck">comparison data that evaluates first and last position in list</param>
+        /// <returns></returns>
+        private void parallelAnalysis(List<Task<CompareData>> comparisons, Task<CompareData> simpleCheck, ref List<StraightLine> motionLines)
         {
-            List<StraightLine> motionStart = new List<StraightLine>();
-
             simpleCheck.Wait();
             CompareData simpleCheckResult = simpleCheck.Result;
 
+            //check if puck was played over bank or if position are on the same line
             if (simpleCheckResult.posOnVecLine)
             {
                 VelocityVector velocity = new VelocityVector(simpleCheckResult.vec.TimedStart, simpleCheckResult.pos);
                 batVelocity = velocity.Velocity;
-                motionStart.Add(new StraightLine(velocity));
+                motionLines.Add(new StraightLine(velocity));
             }
             else
             {
                 int length = comparisons.Count;
                 int impactIndex = length;
                 List<CompareData> comparisonData = new List<CompareData>();
-                int a = 0;
 
-                for (; a < length; a++)
+                //evaluates the comparison data
+                for (int a = 0; a < length; a++)
                 {
-                    CompareData currentComparisonResult;
+                    //extract data structs into new Lists
+                    Task<CompareData> currentComparisonTask = (Task<CompareData>)(object)comparisons[a];
+                    currentComparisonTask.Wait();
 
-                    if (comparisons is List<CompareData>)
-                        currentComparisonResult = (CompareData)(object)comparisons[a];
-                    else if (comparisons is List<Task<CompareData>>)
-                    {
-                        Task<CompareData> currentComparisonTask = (Task<CompareData>)((object)comparisons[a]);
-                        currentComparisonTask.Wait();
-                        currentComparisonResult = currentComparisonTask.Result;
-                    }
-                    else
-                        throw new ArgumentException("type " + typeof(T) + " not allowed");
+                    CompareData currentComparisonResult = currentComparisonTask.Result;
 
                     comparisonData.Add(currentComparisonResult);
 
+                    //checks if an impact on
                     if (!currentComparisonResult.posOnVecLine && impactIndex == length)
                         impactIndex = a;
                 }
 
-                if (a == length)
-                    motionStart.Add(new StraightLine(comparisonData.First().vec.Start, directionMedian(comparisonData)));
-                else
-                {
-                    motionStart.Add(parallelAnalysis(detectedPosition, comparisonData.GetRange(0, a), comparePositions(detectedPosition[0], detectedPosition[1], comparisonData[a].vec.TimedStart)).Last());
+                //create motion line from correct vectors
+                motionLines.Add(new StraightLine(comparisonData.First().vec.Start, directionMedian(comparisonData.GetRange(0, impactIndex))));
 
+                if (impactIndex != length)
+                {
                     List<TimedCoordinate> positions = new List<TimedCoordinate>();
 
-                    positions.Add(getImpactCoordinate(motionStart.Last(), comparisonData[a + 1].vec));
+                    //calculate impact position on bank
+                    positions.Add(getImpactCoordinate(motionLines.Last(), comparisonData[impactIndex].vec));
 
-                    for (a++; a < comparisonData.Count; a++)
+                    //extract positions after impact on bank
+                    for (int a = impactIndex + 1; a < comparisonData.Count; a++)
                         positions.Add(comparisonData[a].vec.TimedEnd);
 
-                    motionStart.Add(parallelCompare(positions).Last());
+                    //reevaluate positions
+                    parallelCompare(positions, ref motionLines);
                 }
             }
-
-            return motionStart;
         }
 
+        /// <summary>
+        /// checks if given coordinates are on the same line
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
         private Task<CompareData> comparePositions(TimedCoordinate start, TimedCoordinate end, TimedCoordinate position)
         {
             return Task<CompareData>.Factory.StartNew(() =>
             {
+                //create struct that holds comparison data
                 CompareData data = new CompareData();
+
+                //create a vector from the first two positions
                 data.vec = new TimedVector(start, end);
+
+                //create a line out of the vector
                 data.vecLine = new StraightLine(data.vec);
+
+                //check if third position is on line
+                data.posOnVecLine = data.vecLine.isOnLine(position, 5);
+
+                //makes sure an impact on the bank is not ignored due to the allowed jitter
+                data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
+
+                //store third position in comparison struct
                 data.pos = position;
-                data.posOnVecLine = data.vecLine.isOnLine(data.pos);
+
                 return data;
             });
         }
+
 
         private Coordinate directionMedian(List<CompareData> motionVectors)
         {
@@ -276,13 +314,16 @@ namespace RockyHockey.MotionCaptureFramework
             return median;
         }
 
+        /// <summary>
+        /// calculates the position where the puck hit the bank
+        /// </summary>
+        /// <param name="movementLine">the motion line created from the previous positions</param>
+        /// <param name="incorrectVector">vector that were created from the positions before and after the puck hit the banlk</param>
+        /// <returns></returns>
         private TimedCoordinate getImpactCoordinate(StraightLine movementLine, TimedVector incorrectVector)
         {
             //get impact on border
-            TimedCoordinate impact = new TimedCoordinate(movementLine.nextImpactOnLongSide());
-
-            if (!Coordinate.insideBounds(impact))
-                impact = new TimedCoordinate(movementLine.nextImpactOnShortSide());
+            TimedCoordinate impact = new TimedCoordinate(movementLine.nextImpact());
 
             //create vector between last valid position and border
             Vector impactVector = new Vector(incorrectVector.Start, impact);
@@ -299,7 +340,7 @@ namespace RockyHockey.MotionCaptureFramework
 
             StraightLine current = motionStart.Last();
 
-            while (Coordinate.insideBounds(current.nextImpactOnLongSide()))
+            while (current.nextImpactOnLongSide().insideBounds())
                 motionStart.Add(current = current.onLongSideReflected());
 
             return motionStart;
@@ -308,7 +349,7 @@ namespace RockyHockey.MotionCaptureFramework
 
     public class TimingException : Exception
     {
-        public TimingException() : base("bat is past point") { }
+        public TimingException() : base("puck is is past point") { }
     }
 
     class CompareData
@@ -499,7 +540,7 @@ namespace RockyHockey.MotionCaptureFramework
             try
             {
                 retval = previousImpactOnLongSide();
-                if (!Coordinate.insideBounds(retval))
+                if (!retval.insideBounds())
                     retval = previousImpactOnShortSide();
             }
             catch (Exception e)
@@ -521,7 +562,7 @@ namespace RockyHockey.MotionCaptureFramework
             try
             {
                 retval = nextImpactOnLongSide();
-                if (!Coordinate.insideBounds(retval))
+                if (!retval.insideBounds())
                     retval = nextImpactOnShortSide();
             }
             catch (Exception e)
@@ -542,7 +583,7 @@ namespace RockyHockey.MotionCaptureFramework
 
             try
             {
-                if (Coordinate.insideBounds(nextImpactOnLongSide()))
+                if (nextImpactOnLongSide().insideBounds())
                     retval = onLongSideReflected();
                 else
                     retval = onShortSideReflected();
@@ -560,7 +601,13 @@ namespace RockyHockey.MotionCaptureFramework
             return increasingX == other.increasingX && increasingY == other.increasingY;
         }
 
-        public bool isOnLine(Coordinate position)
+        /// <summary>
+        /// checks if given position is on line; checks if distance of given position to the line is lower than the jitter
+        /// </summary>
+        /// <param name="position">position to check</param>
+        /// <param name="jitter">max allowed distance to the line</param>
+        /// <returns>true if distance to line < jitter</returns>
+        public bool isOnLine(Coordinate position, double jitter = 0)
         {
             Coordinate orthogonalDirection = new Coordinate();
             orthogonalDirection.X = Direction.Y;
@@ -569,7 +616,7 @@ namespace RockyHockey.MotionCaptureFramework
             StraightLine orthogonalLine = new StraightLine(position, orthogonalDirection);
             Vector distanceVector = new Vector(position, intersection(orthogonalLine));
 
-            return distanceVector.Length < 5;
+            return distanceVector.Length < jitter;
         }
 
         public Coordinate intersection(StraightLine other)

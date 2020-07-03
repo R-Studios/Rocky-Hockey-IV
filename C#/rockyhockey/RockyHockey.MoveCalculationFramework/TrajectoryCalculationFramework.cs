@@ -66,7 +66,7 @@ namespace RockyHockey.MoveCalculationFramework
                 try
                 {
                     //GameFieldPosition batPosition = await motionCaptureProvider.GetBatPosition().ConfigureAwait(false);
-                    puckVector = await vectorCalculationProvider.CalculatePuckVector().ConfigureAwait(false);
+                    puckVector = vectorCalculationProvider.CalculatePuckVector();
                 }
                 catch (Exception ex)
                 {

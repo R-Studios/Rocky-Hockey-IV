@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RockyHockey.MotionCaptureFramework
@@ -15,71 +16,63 @@ namespace RockyHockey.MotionCaptureFramework
     class DetectionTest
     {
         [Test]
-        public async Task checkPosition()
+        public void aConfigInitialisationTest()
         {
-            TestImageReader reader = new TestImageReader();
-            TimedCoordinate pos;
-
-            pos = await PositionCalculator.ProcessImage(reader.getTimedImage(0), false);
-            Assert.True(pos == new Coordinate(368.5f, 168.5f));
-
-            pos = await PositionCalculator.ProcessImage(reader.getTimedImage(2), false);
-            Assert.True(pos == new Coordinate(330.5f, 206.5f));
-
-            pos = await PositionCalculator.ProcessImage(reader.getTimedImage(4), false);
-            Assert.True(pos == new Coordinate(292.5f, 244.5f));
-
-            pos = await PositionCalculator.ProcessImage(reader.getTimedImage(6), false);
-            Assert.True(pos == new Coordinate(254.5f, 282.5f));
+            Config config = Config.Instance;
         }
 
+
         [Test]
-        public void checkPositionList()
+        public void checkPosition()
         {
-            ImagePositionCollector collector = new ImagePositionCollector(new TestImageReader());
+            TestImageReader reader = new TestImageReader();
+            ImagePositionCollector collector = new ImagePositionCollector(reader);
 
             List<TimedCoordinate> posList = collector.GetPuckPositions();
 
             Assert.True(posList.Count == 10);
+
+            Assert.True(posList[2] == new Coordinate(368.5f, 168.5f));
+
+            Assert.True(posList[4] == new Coordinate(330.5f, 206.5f));
+
+            Assert.True(posList[6] == new Coordinate(292.5f, 244.5f));
+
+            Assert.True(posList[8] == new Coordinate(254.5f, 282.5f));
         }
 
         [Test]
         public void checkVector()
         {
-            VectorCalculationProvider test = new VectorCalculationProvider(new ImagePositionCollector(new TestImageReader()));
+            PositionCollector collector = new ImagePositionCollector(new TestImageReader());
+            VectorCalculationProvider test = new VectorCalculationProvider(collector);
 
-            Task<VelocityVector> vecTask = test.CalculatePuckVector();
-            vecTask.Wait();
-
-            VelocityVector vec = vecTask.Result;
-            int a = 0;
-            a++;
+            VelocityVector vec = test.CalculatePuckVector();
         }
 
         [Test]
-        public async Task direct_pathPrediction()
+        public void direct_pathPrediction()
         {
-            Config config = Config.Instance;
             new PathPrediction(new TestImageReader()).init();
-            config.PuckRadius = 10;
         }
 
         [Test]
-        public async Task reflected_pathPrediction()
+        public void reflected_pathPrediction()
         {
-            Config config = Config.Instance;
             new PathPrediction(new TestImageReader().setcounter(0)).init();
-            config.PuckRadius = 10;
         }
 
         [Test]
         public void testPathSimulation()
         {
-            Config config = Config.Instance;
-            SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), 225, 0.03125, 20);
+            SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), new Coordinate(406, 132), 0.03125, 20);
             PathPrediction predictionTest = new PathPrediction(test);
             predictionTest.init();
-            config.PuckRadius = 10;
+
+            //allows some validation cycles
+            Thread.Sleep(100);
+
+            predictionTest.finalize();
         }
     }
 }

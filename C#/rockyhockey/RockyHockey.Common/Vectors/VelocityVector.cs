@@ -6,17 +6,17 @@
     public class VelocityVector : TimedVector
     {
         public VelocityVector() { }
-        public VelocityVector(TimedCoordinate start, TimedCoordinate end, Coordinate direction) : base(start, end, direction)
-        {
-            calcVelocity();
-        }
 
         public VelocityVector(TimedCoordinate start, TimedCoordinate end) : base(start, end)
         {
             calcVelocity();
         }
+        public VelocityVector(VelocityVector original) : base(original)
+        {
+            Velocity = original.Velocity;
+        }
 
-        public double calcVelocity()
+        private double calcVelocity()
         {
             return Velocity = Length / NeededTime;
         }

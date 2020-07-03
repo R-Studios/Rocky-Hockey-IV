@@ -91,27 +91,32 @@ namespace RockyHockey.Common
             bool retVal = false;
 
             if (other.GetType().IsAssignableFrom(typeof(Coordinate)))
-                retVal = this.Equals((Coordinate)other);
+                retVal = Equals((Coordinate)other);
 
             return retVal;
         }
 
-        public static bool insideBounds(Coordinate pos)
+        /// <summary>
+        /// checks if puck position is within the field
+        /// </summary>
+        /// <param name="jitter">pixel tolerance</param>
+        /// <returns></returns>
+        public bool insideBounds(double jitter = 0)
         {
-            double radius = Config.Instance.PuckRadius - 2;
+            double radius = Config.Instance.PuckRadius - jitter;
 
-            bool retval = pos.X >= radius;
+            bool retval = X >= radius;
 
             if (retval)
             {
-                retval = pos.X <= Config.Instance.GameFieldSize.Width - radius;
+                retval = X <= Config.Instance.GameFieldSize.Width - radius;
 
                 if (retval)
                 {
-                    retval = pos.Y >= radius;
+                    retval = Y >= radius;
 
                     if (retval)
-                        retval = pos.Y <= Config.Instance.GameFieldSize.Height - radius;
+                        retval = Y <= Config.Instance.GameFieldSize.Height - radius;
                 }
             }
 

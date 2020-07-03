@@ -22,19 +22,19 @@ namespace RockyHockey.MoveCalculationFramework.Unittests
         }
 
         [Test]
-        public async Task TestCalculatePuckVelocity()
+        public void TestCalculatePuckVelocity()
         {
             var vectorCalculationProvider = new VectorCalculationProvider(new ImagePositionCollector());
-            VelocityVector vec = await vectorCalculationProvider.CalculatePuckVector().ConfigureAwait(false);
+            VelocityVector vec = vectorCalculationProvider.CalculatePuckVector();
             double expectedVelocity = 0.485054301382442;
             Assert.AreEqual(expectedVelocity, vec.Velocity);
         }
 
         [Test]
-        public async Task TestCalculatedDirection()
+        public void TestCalculatedDirection()
         {
             var vectorCalculationProvider = new VectorCalculationProvider(new ImagePositionCollector());
-            VelocityVector vec = await vectorCalculationProvider.CalculatePuckVector().ConfigureAwait(false);
+            VelocityVector vec = vectorCalculationProvider.CalculatePuckVector();
             Assert.AreEqual(1, vec.Direction.X);
             Assert.AreEqual(0.081133540372670773, vec.Direction.Y);
         }

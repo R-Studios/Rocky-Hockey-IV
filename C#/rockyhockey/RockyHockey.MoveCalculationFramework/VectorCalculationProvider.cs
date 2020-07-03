@@ -33,7 +33,7 @@ namespace RockyHockey.MoveCalculationFramework
         /// Calculates the vector that describes the trajectory of the puck
         /// </summary>
         /// <returns>calculatedvVector of the puck with its velocity</returns>
-        public async Task<VelocityVector> CalculatePuckVector()
+        public VelocityVector CalculatePuckVector()
         {
             List<TimedCoordinate> puckPositions = motionCaptureProvider.GetPuckPositions();
 
