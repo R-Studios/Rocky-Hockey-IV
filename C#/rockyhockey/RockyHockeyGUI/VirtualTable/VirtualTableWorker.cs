@@ -95,7 +95,8 @@ namespace RockyHockeyGUI.VirtualTable
         {
             lock (lockObj)
             {
-                var size = Config.Instance.GameFieldSize;
+                var size = Config.Instance.GameFieldSizeMM;
+
                 // Convert from "real" bat position to virtual table position. See VirtualTableView class summary for details about this.
                 var x = fieldWidth - axisX * fieldWidth / size.Width;
                 var y = axisY * fieldHeight / size.Height;
@@ -196,7 +197,7 @@ namespace RockyHockeyGUI.VirtualTable
                     var size = Config.Instance.GameFieldSize;
                     // Convert from virtual table position to "real" position. See VirtualTableView class summary for details about this.
                     var x = tableState.Position.X * size.Width / fieldWidth;
-                    var y = (fieldHeight - tableState.Position.Y) * size.Height / fieldHeight;
+                    var y = tableState.Position.Y * size.Height / fieldHeight;
 
                     positions.Add(new TimedCoordinate(x, y, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
                 }
@@ -221,7 +222,7 @@ namespace RockyHockeyGUI.VirtualTable
                 var size = Config.Instance.GameFieldSize;
                 // Convert from virtual table position to "real" position. See VirtualTableView class summary for details about this.
                 var x = tableState.Position.X * size.Width / fieldWidth;
-                var y = (fieldHeight - tableState.Position.Y) * size.Height / fieldHeight;
+                var y = tableState.Position.Y * size.Height / fieldHeight;
 
                 return new TimedCoordinate(x, y);
             }
