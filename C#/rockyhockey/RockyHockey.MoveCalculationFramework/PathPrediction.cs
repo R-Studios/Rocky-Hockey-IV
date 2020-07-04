@@ -12,7 +12,8 @@ namespace RockyHockey.MoveCalculationFramework
 {
     public class PathPrediction
     {
-        ReaderWriterLock rwl;
+        ReaderWriterLock pathPartsLocker;
+        ReaderWriterLock currentPositionLocker;
 
         public PositionCollector collector { get; private set; }
         TimedCoordinate current;
@@ -20,18 +21,26 @@ namespace RockyHockey.MoveCalculationFramework
         int pathPartPointer;
         bool validationFlag = true;
 
+        IProgress<List<Vector>> progress;
+
+        public event Action OnInit;
+
         double batVelocity = 0;
 
-        public PathPrediction(ImageProvider provider = null)
+        public PathPrediction(ImageProvider provider = null, IProgress<List<Vector>> progress = null)
         {
             collector = new ImagePositionCollector(provider);
-            rwl = new ReaderWriterLock();
+            pathPartsLocker = new ReaderWriterLock();
+            currentPositionLocker = new ReaderWriterLock();
+            this.progress = progress;
         }
 
-        public PathPrediction(PositionCollector provider)
+        public PathPrediction(PositionCollector provider, IProgress<List<Vector>> progress = null)
         {
             collector = provider;
-            rwl = new ReaderWriterLock();
+            pathPartsLocker = new ReaderWriterLock();
+            currentPositionLocker = new ReaderWriterLock();
+            this.progress = progress;
         }
 
         /// <summary>
@@ -47,11 +56,14 @@ namespace RockyHockey.MoveCalculationFramework
                 parallelCompare(positions, ref localpathParts);
                 localpathParts = predict(localpathParts);
 
-                rwl.AcquireWriterLock(int.MaxValue);
+                pathPartsLocker.AcquireWriterLock(int.MaxValue);
                 pathParts = localpathParts;
-                rwl.ReleaseWriterLock();
+                pathPartPointer = 0;
+                pathPartsLocker.ReleaseWriterLock();
 
                 validate();
+
+                OnInit?.Invoke();
             }
         }
 
@@ -97,33 +109,40 @@ namespace RockyHockey.MoveCalculationFramework
                         if (localCurrent == null)
                             continue;
 
-                        rwl.AcquireWriterLock(int.MaxValue);
+                        currentPositionLocker.AcquireWriterLock(int.MaxValue);
                         current = localCurrent;
-                        rwl.ReleaseWriterLock();
+                        currentPositionLocker.ReleaseWriterLock();
 
                         //check if it is on last ckecked line
-                        rwl.AcquireReaderLock(int.MaxValue);
+                        pathPartsLocker.AcquireReaderLock(int.MaxValue);
+
+                        if (pathPartPointer >= pathParts.Count())
+                            break;
+
                         if (!pathParts[pathPartPointer].isOnLine(current, Config.Instance.Tolerance))
                         {
+                            pathPartPointer++;
+                            if (pathPartPointer >= pathParts.Count())
+                                break;
+
                             //check if it is on next line
-                            if (!pathParts[++pathPartPointer].isOnLine(current, Config.Instance.Tolerance))
+                            if (!pathParts[pathPartPointer].isOnLine(current, Config.Instance.Tolerance))
                             {
                                 //update path prediction
-                                rwl.ReleaseReaderLock();
-                                init();
                                 break;
                             }
                         }
-                        rwl.ReleaseReaderLock();
+                        pathPartsLocker.ReleaseReaderLock();
                     }
-
-                    current = null;
-                    pathParts = null;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
+                pathPartsLocker.ReleaseLock();
+                currentPositionLocker.ReleaseLock();
+
+                init();
             });
         }
 
@@ -136,15 +155,15 @@ namespace RockyHockey.MoveCalculationFramework
             double length = 0;
 
             //make local copy so that validation of path does not interfere with calculation
-            rwl.AcquireReaderLock(int.MaxValue);
+            pathPartsLocker.AcquireReaderLock(int.MaxValue);
             List<StraightLine> localpathParts = new List<StraightLine>(pathParts);
-            rwl.ReleaseReaderLock();
+            pathPartsLocker.ReleaseReaderLock();
 
             //find line on which the requested y position is located
             int a;
             for (a = localpathParts.Count - 1; a > -1; a--)
             {
-                retval = new TimedCoordinate(localpathParts[a].reachesX(x));
+                retval = new TimedCoordinate(localpathParts[a].reachesX(x), DateTimeOffset.Now.ToUnixTimeMilliseconds());
 
                 if (retval.insideBounds())
                     break;
@@ -155,10 +174,10 @@ namespace RockyHockey.MoveCalculationFramework
                 throw new TimingException();
 
             //make local copy so that validation of path does not interfere with calculation
-            rwl.AcquireReaderLock(int.MaxValue);
+            pathPartsLocker.AcquireReaderLock(int.MaxValue);
             TimedCoordinate localCurrent = new TimedCoordinate(current);
             int localPathPartPointer = pathPartPointer;
-            rwl.ReleaseReaderLock();
+            pathPartsLocker.ReleaseReaderLock();
 
             //check if bat has passes line with requested y
             if (a < localPathPartPointer)
@@ -191,7 +210,7 @@ namespace RockyHockey.MoveCalculationFramework
             }
 
             //calculate when bat will be at requested position
-            retval.Timestamp = localCurrent.Timestamp + (long)(length / batVelocity);
+            retval.Timestamp += (long)(length / batVelocity);
 
             return new TimedVector(new TimedCoordinate(localpathParts[a].previousImpact()), retval);
         }
@@ -203,6 +222,10 @@ namespace RockyHockey.MoveCalculationFramework
         /// <returns>puck motion parts</returns>
         private void parallelCompare(List<TimedCoordinate> detectedPosition, ref List<StraightLine> motionLines)
         {
+            int oldLength = detectedPosition.Count();
+            if ((detectedPosition = detectedPosition.Where(x => x.X != double.NaN && x.Y != double.NaN).ToList()).Count() != oldLength)
+                motionLines = new List<StraightLine>();
+
             fillPositionListToMinLength(ref detectedPosition);
 
             //start check if first and last point are on the same line
@@ -262,7 +285,7 @@ namespace RockyHockey.MoveCalculationFramework
                 }
 
                 //create motion line from correct vectors
-                motionLines.Add(new StraightLine(comparisonData.First().vec.Start, directionMedian(comparisonData.GetRange(0, impactIndex))));
+                motionLines.Add(new StraightLine(comparisonData.First().vec.Start, directionMedian(comparisonData.GetRange(0, impactIndex == 0 ? 1: impactIndex))));
 
                 if (impactIndex != length)
                 {
@@ -305,11 +328,17 @@ namespace RockyHockey.MoveCalculationFramework
                     //create a line out of the vector
                     data.vecLine = new StraightLine(data.vec);
 
-                    //check if third position is on line
-                    data.posOnVecLine = data.vecLine.isOnLine(position, Config.Instance.Tolerance);
+                    //prevents test from failing if the same position is given for start and end
+                    if (data.vecLine.Direction != new Coordinate())
+                    {
+                        //check if third position is on line
+                        data.posOnVecLine = data.vecLine.isOnLine(position, Config.Instance.Tolerance);
 
-                    //makes sure an impact on the bank is not ignored due to the allowed jitter
-                    data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
+                        //makes sure an impact on the bank is not ignored due to the allowed jitter
+                        data.posOnVecLine = data.posOnVecLine && data.vecLine.reachesX(position.X).insideBounds();
+                    }
+                    else
+                        data.posOnVecLine = true;
 
                     //store third position in comparison struct
                     data.pos = position;
@@ -369,14 +398,20 @@ namespace RockyHockey.MoveCalculationFramework
             return motionStart;
         }
 
+        public void reportProgress()
+        {
+            if (progress != null)
+                reportProgress(progress);
+        }
+
         public void reportProgress(IProgress<List<Vector>> progress)
         {
             Task.Factory.StartNew(() =>
             {
                 //make local copy so that validation of path does not interfere with calculation
-                rwl.AcquireReaderLock(int.MaxValue);
+                pathPartsLocker.AcquireReaderLock(int.MaxValue);
                 List<StraightLine> localpathParts = new List<StraightLine>(pathParts ?? new List<StraightLine>());
-                rwl.ReleaseReaderLock();
+                pathPartsLocker.ReleaseReaderLock();
 
                 if (localpathParts.Any())
                 {

@@ -23,5 +23,10 @@
         /// timestamp when the position has been detected
         /// </summary>
         public long Timestamp { get; set; }
+
+        public new TimedCoordinate pixelToMM()
+        {
+            return new TimedCoordinate(X * Config.Instance.SizeRatio, Y * Config.Instance.SizeRatio, Timestamp);
+        }
     }
 }

@@ -122,5 +122,10 @@ namespace RockyHockey.Common
 
             return retval;
         }
+
+        public Coordinate pixelToMM()
+        {
+            return new Coordinate(X * Config.Instance.SizeRatio, Y * Config.Instance.SizeRatio);
+        }
     }
 }

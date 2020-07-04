@@ -101,7 +101,7 @@ namespace RockyHockeyGUI.VirtualTable
                 var x = fieldWidth - axisX * fieldWidth / size.Width;
                 var y = axisY * fieldHeight / size.Height;
 
-                tableState.BatPosition = new Vector2((float) x, (float) y);
+                tableState.BatPosition = new Vector2((float) axisX, (float) axisY);
             }
         }
 

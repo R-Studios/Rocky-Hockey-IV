@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace RockyHockey.MoveCalculationFramework
@@ -48,26 +49,27 @@ namespace RockyHockey.MoveCalculationFramework
         /// </summary>
         public Task BeginCalculationLoop(IProgress<List<Vector>> progress)
         {
-            return Task.Factory.StartNew(() =>
+            return Task.Factory.StartNew(async () =>
             {
-                PathPrediction prediction = new PathPrediction(motionCaptureProvider);
+                PathPrediction prediction = new PathPrediction(motionCaptureProvider, progress);
+                prediction.OnInit += prediction.reportProgress;
 
-                StrategyManager manager = new StrategyManager();
+                StrategyManager manager = new StrategyManager(movementController, prediction);
 
                 movementController.InitializeSerialPorts();
+
+                prediction.init();
 
                 KeepPlaying = true;
                 while (KeepPlaying)
                 {
-                    prediction.init();
-
-                    prediction.reportProgress(progress);
-
                     if (prediction.towardsRobot())
-                        manager.calculate(movementController, prediction);
-
-                    prediction.finalize();
+                        manager.calculate();
+                    else
+                        await Task.Factory.StartNew(() => { Thread.Sleep(10); });
                 }
+
+                prediction.finalize();
             });
         }
 

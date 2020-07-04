@@ -167,16 +167,23 @@ namespace RockyHockeyGUI
         {
             return Task.Factory.StartNew(() =>
             {
-                TrajectoryLine.Points.Clear();
-                if (progress.Any())
+                try
                 {
-                    TrajectoryLine.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(progress.First().Start.X),
-                        Convert.ToInt32(progress.First().Start.Y)));
-                    foreach (Vector vec in progress)
+                    TrajectoryLine.Points.Clear();
+                    if (progress.Any())
                     {
-                        TrajectoryLine.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(vec.End.X),
-                            Convert.ToInt32(vec.End.Y)));
+                        TrajectoryLine.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(progress.First().Start.X),
+                            Convert.ToInt32(progress.First().Start.Y)));
+                        foreach (Vector vec in progress)
+                        {
+                            TrajectoryLine.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(vec.End.X),
+                                Convert.ToInt32(vec.End.Y)));
+                        }
                     }
+                }
+                catch (Exception e)
+                {
+
                 }
             });
         }
