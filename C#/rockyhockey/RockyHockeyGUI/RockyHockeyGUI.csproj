@@ -113,7 +113,6 @@
     <Compile Include="MessageBoxLogger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScoreInitializer.cs" />
     <Compile Include="VirtualTable\TableState.cs" />
     <Compile Include="VirtualTable\VirtualTableView.cs">
       <SubType>Form</SubType>
