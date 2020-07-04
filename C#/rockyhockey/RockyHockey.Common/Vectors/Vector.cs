@@ -36,17 +36,6 @@ namespace RockyHockey.Common
             if (VectorDirection == null)
                 calcDirection();
 
-            Position = new GameFieldPosition
-            {
-                X = Start.X,
-                Y = Start.Y
-            };
-            Direction = new GameFieldPosition
-            {
-                X = End.X,
-                Y = End.Y
-            };
-
             return Length = Math.Sqrt(Math.Pow(VectorDirection.X, 2) + Math.Pow(VectorDirection.Y, 2));
         }
 
@@ -58,15 +47,6 @@ namespace RockyHockey.Common
                 Y = End.Y - Start.Y
             };
         }
-        /// <summary>
-        /// X-Achse
-        /// </summary>
-        public GameFieldPosition Position { get; set; }
-
-        /// <summary>
-        /// X-Length
-        /// </summary>
-        public GameFieldPosition Direction { get; set; }
 
         public Coordinate Start { get; private set; }
         public Coordinate End { get; private set; }
@@ -81,7 +61,7 @@ namespace RockyHockey.Common
         {
             bool retval = false;
 
-            if (Direction.Y < 0)
+            if (VectorDirection.X < 0)
                 retval = true;
 
             return retval;

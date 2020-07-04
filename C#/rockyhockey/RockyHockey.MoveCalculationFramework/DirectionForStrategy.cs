@@ -118,17 +118,18 @@ namespace RockyHockey.MoveCalculationFramework
          *          ||
          *         \||/
          *          \/
-         *          
-         * -----------------/|
-         * |               / |
-         * |              /  |
-         * |\            /   |
-         * --\----------/-----
-         *    \        /
-         *     \      /
-         *      \    /
-         *       \  /
-         *        \/
+         *                                                  S
+         * -----------------/|          -----------------/| 
+         * |               / |          |             X / |
+         * |              /  |        T |-----------------| T'
+         * |\            /   |          |\            /|  |
+         * --\----------/-----    =>    --\----------/-|---
+         *    \        /                   \        /  |
+         *     \      /                     \      /   |
+         *      \    /                       \    /    |
+         *       \  /                         \  /     |
+         *        \/                           \/      |
+         *                                      R      X'
          */
         private static Coordinate getPointOnIntersectionLine(double sourceY, double targetY, double width, int bankHitCount, bool toTop = false)
         {

@@ -98,20 +98,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractCameraDetectionFramework.cs" />
-    <Compile Include="new\CameraReader.cs" />
-    <Compile Include="GameCameraDetectionFramework.cs" />
-    <Compile Include="CalibrationCameraDetectionFramework.cs" />
-    <Compile Include="CalibrationFramework.cs" />
-    <Compile Include="ICalibrationForCameraProvider.cs" />
-    <Compile Include="new\ImageProvider.cs" />
-    <Compile Include="IMotionCaptureProvider.cs" />
-    <Compile Include="MotionCaptureProvider.cs" />
-    <Compile Include="new\PathPrediction.cs" />
-    <Compile Include="new\PositionCalculator.cs" />
-    <Compile Include="new\ImagePositionCollector.cs" />
-    <Compile Include="new\PositionCollector.cs" />
+    <Compile Include="CameraReader.cs" />
+    <Compile Include="ImageProcessing.cs" />
+    <Compile Include="ImageProvider.cs" />
+    <Compile Include="ImagePositionCollector.cs" />
+    <Compile Include="PositionCollector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ImageReader.cs" />
+    <Compile Include="VideoReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

@@ -41,8 +41,8 @@ namespace RockyHockeyGUI
 
         private void LoadConfigData()
         {
-            HeightTextBox.Text = Config.Instance.GameFieldSize.Height.ToString();
-            WidthTextBox.Text = Config.Instance.GameFieldSize.Width.ToString();
+            HeightTextBox.Text = Config.Instance.GameFieldSizeMM.Height.ToString();
+            WidthTextBox.Text = Config.Instance.GameFieldSizeMM.Width.ToString();
             FrameRateTextBox.Text = Config.Instance.FrameRate.ToString();
             DifficultyComboBox.SelectedItem = Config.Instance.GameDifficulty.ToString();
             PunchAxisPositionTextBox.Text = Config.Instance.ImaginaryAxePosition.ToString();
@@ -50,8 +50,8 @@ namespace RockyHockeyGUI
             Camera1IndexTextBox.Text = Config.Instance.Camera1.index.ToString();
             MaximumBatVelocityTextBox.Text = Config.Instance.MaxBatVelocity.ToString();
             RestPositionDivisorTextBox.Text = Config.Instance.RestPositionDivisor.ToString();
-            PuckRadiusTextBox.Text = Config.Instance.PuckRadius.ToString();
-            SizeRatioTextBox.Text = Config.Instance.SizeRatio.ToString();
+            PuckRadiusTextBox.Text = Config.Instance.PuckRadiusMM.ToString();
+            BatRadiusTextBox.Text = Config.Instance.BatRadiusMM.ToString();
         }
 
         private void AbortButton_Click(object sender, EventArgs e)
@@ -63,7 +63,9 @@ namespace RockyHockeyGUI
         {
             try
             {
-                var gameFieldSize = new Size(Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text));
+                var gameFieldSizeMM = new Size(Convert.ToInt32(WidthTextBox.Text), Convert.ToInt32(HeightTextBox.Text));
+                var gameFieldSize = new Size((int)Math.Ceiling(gameFieldSizeMM.Width / Config.Instance.SizeRatio), (int)Math.Ceiling(gameFieldSizeMM.Height / Config.Instance.SizeRatio));
+                Config.Instance.GameFieldSizeMM = gameFieldSizeMM;
                 Config.Instance.GameFieldSize = gameFieldSize;
                 Config.Instance.FrameRate = Convert.ToInt32(FrameRateTextBox.Text);
                 Config.Instance.GameDifficulty = (Difficulties)Enum.Parse(typeof(Difficulties), DifficultyComboBox.SelectedItem.ToString());
@@ -72,8 +74,10 @@ namespace RockyHockeyGUI
                 Config.Instance.Camera1.index = Convert.ToInt32(Camera1IndexTextBox.Text);
                 Config.Instance.MaxBatVelocity = Convert.ToDouble(MaximumBatVelocityTextBox.Text);
                 Config.Instance.RestPositionDivisor = Convert.ToDouble(RestPositionDivisorTextBox.Text);
-                Config.Instance.PuckRadius = Convert.ToDouble(PuckRadiusTextBox.Text);
-                Config.Instance.SizeRatio = Convert.ToDouble(SizeRatioTextBox.Text);
+                Config.Instance.PuckRadiusMM = Convert.ToDouble(PuckRadiusTextBox.Text);
+                Config.Instance.PuckRadius = Math.Ceiling(Config.Instance.PuckRadiusMM / Config.Instance.SizeRatio);
+                Config.Instance.BatRadiusMM = Convert.ToDouble(BatRadiusTextBox.Text);
+                Config.Instance.BatRadius = Math.Ceiling(Config.Instance.BatRadiusMM / Config.Instance.SizeRatio);
 
                 Config.Instance.save();
                 Close();

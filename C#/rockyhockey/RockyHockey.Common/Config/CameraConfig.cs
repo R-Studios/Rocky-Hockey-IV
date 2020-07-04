@@ -23,14 +23,24 @@ namespace RockyHockey.Common
         public int index;
 
         /// <summary>
-        /// game field size in px
+        /// wether or not the camera records the origin coordinate
         /// </summary>
-        public Size FieldSize { get; set; } = new Size(0, 0);
+        public bool displaysOrigin { get; set; } = true;
 
         /// <summary>
-        /// camera offset
+        /// degrees how far to rotate the image; 0, 90, 180, 270 allowed
         /// </summary>
-        public CameraOffset Offset { get; set; } = new CameraOffset();
+        public int ImageRotation { get; set; } = 0;
+
+        /// <summary>
+        /// size of game field part visible on the camera images
+        /// </summary>
+        public Size FieldView { get; set; } = new Size(0, 0);
+
+        /// <summary>
+        /// resolution of Camera
+        /// </summary>
+        public Size Resolution { get; set; } = new Size(0, 0);
 
         /// <summary>
         /// upper left position for warping
@@ -51,29 +61,5 @@ namespace RockyHockey.Common
         /// lower left position for warping
         /// </summary>
         public Coordinate LowerLeft { get; set; } = new Coordinate();
-    }
-
-    /// <summary>
-    /// class to store the offset of the camera to the game field
-    /// </summary>
-    public class CameraOffset
-    {
-        public CameraOffset(int fromLeft, int fromTop)
-        {
-            FromTop = fromTop;
-            FromLeft = fromLeft;
-        }
-
-        public CameraOffset() { }
-
-        /// <summary>
-        /// X-Position
-        /// </summary>
-        public int FromTop { get; set; } = 0;
-
-        /// <summary>
-        /// Y-Position
-        /// </summary>
-        public int FromLeft { get; set; } = 0;
     }
 }

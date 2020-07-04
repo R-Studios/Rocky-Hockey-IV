@@ -18,31 +18,38 @@ namespace RockyHockey.Common
             Tolerance = 5;
             MaxBatVelocity = 0.4;
             RestPositionDivisor = 16;
+            SizeRatio = 1;
+            PuckRadiusMM = 5;
+            PuckRadius = PuckRadiusMM / SizeRatio;
+            BatRadiusMM = 5;
+            BatRadius = BatRadiusMM / SizeRatio;
 
             Camera1 = new CameraConfig(0);
-            Camera1.FieldSize = new Size(320, 240);
+            Camera1.Resolution = new Size(320, 240);
             Camera1.UpperRight = new Coordinate(320, 0);
             Camera1.LowerLeft = new Coordinate(0, 240);
             Camera1.LowerRight = new Coordinate(320, 240);
-
-            Camera2 = new CameraConfig(1);
-            Camera2.FieldSize = new Size(320, 240);
-            Camera2.UpperRight = new Coordinate(320, 0);
-            Camera2.LowerLeft = new Coordinate(0, 240);
-            Camera2.LowerRight = new Coordinate(320, 240);
         }
 
         private static string configFile = "RockyHockeyConfig.xml";
 
-        static Config()
+        public static Config load()
         {
-            Instance = ObjectSerializer.DeserializeObject<Config>(configFile);
-
-            if (Instance == null)
+            lock (configFile)
             {
-                Instance = new Config();
-                Instance.save();
+                if (instance == null)
+                {
+                    instance = ObjectSerializer.DeserializeObject<Config>(configFile);
+
+                    if (instance == null)
+                    {
+                        instance = new Config();
+                        instance.save();
+                    }
+                }
             }
+
+            return instance;
         }
 
         /// <summary>
@@ -53,25 +60,29 @@ namespace RockyHockey.Common
             ObjectSerializer.SerializeObject(this, configFile);
         }
 
+        private static Config instance = null;
+
         /// <summary>
         /// Singleton instance
         /// </summary>
-        public static Config Instance { get; private set; }
+        public static Config Instance => instance ?? (instance = load());
 
         /// <summary>
         /// config of camera 1
         /// </summary>
         public CameraConfig Camera1 { get; set; }
 
-        /// <summary>
-        /// config of camera 2
-        /// </summary>
-        public CameraConfig Camera2 { get; set; }
+        public PuckDetectionConfig detectionConfig { get; set; }
 
         /// <summary>
         /// Size of the gamefield
         /// </summary>
         public Size GameFieldSize { get; set; }
+
+        /// <summary>
+        /// Size of the gamefield in millimeters
+        /// </summary>
+        public Size GameFieldSizeMM { get; set; }
 
         /// <summary>
         /// Position of the imaginary axis
@@ -89,9 +100,24 @@ namespace RockyHockey.Common
         public int FrameRate { get; set; }
 
         /// <summary>
+        /// radius of the puck in mm
+        /// </summary>
+        public double PuckRadiusMM { get; set; }
+
+        /// <summary>
         /// radius of the puck
         /// </summary>
         public double PuckRadius { get; set; }
+
+        /// <summary>
+        /// radius of the bat in mm
+        /// </summary>
+        public double BatRadiusMM { get; set; }
+
+        /// <summary>
+        /// radius of the bat
+        /// </summary>
+        public double BatRadius { get; set; }
 
         /// <summary>
         /// Difficulty of the RockyHockey game

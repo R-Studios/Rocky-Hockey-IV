@@ -16,16 +16,16 @@ namespace RockyHockey.MovementFramework.Unittests
         [TestCase(0, 0, -1500, -1500)]
         public async Task TestMovement(double xPos, double yPos, double xDir, double yDir)
         {
-            var vector = new VelocityVector
-            {
-                Position = new GameFieldPosition { X = xPos, Y = yPos },
-                Direction = new GameFieldPosition { X = xDir, Y = yDir },
-                Velocity = 1500
-            };
+            var vector = new VelocityVector(
+                new TimedCoordinate { X = xPos, Y = yPos },
+                new TimedCoordinate { X = xDir, Y = yDir });
+
+            vector.Velocity = 1500;
+
             var vectors = new List<VelocityVector> { vector };
 
             var tokenSource = new CancellationTokenSource();
-            await MovementController.Instance.MoveStrategy(vectors, 0).ConfigureAwait(false);
+            MovementController.Instance.MoveStrategy(vectors, 0);
 
             Thread.Sleep(5000);
         }

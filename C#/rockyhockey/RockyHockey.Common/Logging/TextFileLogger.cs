@@ -8,7 +8,8 @@ namespace RockyHockey.Common
     /// </summary>
     public class TextFileLogger : Logger
     {
-        public static TextFileLogger Instance { get; } =  new TextFileLogger("errors.txt");
+        private static TextFileLogger instance = null;
+        public static TextFileLogger Instance => instance ?? (instance = new TextFileLogger("errors.txt"));
 
         /// <summary>
         /// Creates a new Instance of the TextFileLogger with the surpassed file

@@ -1,5 +1,4 @@
 ﻿using RockyHockey.Common;
-using RockyHockey.GoalDetectionFramework;
 using System;
 using System.Windows.Forms;
 
@@ -30,7 +29,6 @@ namespace RockyHockeyGUI
             }
             finally
             {
-                GoalDetectionProvider.Instance.UnexportPins();
                 Application.Exit();
             }
         }

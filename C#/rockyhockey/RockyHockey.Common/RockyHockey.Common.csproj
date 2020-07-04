@@ -46,20 +46,19 @@
     <Compile Include="Config\CameraConfig.cs" />
     <Compile Include="Config\Config.cs" />
     <Compile Include="Config\ObjectSerializer.cs" />
+    <Compile Include="Config\PuckDetectionConfig.cs" />
     <Compile Include="Coordinates\Coordinate.cs" />
     <Compile Include="Coordinates\TimedCoordinate.cs" />
-    <Compile Include="Coordinates\GameFieldPosition.cs" />
     <Compile Include="Difficulties.cs" />
     <Compile Include="Logging\ConsoleLogger.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\TextFileLogger.cs" />
-    <Compile Include="Score.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StraightLine.cs" />
     <Compile Include="Vectors\Vector.cs" />
     <Compile Include="Vectors\TimedVector.cs" />
     <Compile Include="Vectors\VelocityVector.cs" />
-    <Compile Include="Vectors\VectorExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

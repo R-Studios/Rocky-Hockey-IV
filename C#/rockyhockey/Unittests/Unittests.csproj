@@ -48,6 +48,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,15 +62,8 @@
   <ItemGroup>
     <Compile Include="MotionCaptureFramework\DetectionTest.cs" />
     <Compile Include="MotionCaptureFramework\SimulationPositionCollector.cs" />
-    <Compile Include="MotionCaptureFramework\TestImageReader.cs" />
     <Compile Include="MoveCalculationFramework\PuckMotionInstrategy.cs" />
-    <Compile Include="MoveCalculationFramework\TestTrajectoryCalculationFramework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MoveCalculationFramework\MockMotionCaptureProvider.cs" />
-    <Compile Include="MoveCalculationFramework\MockVectorCalculationProvider.cs" />
-    <Compile Include="MoveCalculationFramework\TrajectoryCalculationTests.cs" />
-    <Compile Include="MoveCalculationFramework\VectorCalculationProviderTests.cs" />
-    <Compile Include="MoveCalculationFramework\VectorExtensionsTests.cs" />
     <Compile Include="MovementFramework\MovementControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,10 +74,6 @@
     <ProjectReference Include="..\RockyHockey.Common\RockyHockey.Common.csproj">
       <Project>{124d54b6-d88a-49c7-9241-25e46c4e9c27}</Project>
       <Name>RockyHockey.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RockyHockey.GoalDetectionFramework\RockyHockey.GoalDetectionFramework.csproj">
-      <Project>{6b01d597-e5ba-41eb-a7cb-9c271afb51ba}</Project>
-      <Name>RockyHockey.GoalDetectionFramework</Name>
     </ProjectReference>
     <ProjectReference Include="..\RockyHockey.MotionCaptureFramework\RockyHockey.MotionCaptureFramework.csproj">
       <Project>{b4cef20c-19d3-4989-9f27-12dc0f4e85a1}</Project>
@@ -96,6 +86,10 @@
     <ProjectReference Include="..\RockyHockey.MovementFramework\RockyHockey.MovementFramework.csproj">
       <Project>{3e6577bc-4681-4916-8115-fd1f3add092d}</Project>
       <Name>RockyHockey.MovementFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RockyHockeyGUI\RockyHockeyGUI.csproj">
+      <Project>{c710eeaf-3077-438d-b133-e2d679e90fa2}</Project>
+      <Name>RockyHockeyGUI</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -116,9 +110,6 @@
     <Content Include="MotionCaptureFramework\testimages\8.png" />
     <Content Include="MotionCaptureFramework\testimages\9.png" />
     <Content Include="MotionCaptureFramework\testimages\original.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TestImages\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

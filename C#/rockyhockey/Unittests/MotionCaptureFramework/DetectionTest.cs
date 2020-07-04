@@ -3,6 +3,7 @@ using NUnit.Framework;
 using NUnit.Framework.Internal;
 using RockyHockey.Common;
 using RockyHockey.MoveCalculationFramework;
+using RockyHockeyGUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace RockyHockey.MotionCaptureFramework
 {
@@ -25,7 +27,7 @@ namespace RockyHockey.MotionCaptureFramework
         [Test]
         public void checkPosition()
         {
-            TestImageReader reader = new TestImageReader();
+            ImageReader reader = new ImageReader("P:\\testImages\\", -2, 12);
             ImagePositionCollector collector = new ImagePositionCollector(reader);
 
             List<TimedCoordinate> posList = collector.GetPuckPositions();
@@ -42,24 +44,17 @@ namespace RockyHockey.MotionCaptureFramework
         }
 
         [Test]
-        public void checkVector()
-        {
-            PositionCollector collector = new ImagePositionCollector(new TestImageReader());
-            VectorCalculationProvider test = new VectorCalculationProvider(collector);
-
-            VelocityVector vec = test.CalculatePuckVector();
-        }
-
-        [Test]
         public void direct_pathPrediction()
         {
-            new PathPrediction(new TestImageReader()).init();
+            new PathPrediction(new ImageReader("P:\\testImages\\", -2, 12)).init();
         }
 
         [Test]
         public void reflected_pathPrediction()
         {
-            new PathPrediction(new TestImageReader().setcounter(0)).init();
+            ImageReader reader = new ImageReader("P:\\testImages\\", -2, 12);
+            reader.setFrameIndex(0);
+            new PathPrediction(reader).init();
         }
 
         [Test]
@@ -68,11 +63,17 @@ namespace RockyHockey.MotionCaptureFramework
             SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), new Coordinate(406, 132), 0.03125, 20);
             PathPrediction predictionTest = new PathPrediction(test);
             predictionTest.init();
+        }
 
-            //allows some validation cycles
-            Thread.Sleep(100);
+        [Test]
+        public void testZeug()
+        {
+            SimulationPositionCollector test = new SimulationPositionCollector(new Coordinate(407, 131), new Coordinate(406, 132), 1000);
 
-            predictionTest.finalize();
+            TimedCoordinate first = test.GetPuckPosition();
+            TimedCoordinate second = test.GetPuckPosition();
+
+            TimedVector testVec = new TimedVector(first, second);
         }
     }
 }

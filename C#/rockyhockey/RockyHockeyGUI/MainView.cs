@@ -1,10 +1,8 @@
 ﻿using OxyPlot;
 using OxyPlot.Series;
 using RockyHockey.Common;
-using RockyHockey.GoalDetectionFramework;
 using RockyHockey.MoveCalculationFramework;
 using RockyHockey.MovementFramework;
-using RockyHockey.SoundFramework;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,6 +35,7 @@ namespace RockyHockeyGUI
             {
                 StopButton.Enabled = false;
                 CalibrateButton.Enabled = false;
+                ImageDebuggingButton.Enabled = false;
 
                 myModel = new PlotModel();
                 var timer = new System.Windows.Forms.Timer { Interval = 50 };
@@ -54,15 +53,20 @@ namespace RockyHockeyGUI
             }
         }
 
+        private ImageDebugging debuggingWindow = null;
+        private bool imageDebuggingActive = false;
+
+        CameraCalibration cameraCalibration;
+
+        CircleDetectionCalibration circleDetectionCalibration;
+
         private PlotModel myModel;
 
-        private IProgress<IEnumerable<IEnumerable<Vector>>> progress;
+        private IProgress<List<Vector>> progress;
 
         private OptionsView optionsView;
 
         private Stopwatch stopwatch;
-
-        private ScoreInitializer socreInitializer;
         
         private TrajectoryCalculationFramework trajectoryCalculationFramework;
 
@@ -100,9 +104,6 @@ namespace RockyHockeyGUI
         {
             try
             {
-                await LEDController.Instance.DoStartLEDShow();
-
-                socreInitializer = new ScoreInitializer(ScoreLabel);
                 if (optionsView != null)
                 {
                     optionsView.Close();
@@ -112,10 +113,11 @@ namespace RockyHockeyGUI
                 StartButton.Enabled = false;
                 StopButton.Enabled = true;
                 CalibrateButton.Enabled = true;
+                ImageDebuggingButton.Enabled = true;
+                CameraCalibrationButton.Enabled = false;
+                ImageProcessingCalibration_Button.Enabled = false;
 
                 StartGameTime();
-
-                GoalDetectionProvider.Instance.StartGoalDetection();
                 
                 trajectoryCalculationFramework = new TrajectoryCalculationFramework(OverridePositionCollector);
                 await trajectoryCalculationFramework.BeginCalculationLoop(progress).ConfigureAwait(false);
@@ -138,7 +140,7 @@ namespace RockyHockeyGUI
         /// </summary>
         private void InitializeGameField()
         {
-            progress = new Progress<IEnumerable<IEnumerable<Vector>>>(async t =>
+            progress = new Progress<List<Vector>>(async t =>
             {
                 await CreatePoints(t);
                 Draw();
@@ -161,38 +163,19 @@ namespace RockyHockeyGUI
         /// Creates the Points to draw from the surpassed vectors
         /// </summary>
         /// <param name="progress">Progress that needs to be reported to the UI</param>
-        private Task CreatePoints(IEnumerable<IEnumerable<Vector>> progress)
+        private Task CreatePoints(List<Vector> progress)
         {
             return Task.Factory.StartNew(() =>
             {
-                IEnumerable<Vector> vectors = new List<Vector>();
-                LineSeries line = null;
-                for (int i = 0; i < progress.Count(); i++)
+                TrajectoryLine.Points.Clear();
+                if (progress.Any())
                 {
-                    if (i == 0)
+                    TrajectoryLine.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(progress.First().Start.X),
+                        Convert.ToInt32(progress.First().Start.Y)));
+                    foreach (Vector vec in progress)
                     {
-                        line = TrajectoryLine;
-                    }
-                    else if (i == 1)
-                    {
-                        line = PunchLine;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-
-                    vectors = progress.ElementAt(i);
-                    line.Points.Clear();
-                    if (vectors != null && vectors.Any())
-                    {
-                        line.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(vectors.First().Position.X),
-                            Convert.ToInt32(vectors.First().Position.Y)));
-                        foreach (Vector vec in vectors)
-                        {
-                            line.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(vec.Direction.X),
-                                Convert.ToInt32(vec.Direction.Y)));
-                        }
+                        TrajectoryLine.Points.Add(new OxyPlot.DataPoint(Convert.ToInt32(vec.End.X),
+                            Convert.ToInt32(vec.End.Y)));
                     }
                 }
             });
@@ -211,7 +194,6 @@ namespace RockyHockeyGUI
                     if (trajectoryCalculationFramework.KeepPlaying)
                     {
                         trajectoryCalculationFramework.KeepPlaying = false;
-                        GoalDetectionProvider.Instance.DetectGoals = false;
                         while (trajectoryCalculationFramework.KeepPlaying == false) { }
                         trajectoryCalculationFramework.StopAllUsedFrameworks().Wait();
                     }
@@ -219,10 +201,15 @@ namespace RockyHockeyGUI
                 
                 stopwatch.Stop();
 
+                debuggingWindow?.Close();
+
                 OptionsButton.Enabled = true;
                 StartButton.Enabled = true;
                 StopButton.Enabled = false;
                 CalibrateButton.Enabled = false;
+                ImageDebuggingButton.Enabled = false;
+                CameraCalibrationButton.Enabled = true;
+                ImageProcessingCalibration_Button.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -248,7 +235,7 @@ namespace RockyHockeyGUI
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TimerTick(object sender, EventArgs e)
+        private async void TimerTick(object sender, EventArgs e)
         {
             if (stopwatch != null)
             {
@@ -256,6 +243,8 @@ namespace RockyHockeyGUI
             }
 
             pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider?.lastCapture.GetImage();
+            if (imageDebuggingActive)
+                debuggingWindow?.displayImage(trajectoryCalculationFramework?.motionCaptureProvider.imageProvider.lastCapture);
 
             Refresh();
         }
@@ -284,7 +273,70 @@ namespace RockyHockeyGUI
 
         private void CalibrateButton_Click(object sender, EventArgs e)
         {
-            MovementController.Instance.OnGoalDetected(this, new DetectedGoalEventArgs(true));
+            MovementController.Instance.init();
+        }
+
+        private void ImageDebuggingButton_Click(object sender, EventArgs e)
+        {
+            ImageDebuggingButton.Enabled = false;
+            debuggingWindow = new ImageDebugging();
+            debuggingWindow.FormClosed += debuggingWindow_FormClosed;
+            debuggingWindow.Show();
+            imageDebuggingActive = true;
+        }
+
+        private void debuggingWindow_FormClosed(object sender, EventArgs e)
+        {
+            imageDebuggingActive = false;
+            debuggingWindow.Dispose();
+            debuggingWindow = null;
+            ImageDebuggingButton.Enabled = true;
+        }
+
+        private void CameraCalibrationButton_Click(object sender, EventArgs e)
+        {
+            CameraCalibrationButton.Enabled = false;
+            ImageProcessingCalibration_Button.Enabled = false;
+            StartButton.Enabled = false;
+            CalibrateButton.Enabled = false;
+
+            cameraCalibration = new CameraCalibration();
+            cameraCalibration.FormClosed += cameraCalibrationWindow_FormClosed;
+            cameraCalibration.Show();
+        }
+
+        private void cameraCalibrationWindow_FormClosed(object sender, EventArgs e)
+        {
+            cameraCalibration.Dispose();
+            cameraCalibration = null;
+
+            CameraCalibrationButton.Enabled = true;
+            ImageProcessingCalibration_Button.Enabled = true;
+            StartButton.Enabled = true;
+            CalibrateButton.Enabled = true;
+        }
+
+        private void ImageProcessingCalibration_Button_Click(object sender, EventArgs e)
+        {
+            CameraCalibrationButton.Enabled = false;
+            ImageProcessingCalibration_Button.Enabled = false;
+            StartButton.Enabled = false;
+            CalibrateButton.Enabled = false;
+
+            circleDetectionCalibration = new CircleDetectionCalibration();
+            circleDetectionCalibration.FormClosed += circleDetectionCalibration_FormClosed;
+            circleDetectionCalibration.Show();
+        }
+
+        private void circleDetectionCalibration_FormClosed(object sender, EventArgs e)
+        {
+            circleDetectionCalibration.Dispose();
+            circleDetectionCalibration = null;
+
+            CameraCalibrationButton.Enabled = true;
+            ImageProcessingCalibration_Button.Enabled = true;
+            StartButton.Enabled = true;
+            CalibrateButton.Enabled = true;
         }
 
         /// <summary>
