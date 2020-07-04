@@ -14,10 +14,12 @@ namespace RockyHockeyGUI.VirtualTable
     /// This window hosts and interacts with a virtual table simulation (<see cref="VirtualTableWorker"/>).
     /// The virtual table is modeling the real table, bat and puck at a scale of 2 mm : 1 pixel (at 100% display scale).
     /// Since the table size is defined like this, all coordinates going in and out have to be scaled to the play field size in the <see cref="Config"/>.
+    ///
     /// In addition to scaling, the virtual table, path prediction and motor controls all have their origin - point (0,0) - in different places.
-    /// The virtual table has its origin at the top-left corner. This is the left corner when standing on the player side.
-    /// Path prediction use the bottom-left corner. This is the right corner of the player side.
-    /// Motor controls have it at the top-right corner. This is the right corner when standing on the robot side.
+    /// The new strategies see the table rotated by 180° compared to the old strategies.
+    /// The virtual table has its origin in the top-left corner. This is the left corner when standing on the robot side.
+    /// Path tracing (the main window) uses the bottom-left corner. This is the right corner of the robot side.
+    /// Motor controls have it in the bottom-left corner. 
     /// </summary>
     public partial class VirtualTableView : Form
     {
@@ -28,7 +30,7 @@ namespace RockyHockeyGUI.VirtualTable
 
         // Not quite sure about the puck size - forgot to measure... Standardized puck sizes are 63 and 50 mm.
         // Putting 63 mm for now but I have a feeling it might be wrong.
-        // Dear future maintainers: If you see this note and know the actual size, please change these constants here.
+        // Todo: Use the correct puck size here.
         private const float PuckDiameter = 31.5f; //   63 mm
         private const float PuckRadius = 15.75f; //  31.5 mm
         //private const float PuckDiameter = 25.5f; //   50 mm

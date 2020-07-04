@@ -34,7 +34,7 @@ namespace RockyHockeyGUI.VirtualTable
             this.fieldHeight = fieldHeight;
             this.puckRadius = puckRadius;
 
-            tableState = new TableState(new Vector2(fieldWidth * 0.25f, fieldHeight * 0.5f));
+            tableState = new TableState(new Vector2(fieldWidth * 0.75f, fieldHeight * 0.5f));
         }
 
         /// <summary>
@@ -95,13 +95,17 @@ namespace RockyHockeyGUI.VirtualTable
         {
             lock (lockObj)
             {
+                // Todo: fix this issue
+                // This callback is attached to the MovementController OnMove event that's triggered right before movement data is sent to the motor control unit.
+                // The data is supposed to be sent as absolute distance in millimeters from the motor control's origin.
+                // I have no clue what to do here, the movement data doesn't make a lot of sense.
                 var size = Config.Instance.GameFieldSizeMM;
 
                 // Convert from "real" bat position to virtual table position. See VirtualTableView class summary for details about this.
-                var x = fieldWidth - axisX * fieldWidth / size.Width;
-                var y = axisY * fieldHeight / size.Height;
+                var x = axisX * fieldWidth / size.Width;
+                var y = fieldHeight - axisY * fieldHeight / size.Height;
 
-                tableState.BatPosition = new Vector2((float) axisX, (float) axisY);
+                tableState.BatPosition = new Vector2((float) x, (float) y);
             }
         }
 
@@ -192,15 +196,9 @@ namespace RockyHockeyGUI.VirtualTable
 
             for (var i = 0; i < positions.Capacity; i++)
             {
-                lock (lockObj)
-                {
-                    var size = Config.Instance.GameFieldSize;
-                    // Convert from virtual table position to "real" position. See VirtualTableView class summary for details about this.
-                    var x = tableState.Position.X * size.Width / fieldWidth;
-                    var y = tableState.Position.Y * size.Height / fieldHeight;
-
-                    positions.Add(new TimedCoordinate(x, y, DateTimeOffset.Now.ToUnixTimeMilliseconds()));
-                }
+                var puckPosition = GetPuckPosition();
+                puckPosition.Timestamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                positions.Add(puckPosition);
 
                 Thread.Sleep(10);
             }
@@ -222,7 +220,7 @@ namespace RockyHockeyGUI.VirtualTable
                 var size = Config.Instance.GameFieldSize;
                 // Convert from virtual table position to "real" position. See VirtualTableView class summary for details about this.
                 var x = tableState.Position.X * size.Width / fieldWidth;
-                var y = tableState.Position.Y * size.Height / fieldHeight;
+                var y = (fieldHeight - tableState.Position.Y) * size.Height / fieldHeight;
 
                 return new TimedCoordinate(x, y);
             }
