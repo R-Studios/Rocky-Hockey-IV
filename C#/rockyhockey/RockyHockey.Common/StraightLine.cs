@@ -255,14 +255,22 @@ namespace RockyHockey.Common
         /// <returns>true if distance to line greater jitter</returns>
         public bool isOnLine(Coordinate position, double jitter = 0)
         {
-            Coordinate orthogonalDirection = new Coordinate();
-            orthogonalDirection.X = Direction.Y;
-            orthogonalDirection.Y = -1 * Direction.X;
+            Vector distanceVector;
+            if (Direction == new Coordinate())
+            {
+                distanceVector = new Vector(position, new Coordinate(position.X, yIntercept));
+            }
+            else
+            {
+                Coordinate orthogonalDirection = new Coordinate();
+                orthogonalDirection.X = Direction.Y;
+                orthogonalDirection.Y = -1 * Direction.X;
 
-            StraightLine orthogonalLine = new StraightLine(position, orthogonalDirection);
-            Vector distanceVector = new Vector(position, intersection(orthogonalLine));
+                StraightLine orthogonalLine = new StraightLine(position, orthogonalDirection);
+                distanceVector = new Vector(position, intersection(orthogonalLine));
+            }
 
-            return distanceVector.Length < jitter;
+            return distanceVector.Length <= jitter;
         }
 
         /// <summary>
