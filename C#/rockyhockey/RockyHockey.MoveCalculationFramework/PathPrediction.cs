@@ -88,6 +88,7 @@ namespace RockyHockey.MoveCalculationFramework
             {
                 try
                 {
+                    validationFlag = true;
                     while (validationFlag)
                     {
                         //get current position
@@ -118,7 +119,6 @@ namespace RockyHockey.MoveCalculationFramework
 
                     current = null;
                     pathParts = null;
-                    rwl = null;
                 }
                 catch (Exception e)
                 {
@@ -362,8 +362,9 @@ namespace RockyHockey.MoveCalculationFramework
 
             StraightLine current = motionStart.Last();
 
-            while (current.nextImpactOnLongSide().insideBounds())
-                motionStart.Add(current = current.onLongSideReflected());
+            if (current.Direction != new Coordinate())
+                while (current.nextImpactOnLongSide().insideBounds())
+                    motionStart.Add(current = current.onLongSideReflected());
 
             return motionStart;
         }
