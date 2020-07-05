@@ -181,7 +181,9 @@ namespace RockyHockeyGUI
                     timeStamp = timedImage.timeStamp
                 };
 
-                process = await Task<ImageProcessing>.Factory.StartNew(() => { return new ImageProcessing(timedImage.image.Clone(), true, null, detectionConfig); });
+                process = await Task<ImageProcessing>.Factory.StartNew(() => { 
+                    return new ImageProcessing(timedImage.image.Clone(), true, null,
+                        UseConfigParams_Button.Checked ? null : detectionConfig); });
 
                 Bitmap image = process.Lines.Bitmap;
 
@@ -211,6 +213,7 @@ namespace RockyHockeyGUI
                         .Append(radius).Append("\r\n");
                 }
 
+                FoundCircles_Box.Clear();
                 FoundCircles_Box.Text += builder.ToString();
 
                 CurrentFrame.Image = tempMap;
@@ -339,6 +342,8 @@ namespace RockyHockeyGUI
             if (reader == null)
                 return;
 
+            ImageStreamStart_Button.Enabled = false;
+
             if (reader is VideoReader)
             {
                 string frameIndexString = ImageIndex_Box.Text;
@@ -373,6 +378,7 @@ namespace RockyHockeyGUI
             timer.Stop();
             timer.Dispose();
             timer = null;
+            ImageStreamStart_Button.Enabled = true;
         }
     }
 }

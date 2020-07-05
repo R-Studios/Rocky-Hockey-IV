@@ -60,6 +60,7 @@
             this.Save_Button = new System.Windows.Forms.Button();
             this.ImageIndex_Label = new System.Windows.Forms.Label();
             this.StopImageStream_Button = new System.Windows.Forms.Button();
+            this.UseConfigParams_Button = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.MinRadiusTrackbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CurrentFrame)).BeginInit();
             this.panel1.SuspendLayout();
@@ -132,7 +133,7 @@
             // 
             // GrabImage_Button
             // 
-            this.GrabImage_Button.Location = new System.Drawing.Point(477, 167);
+            this.GrabImage_Button.Location = new System.Drawing.Point(473, 239);
             this.GrabImage_Button.Name = "GrabImage_Button";
             this.GrabImage_Button.Size = new System.Drawing.Size(113, 26);
             this.GrabImage_Button.TabIndex = 6;
@@ -178,7 +179,7 @@
             // 
             // ImageIndex_Box
             // 
-            this.ImageIndex_Box.Location = new System.Drawing.Point(501, 129);
+            this.ImageIndex_Box.Location = new System.Drawing.Point(497, 201);
             this.ImageIndex_Box.Name = "ImageIndex_Box";
             this.ImageIndex_Box.Size = new System.Drawing.Size(100, 20);
             this.ImageIndex_Box.TabIndex = 10;
@@ -344,7 +345,7 @@
             // 
             // ImageStreamStart_Button
             // 
-            this.ImageStreamStart_Button.Location = new System.Drawing.Point(487, 208);
+            this.ImageStreamStart_Button.Location = new System.Drawing.Point(483, 280);
             this.ImageStreamStart_Button.Name = "ImageStreamStart_Button";
             this.ImageStreamStart_Button.Size = new System.Drawing.Size(113, 26);
             this.ImageStreamStart_Button.TabIndex = 28;
@@ -366,7 +367,7 @@
             // ImageIndex_Label
             // 
             this.ImageIndex_Label.AutoSize = true;
-            this.ImageIndex_Label.Location = new System.Drawing.Point(468, 110);
+            this.ImageIndex_Label.Location = new System.Drawing.Point(464, 182);
             this.ImageIndex_Label.Name = "ImageIndex_Label";
             this.ImageIndex_Label.Size = new System.Drawing.Size(63, 13);
             this.ImageIndex_Label.TabIndex = 30;
@@ -375,7 +376,7 @@
             // 
             // StopImageStream_Button
             // 
-            this.StopImageStream_Button.Location = new System.Drawing.Point(488, 240);
+            this.StopImageStream_Button.Location = new System.Drawing.Point(484, 312);
             this.StopImageStream_Button.Name = "StopImageStream_Button";
             this.StopImageStream_Button.Size = new System.Drawing.Size(113, 26);
             this.StopImageStream_Button.TabIndex = 31;
@@ -383,11 +384,22 @@
             this.StopImageStream_Button.UseVisualStyleBackColor = true;
             this.StopImageStream_Button.Click += new System.EventHandler(this.StopImageStream_Button_Click);
             // 
+            // UseConfigParams_Button
+            // 
+            this.UseConfigParams_Button.AutoSize = true;
+            this.UseConfigParams_Button.Location = new System.Drawing.Point(470, 109);
+            this.UseConfigParams_Button.Name = "UseConfigParams_Button";
+            this.UseConfigParams_Button.Size = new System.Drawing.Size(123, 17);
+            this.UseConfigParams_Button.TabIndex = 32;
+            this.UseConfigParams_Button.Text = "use params in config";
+            this.UseConfigParams_Button.UseVisualStyleBackColor = true;
+            // 
             // CircleDetectionCalibration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(940, 658);
+            this.Controls.Add(this.UseConfigParams_Button);
             this.Controls.Add(this.StopImageStream_Button);
             this.Controls.Add(this.ImageIndex_Label);
             this.Controls.Add(this.Save_Button);
@@ -468,5 +480,6 @@
         private System.Windows.Forms.Button Save_Button;
         private System.Windows.Forms.Label ImageIndex_Label;
         private System.Windows.Forms.Button StopImageStream_Button;
+        private System.Windows.Forms.CheckBox UseConfigParams_Button;
     }
 }

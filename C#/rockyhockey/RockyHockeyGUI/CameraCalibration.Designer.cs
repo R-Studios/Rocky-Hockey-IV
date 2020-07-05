@@ -73,12 +73,12 @@
             this.Cancel_Button = new System.Windows.Forms.Button();
             this.LoadConfig_Button = new System.Windows.Forms.Button();
             this.ResolutionCalibration_Panel = new System.Windows.Forms.Panel();
+            this.ChangeResolution_Button = new System.Windows.Forms.Button();
             this.label12 = new System.Windows.Forms.Label();
             this.ResolutionHeight_Box = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.ResolutionWidth_Box = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.ChangeResolution_Button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -493,6 +493,7 @@
             // 
             // label9
             // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(407, 690);
             this.label9.Name = "label9";
@@ -535,6 +536,16 @@
             this.ResolutionCalibration_Panel.Size = new System.Drawing.Size(316, 94);
             this.ResolutionCalibration_Panel.TabIndex = 10;
             // 
+            // ChangeResolution_Button
+            // 
+            this.ChangeResolution_Button.Location = new System.Drawing.Point(210, 68);
+            this.ChangeResolution_Button.Name = "ChangeResolution_Button";
+            this.ChangeResolution_Button.Size = new System.Drawing.Size(99, 23);
+            this.ChangeResolution_Button.TabIndex = 4;
+            this.ChangeResolution_Button.Text = "change resolution";
+            this.ChangeResolution_Button.UseVisualStyleBackColor = true;
+            this.ChangeResolution_Button.Click += new System.EventHandler(this.ChangeResolution_Button_Click);
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -575,16 +586,6 @@
             this.label11.Size = new System.Drawing.Size(35, 13);
             this.label11.TabIndex = 0;
             this.label11.Text = "Width";
-            // 
-            // ChangeResolution_Button
-            // 
-            this.ChangeResolution_Button.Location = new System.Drawing.Point(210, 68);
-            this.ChangeResolution_Button.Name = "ChangeResolution_Button";
-            this.ChangeResolution_Button.Size = new System.Drawing.Size(99, 23);
-            this.ChangeResolution_Button.TabIndex = 4;
-            this.ChangeResolution_Button.Text = "change resolution";
-            this.ChangeResolution_Button.UseVisualStyleBackColor = true;
-            this.ChangeResolution_Button.Click += new System.EventHandler(this.ChangeResolution_Button_Click);
             // 
             // CameraCalibration
             // 

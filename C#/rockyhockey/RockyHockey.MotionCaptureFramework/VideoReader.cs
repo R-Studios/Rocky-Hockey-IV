@@ -11,6 +11,7 @@ namespace RockyHockey.MotionCaptureFramework
     {
         int frameCount;
         VideoCapture video;
+        int frameIndex;
 
         public VideoReader(string videoPath)
         {
@@ -18,6 +19,7 @@ namespace RockyHockey.MotionCaptureFramework
             video = new VideoCapture(videoPath);
             video.Start();
             frameCount = (int)video.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
+            frameIndex = 1;
         }
 
         public override void finalize()
@@ -34,6 +36,8 @@ namespace RockyHockey.MotionCaptureFramework
 
         public override TimedImage getTimedImage()
         {
+            setFrameIndex(frameIndex++);
+
             TimedImage capture = new TimedImage
             {
                 image = video.QueryFrame(),
@@ -51,6 +55,8 @@ namespace RockyHockey.MotionCaptureFramework
                 index = 0;
             else if (index >= frameCount)
                 index = frameCount - 1;
+
+            frameIndex = index;
 
             video.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames, index);
 
