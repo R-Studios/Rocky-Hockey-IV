@@ -249,6 +249,8 @@ public class Gui extends JFrame implements ActionListener {
 	public void reset() {
 		playerLabel.setText("Player");
 		botLabel.setText("Bot");
+		setPlayerScore(0);
+		setBotScore(0);
 		playerScoreLabel.setText("0");
 		botScoreLabel.setText("0");
 		timeLabel.setText("10:00");
