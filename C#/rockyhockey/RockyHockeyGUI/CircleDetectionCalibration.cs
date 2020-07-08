@@ -45,11 +45,15 @@ namespace RockyHockeyGUI
 
         private void formClosing(object sender, EventArgs e)
         {
-            reader?.finalize();
-
             readerCalibrationWindow?.Close();
-
             imageDebuggingWindow?.Close();
+
+            timer?.Stop();
+            timer?.Dispose();
+            timer = null;
+
+            reader?.finalize();
+            reader = null;
         }
 
         Action<object, EventArgs> streamMethod;

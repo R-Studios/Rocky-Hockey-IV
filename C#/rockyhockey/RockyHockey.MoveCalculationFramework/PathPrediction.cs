@@ -80,6 +80,7 @@ namespace RockyHockey.MoveCalculationFramework
         private void fillPositionListToMinLength(ref List<TimedCoordinate> positions)
         {
             positions = positions.Where(x => x != null).ToList();
+            positions = positions.Where(x => x.X != double.NaN && x.Y != double.NaN).ToList();
 
             int tryCounter = 0;
             while (positions.Count() < 3 && tryCounter++ < 50)

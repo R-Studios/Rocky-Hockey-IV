@@ -17,6 +17,8 @@ namespace RockyHockey.MovementFramework
     {
         private static MovementController instance;
 
+        private bool initialized = false;
+
         private SerialPort xAxis;
 
         private SerialPort yAxis;
@@ -55,14 +57,17 @@ namespace RockyHockey.MovementFramework
 
             try
             {
+                if (!initialized)
+                {
+                    xAxis = new SerialPort(p[0], 115200);
+                    xAxis.Open();
+                    yAxis = new SerialPort(p[1], 115200);
+                    yAxis.Open();
 
-                xAxis = new SerialPort(p[0], 115200);
-                xAxis.Open();
-                yAxis = new SerialPort(p[1], 115200);
-                yAxis.Open();
+                    initialized = true;
+                }
 
-                xAxis.Write("calibrate");
-                yAxis.Write("calibrate");
+                init();
             }
             catch (Exception ex)
             {
@@ -117,25 +122,31 @@ namespace RockyHockey.MovementFramework
         {
             return Task.Factory.StartNew(() =>
             {
-                if (xAxis != null && yAxis != null && xAxis.IsOpen && yAxis.IsOpen)
-                {
-                    xAxis.Close();
-                    yAxis.Close();
-                    xAxis.Dispose();
-                    yAxis.Dispose();
-                }
+                xAxis?.Close();
+                yAxis?.Close();
+                xAxis?.Dispose();
+                yAxis?.Dispose();
+
+                initialized = false;
             });
         }
 
         public void init()
         {
-            xAxis.Write("calibrate");
-            yAxis.Write("calibrate");
-            BatPosition = new Coordinate()
+            if (!initialized)
+                InitializeSerialPorts();
+            else
             {
-                X = Config.Instance.GameFieldSize.Width - 50,
-                Y = Config.Instance.GameFieldSize.Height - 110
-            };
+                xAxis.Write("calibrate");
+                yAxis.Write("calibrate");
+                BatPosition = new Coordinate()
+                {
+                    X = Config.Instance.GameFieldSizeMM.Width / 2,
+                    Y = Config.Instance.GameFieldSizeMM.Height / 2
+                };
+
+                Move(BatPosition);
+            }
         }
     }
 }

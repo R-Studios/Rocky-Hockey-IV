@@ -65,8 +65,6 @@ namespace RockyHockey.MoveCalculationFramework
                 {
                     if (prediction.towardsRobot())
                         manager.calculate();
-                    else
-                        await Task.Factory.StartNew(() => { Thread.Sleep(10); });
                 }
 
                 prediction.finalize();

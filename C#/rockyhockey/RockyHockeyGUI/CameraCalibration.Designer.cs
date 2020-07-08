@@ -525,6 +525,7 @@
             // 
             // ResolutionCalibration_Panel
             // 
+            this.ResolutionCalibration_Panel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.ResolutionCalibration_Panel.Controls.Add(this.ChangeResolution_Button);
             this.ResolutionCalibration_Panel.Controls.Add(this.label12);
             this.ResolutionCalibration_Panel.Controls.Add(this.ResolutionHeight_Box);

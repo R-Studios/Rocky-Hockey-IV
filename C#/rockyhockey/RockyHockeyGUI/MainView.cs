@@ -34,7 +34,6 @@ namespace RockyHockeyGUI
             try
             {
                 StopButton.Enabled = false;
-                CalibrateButton.Enabled = false;
                 ImageDebuggingButton.Enabled = false;
 
                 myModel = new PlotModel();
@@ -213,7 +212,6 @@ namespace RockyHockeyGUI
                 OptionsButton.Enabled = true;
                 StartButton.Enabled = true;
                 StopButton.Enabled = false;
-                CalibrateButton.Enabled = false;
                 ImageDebuggingButton.Enabled = false;
                 CameraCalibrationButton.Enabled = true;
                 ImageProcessingCalibration_Button.Enabled = true;
@@ -305,7 +303,6 @@ namespace RockyHockeyGUI
             CameraCalibrationButton.Enabled = false;
             ImageProcessingCalibration_Button.Enabled = false;
             StartButton.Enabled = false;
-            CalibrateButton.Enabled = false;
 
             cameraCalibration = new CameraCalibration();
             cameraCalibration.FormClosed += cameraCalibrationWindow_FormClosed;
@@ -320,7 +317,6 @@ namespace RockyHockeyGUI
             CameraCalibrationButton.Enabled = true;
             ImageProcessingCalibration_Button.Enabled = true;
             StartButton.Enabled = true;
-            CalibrateButton.Enabled = true;
         }
 
         private void ImageProcessingCalibration_Button_Click(object sender, EventArgs e)
@@ -328,7 +324,6 @@ namespace RockyHockeyGUI
             CameraCalibrationButton.Enabled = false;
             ImageProcessingCalibration_Button.Enabled = false;
             StartButton.Enabled = false;
-            CalibrateButton.Enabled = false;
 
             circleDetectionCalibration = new CircleDetectionCalibration();
             circleDetectionCalibration.FormClosed += circleDetectionCalibration_FormClosed;
@@ -343,7 +338,6 @@ namespace RockyHockeyGUI
             CameraCalibrationButton.Enabled = true;
             ImageProcessingCalibration_Button.Enabled = true;
             StartButton.Enabled = true;
-            CalibrateButton.Enabled = true;
         }
 
         /// <summary>
