@@ -136,13 +136,14 @@ namespace RockyHockey.MoveCalculationFramework
             Coordinate retval = new Coordinate();
 
             double stretchFactor = Math.Ceiling((double)bankHitCount / 2.0f) - 1;
-            double stretchDistance = stretchFactor * Config.Instance.GameFieldSize.Height;
+            double reachableHeight = Config.Instance.GameFieldSize.Height - 2 * Config.Instance.PuckRadius;
+            double stretchDistance = stretchFactor * reachableHeight;
 
             if (toTop)
             {
                 targetY = Config.Instance.GameFieldSize.Height - targetY;
                 sourceY = Config.Instance.GameFieldSize.Height - sourceY;
-                retval.Y = stretchDistance + Config.Instance.GameFieldSize.Height;
+                retval.Y = stretchDistance + reachableHeight;
             }
             else
                 retval.Y = -stretchDistance;
@@ -150,7 +151,7 @@ namespace RockyHockey.MoveCalculationFramework
             sourceY += stretchDistance;
 
             if (bankHitCount % 2 == 0)
-                targetY = (stretchFactor + 2) * Config.Instance.GameFieldSize.Height - targetY;
+                targetY = (stretchFactor + 2) * reachableHeight - targetY;
             else
                 targetY += stretchDistance;
 
