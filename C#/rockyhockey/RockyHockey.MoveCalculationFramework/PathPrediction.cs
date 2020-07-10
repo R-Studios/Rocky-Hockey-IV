@@ -25,7 +25,7 @@ namespace RockyHockey.MoveCalculationFramework
 
         public event Action OnInit;
 
-        double batVelocity = 0;
+        double puckVelocity = 0;
 
         public PathPrediction(ImageProvider provider = null, IProgress<List<Vector>> progress = null)
         {
@@ -111,6 +111,14 @@ namespace RockyHockey.MoveCalculationFramework
                             continue;
 
                         currentPositionLocker.AcquireWriterLock(int.MaxValue);
+                        //update speed
+                        if (current != null)
+                        {
+                            VelocityVector currentVelocity = new VelocityVector(current, localCurrent);
+                            puckVelocity = currentVelocity.Velocity;
+                        }
+
+                        //update position
                         current = localCurrent;
                         currentPositionLocker.ReleaseWriterLock();
 
@@ -175,8 +183,11 @@ namespace RockyHockey.MoveCalculationFramework
                 throw new TimingException();
 
             //make local copy so that validation of path does not interfere with calculation
-            pathPartsLocker.AcquireReaderLock(int.MaxValue);
+            currentPositionLocker.AcquireReaderLock(int.MaxValue);
             TimedCoordinate localCurrent = new TimedCoordinate(current);
+            currentPositionLocker.ReleaseReaderLock();
+
+            pathPartsLocker.AcquireReaderLock(int.MaxValue);
             int localPathPartPointer = pathPartPointer;
             pathPartsLocker.ReleaseReaderLock();
 
@@ -211,7 +222,9 @@ namespace RockyHockey.MoveCalculationFramework
             }
 
             //calculate when bat will be at requested position
-            retval.Timestamp += (long)(length / batVelocity);
+            currentPositionLocker.AcquireReaderLock(int.MaxValue);
+            retval.Timestamp += (long)(length / puckVelocity);
+            currentPositionLocker.ReleaseReaderLock();
 
             return new TimedVector(new TimedCoordinate(localpathParts[a].previousImpact()), retval);
         }
@@ -256,9 +269,9 @@ namespace RockyHockey.MoveCalculationFramework
             //check if puck was played over bank or if position are on the same line
             if (simpleCheckResult != null && simpleCheckResult.posOnVecLine)
             {
-                VelocityVector velocity = new VelocityVector(simpleCheckResult.vec.TimedStart, simpleCheckResult.pos);
-                batVelocity = velocity.Velocity;
-                motionLines.Add(new StraightLine(velocity));
+                TimedVector direction = new VelocityVector(simpleCheckResult.vec.TimedStart, simpleCheckResult.pos);
+                calcVelocity(direction.TimedStart, direction.TimedEnd);
+                motionLines.Add(new StraightLine(direction));
             }
             else
             {
@@ -302,7 +315,19 @@ namespace RockyHockey.MoveCalculationFramework
                     //reevaluate positions
                     parallelCompare(positions, ref motionLines);
                 }
+                else
+                    calcVelocity(comparisonData.Last().vec.TimedStart, comparisonData.Last().pos);
             }
+        }
+
+        private void calcVelocity(TimedCoordinate startPosition, TimedCoordinate lastPosition)
+        {
+            VelocityVector velocity = new VelocityVector(startPosition, lastPosition);
+
+            currentPositionLocker.AcquireWriterLock(int.MaxValue);
+            current = lastPosition;
+            puckVelocity = velocity.Velocity;
+            currentPositionLocker.ReleaseWriterLock();
         }
 
         /// <summary>
