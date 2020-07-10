@@ -195,32 +195,20 @@ namespace RockyHockeyGUI
                 CurrentFrame.Height = image.Height;
 
                 StringBuilder builder = new StringBuilder();
-
-                Bitmap tempMap = new Bitmap(image.Width, image.Height);
-
-                Graphics CurrentFrameGraphics = Graphics.FromImage(tempMap);
-
-                CurrentFrameGraphics.DrawImage(image, 0, 0);
-
-                Pen pen = new Pen(new SolidBrush(Color.White), 1f);
                 foreach (CircleF circle in process.circles)
                 {
-                    float radius = circle.Radius;
-                    float x = circle.Center.X;
-                    float y = circle.Center.Y;
-                    CurrentFrameGraphics.DrawEllipse(pen, new RectangleF(x - radius, y - radius, 2 * radius, 2 * radius));
                     builder.Append("( ")
-                        .Append(x)
+                        .Append(circle.Center.X)
                         .Append(" / ")
-                        .Append(y)
+                        .Append(circle.Center.Y)
                         .Append(" ), r = ")
-                        .Append(radius).Append("\r\n");
+                        .Append(circle.Radius).Append("\r\n");
                 }
+
+                CurrentFrame.Image = process.getImagewithCircles();
 
                 FoundCircles_Box.Clear();
                 FoundCircles_Box.Text += builder.ToString();
-
-                CurrentFrame.Image = tempMap;
 
                 imageDebuggingWindow?.displayImage(timedImage);
             }

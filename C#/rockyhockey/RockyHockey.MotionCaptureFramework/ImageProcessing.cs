@@ -121,6 +121,24 @@ namespace RockyHockey.MotionCaptureFramework
             return rotated;
         }
 
+        public Bitmap getImagewithCircles()
+        {
+            Bitmap tempMap = new Bitmap(Lines.Width, Lines.Height);
+
+            Graphics CurrentFrameGraphics = Graphics.FromImage(tempMap);
+
+            CurrentFrameGraphics.DrawImage(Lines.Bitmap, 0, 0);
+
+            Pen pen = new Pen(new SolidBrush(Color.White), 1f);
+            foreach (CircleF circle in circles)
+            {
+                float radius = circle.Radius;
+                CurrentFrameGraphics.DrawEllipse(pen, new RectangleF(circle.Center.X - radius, circle.Center.Y - radius, 2 * radius, 2 * radius));
+            }
+
+            return tempMap;
+        }
+
         public static Task<TimedCoordinate> ProcessImage(TimedImage image, bool sliceImage = true)
         {
             return Task<TimedCoordinate>.Factory.StartNew(() =>

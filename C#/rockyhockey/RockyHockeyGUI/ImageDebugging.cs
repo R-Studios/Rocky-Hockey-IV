@@ -64,6 +64,9 @@ namespace RockyHockeyGUI
                     case 5:
                         updatePictureBox(pictureBox1, processing.Lines.Bitmap);
                         break;
+                    case 6:
+                        updatePictureBox(pictureBox1, processing.getImagewithCircles());
+                        break;
                 }
         }
 
@@ -125,6 +128,14 @@ namespace RockyHockeyGUI
             sliceImage = ((CheckBox)sender).Checked;
 
             displayImage(last);
+        }
+
+        private void radioButton7_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked)
+                debuggingIndex = 6;
+
+            setImage();
         }
     }
 }
