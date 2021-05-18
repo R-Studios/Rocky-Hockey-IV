@@ -61,7 +61,7 @@ namespace RockyHockeyGUI
             PunchAxisPositionTextBox.Text = Config.Instance.ImaginaryAxePosition.ToString();
             ToleranceTextBox.Text = Config.Instance.Tolerance.ToString();
             if(!String.IsNullOrEmpty(Config.Instance.Camera1.name))
-                SelectedCameraCombobox.SelectedItem = Config.Instance.Camera1.name;
+                SelectedCameraCBO.SelectedItem = Config.Instance.Camera1.name;
             MaximumBatVelocityTextBox.Text = Config.Instance.MaxBatVelocity.ToString();
             RestPositionDivisorTextBox.Text = Config.Instance.RestPositionDivisor.ToString();
             PuckRadiusTextBox.Text = Config.Instance.PuckRadiusMM.ToString();

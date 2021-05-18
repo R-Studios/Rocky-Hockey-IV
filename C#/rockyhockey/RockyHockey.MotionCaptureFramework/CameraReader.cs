@@ -18,6 +18,9 @@ namespace RockyHockey.MotionCaptureFramework
         //AForge
         private VideoCaptureDevice videoCaptureDevice;
 
+        //EmguCV
+        VideoCapture camera;
+
         /// <summary>
         /// initializes the camera
         /// </summary>
@@ -68,11 +71,13 @@ namespace RockyHockey.MotionCaptureFramework
             //camera?.Stop();
             //camera?.Dispose();
             //camera = null;
+            videoCaptureDevice?.Stop();
+            videoCaptureDevice = null;
         }
 
         public override int getFPS()
         {
-            //return (int)camera.GetCaptureProperty(CapProp.Fps);
+            return (int)camera.GetCaptureProperty(CapProp.Fps);
         }
     }
 }

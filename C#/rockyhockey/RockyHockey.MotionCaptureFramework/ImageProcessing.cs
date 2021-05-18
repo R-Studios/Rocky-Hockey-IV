@@ -92,10 +92,11 @@ namespace RockyHockey.MotionCaptureFramework
             destinationPointsMat[2] = new PointF(0, cameraConfig.FieldView.Height);
             destinationPointsMat[3] = new PointF(cameraConfig.FieldView.Width, cameraConfig.FieldView.Height);
 
+            Mat output = new Mat();
             var rectangle = new Rectangle(0, 0, cameraConfig.FieldView.Width, cameraConfig.FieldView.Height);
             Mat lambda = CvInvoke.GetPerspectiveTransform(sourcePointsMat, destinationPointsMat);
-            CvInvoke.WarpPerspective(mat, mat, lambda, cameraConfig.FieldView);
-            Mat cropped = new Mat(mat, rectangle);
+            CvInvoke.WarpPerspective(mat, output, lambda, cameraConfig.FieldView);
+            Mat cropped = new Mat(output, rectangle);
 
             Mat rotated = null;
             Bitmap rota = cropped.Clone().Bitmap;
