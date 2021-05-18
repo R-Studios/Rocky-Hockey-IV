@@ -24,7 +24,7 @@ namespace RockyHockey.Common
             BatRadiusMM = 5;
             BatRadius = BatRadiusMM / SizeRatio;
 
-            Camera1 = new CameraConfig(0);
+            Camera1 = new CameraConfig("");
             Camera1.Resolution = new Size(320, 240);
             Camera1.UpperRight = new Coordinate(320, 0);
             Camera1.LowerLeft = new Coordinate(0, 240);
@@ -71,6 +71,7 @@ namespace RockyHockey.Common
         /// config of camera 1
         /// </summary>
         public CameraConfig Camera1 { get; set; }
+
 
         public PuckDetectionConfig detectionConfig { get; set; }
 

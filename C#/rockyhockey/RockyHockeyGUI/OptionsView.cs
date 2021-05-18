@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using AForge.Video.DirectShow;
 
 namespace RockyHockeyGUI
 {
@@ -22,7 +23,8 @@ namespace RockyHockeyGUI
         public OptionsView()
         {
             InitializeComponent();
-            InitializeComboBox();
+            InitializeDifficultyComboBox();
+            InitializeSelectedCameraCombobox();
             LoadConfigData();
         }
 
@@ -31,12 +33,23 @@ namespace RockyHockeyGUI
         /// </summary>
         public MessageBoxLogger MsgBoxLogger { get; } = new MessageBoxLogger();
 
-        private void InitializeComboBox()
+        public FilterInfoCollection filterInfoCollection;
+
+        private void InitializeDifficultyComboBox()
         {
             foreach (string difficulty in Enum.GetNames(typeof(Difficulties)))
             {
                 DifficultyComboBox.Items.Add(difficulty);
             }
+        }
+
+        private void InitializeSelectedCameraCombobox()
+        {
+            filterInfoCollection = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            foreach (FilterInfo filterInfo in filterInfoCollection)
+                SelectedCameraCBO.Items.Add(filterInfo.Name);
+            SelectedCameraCBO.SelectedIndex = 0;
+
         }
 
         private void LoadConfigData()
@@ -47,7 +60,8 @@ namespace RockyHockeyGUI
             DifficultyComboBox.SelectedItem = Config.Instance.GameDifficulty.ToString();
             PunchAxisPositionTextBox.Text = Config.Instance.ImaginaryAxePosition.ToString();
             ToleranceTextBox.Text = Config.Instance.Tolerance.ToString();
-            Camera1IndexTextBox.Text = Config.Instance.Camera1.index.ToString();
+            if(!String.IsNullOrEmpty(Config.Instance.Camera1.name))
+                SelectedCameraCombobox.SelectedItem = Config.Instance.Camera1.name;
             MaximumBatVelocityTextBox.Text = Config.Instance.MaxBatVelocity.ToString();
             RestPositionDivisorTextBox.Text = Config.Instance.RestPositionDivisor.ToString();
             PuckRadiusTextBox.Text = Config.Instance.PuckRadiusMM.ToString();
@@ -71,7 +85,8 @@ namespace RockyHockeyGUI
                 Config.Instance.GameDifficulty = (Difficulties)Enum.Parse(typeof(Difficulties), DifficultyComboBox.SelectedItem.ToString());
                 Config.Instance.ImaginaryAxePosition = Convert.ToInt32(PunchAxisPositionTextBox.Text);
                 Config.Instance.Tolerance = Convert.ToInt32(ToleranceTextBox.Text);
-                Config.Instance.Camera1.index = Convert.ToInt32(Camera1IndexTextBox.Text);
+                Console.WriteLine(filterInfoCollection[SelectedCameraCBO.SelectedIndex].MonikerString);
+                Config.Instance.Camera1.name = filterInfoCollection[SelectedCameraCBO.SelectedIndex].MonikerString;
                 Config.Instance.MaxBatVelocity = Convert.ToDouble(MaximumBatVelocityTextBox.Text);
                 Config.Instance.RestPositionDivisor = Convert.ToDouble(RestPositionDivisorTextBox.Text);
                 Config.Instance.PuckRadiusMM = Convert.ToDouble(PuckRadiusTextBox.Text);

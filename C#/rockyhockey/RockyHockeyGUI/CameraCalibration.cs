@@ -16,7 +16,7 @@ namespace RockyHockeyGUI
     public partial class CameraCalibration : Form
     {
         ImageProvider reader;
-        CameraConfig config = new CameraConfig(1);
+        CameraConfig config = new CameraConfig("");
 
         bool cantChangeReader = false;
         public CameraCalibration(ImageProvider reader = null)

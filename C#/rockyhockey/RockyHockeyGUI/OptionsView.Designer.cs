@@ -35,7 +35,6 @@
             this.HeightTextBox = new System.Windows.Forms.TextBox();
             this.WidthLabel = new System.Windows.Forms.Label();
             this.HeightLabel = new System.Windows.Forms.Label();
-            this.Camera1IndexTextBox = new System.Windows.Forms.TextBox();
             this.ToleranceTextBox = new System.Windows.Forms.TextBox();
             this.PunchAxisPositionTextBox = new System.Windows.Forms.TextBox();
             this.DifficultyComboBox = new System.Windows.Forms.ComboBox();
@@ -55,6 +54,7 @@
             this.SizeRatioLabel = new System.Windows.Forms.Label();
             this.OKButton = new System.Windows.Forms.Button();
             this.AbortButton = new System.Windows.Forms.Button();
+            this.SelectedCameraCBO = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,8 +81,6 @@
             this.tableLayoutPanel1.Controls.Add(this.WidthLabel, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.HeightLabel, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.GameFieldSizeLabel, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.Camera1IndexTextBox, 1, 7);
-            this.tableLayoutPanel1.Controls.Add(this.ToleranceTextBox, 1, 6);
             this.tableLayoutPanel1.Controls.Add(this.PunchAxisPositionTextBox, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.DifficultyComboBox, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.FrameRateTextBox, 1, 3);
@@ -99,6 +97,8 @@
             this.tableLayoutPanel1.Controls.Add(this.RestPositionDivisorLabel, 0, 9);
             this.tableLayoutPanel1.Controls.Add(this.PuckRadiusLabel, 0, 10);
             this.tableLayoutPanel1.Controls.Add(this.SizeRatioLabel, 0, 11);
+            this.tableLayoutPanel1.Controls.Add(this.SelectedCameraCBO, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.ToleranceTextBox, 1, 6);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 8);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -155,14 +155,6 @@
             this.HeightLabel.TabIndex = 0;
             this.HeightLabel.Text = "                height";
             // 
-            // Camera1IndexTextBox
-            // 
-            this.Camera1IndexTextBox.Location = new System.Drawing.Point(166, 170);
-            this.Camera1IndexTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.Camera1IndexTextBox.Name = "Camera1IndexTextBox";
-            this.Camera1IndexTextBox.Size = new System.Drawing.Size(35, 20);
-            this.Camera1IndexTextBox.TabIndex = 7;
-            // 
             // ToleranceTextBox
             // 
             this.ToleranceTextBox.Location = new System.Drawing.Point(166, 146);
@@ -202,9 +194,9 @@
             this.Camera1IndexLabel.Location = new System.Drawing.Point(2, 168);
             this.Camera1IndexLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Camera1IndexLabel.Name = "Camera1IndexLabel";
-            this.Camera1IndexLabel.Size = new System.Drawing.Size(72, 13);
+            this.Camera1IndexLabel.Size = new System.Drawing.Size(88, 13);
             this.Camera1IndexLabel.TabIndex = 16;
-            this.Camera1IndexLabel.Text = "Camera Index";
+            this.Camera1IndexLabel.Text = "Selected Camera";
             // 
             // ToleranceLabel
             // 
@@ -343,6 +335,15 @@
             this.AbortButton.UseVisualStyleBackColor = true;
             this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
             // 
+            // SelectedCameraCBO
+            // 
+            this.SelectedCameraCBO.FormattingEnabled = true;
+            this.SelectedCameraCBO.Location = new System.Drawing.Point(166, 170);
+            this.SelectedCameraCBO.Margin = new System.Windows.Forms.Padding(2);
+            this.SelectedCameraCBO.Name = "SelectedCameraCBO";
+            this.SelectedCameraCBO.Size = new System.Drawing.Size(134, 21);
+            this.SelectedCameraCBO.TabIndex = 23;
+            // 
             // OptionsView
             // 
             this.AcceptButton = this.OKButton;
@@ -373,7 +374,6 @@
         private System.Windows.Forms.TextBox FrameRateTextBox;
         private System.Windows.Forms.TextBox PunchAxisPositionTextBox;
         private System.Windows.Forms.TextBox ToleranceTextBox;
-        private System.Windows.Forms.TextBox Camera1IndexTextBox;
         private System.Windows.Forms.TextBox MaximumBatVelocityTextBox;
         private System.Windows.Forms.TextBox RestPositionDivisorTextBox;
         private System.Windows.Forms.Label FrameRateLabel;
@@ -390,9 +390,11 @@
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.Button AbortButton;
         private System.Windows.Forms.ComboBox DifficultyComboBox;
+        private System.Windows.Forms.ComboBox SelectedCameraCombobox;
         private System.Windows.Forms.Label PuckRadiusLabel;
         private System.Windows.Forms.TextBox PuckRadiusTextBox;
         private System.Windows.Forms.Label SizeRatioLabel;
         private System.Windows.Forms.TextBox BatRadiusTextBox;
+        private System.Windows.Forms.ComboBox SelectedCameraCBO;
     }
 }

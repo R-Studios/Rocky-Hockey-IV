@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Emgu.CV;
+using AForge.Video.DirectShow;
 
 namespace RockyHockey.MotionCaptureFramework
 {
     public abstract class ImageProvider
     {
 		public TimedImage lastCapture { get; protected set; }
+
+        public Bitmap nextFrame { get; set; }
         public bool SliceImage { get; protected set; }
         public abstract TimedImage getTimedImage();
         public abstract void finalize();
