@@ -204,6 +204,8 @@ namespace RockyHockeyGUI
                         trajectoryCalculationFramework.StopAllUsedFrameworks().Wait();
                     }
                 });
+
+
                 
                 stopwatch.Stop();
 

@@ -32,6 +32,12 @@
     <DocumentationFile>bin\Release\RockyHockey.Common.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge.Imaging">
+      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math">
+      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Math.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Config\CameraConfig.cs" />
     <Compile Include="Config\Config.cs" />
+    <Compile Include="Config\GameFieldConfig.cs" />
     <Compile Include="Config\ObjectSerializer.cs" />
     <Compile Include="Config\PuckDetectionConfig.cs" />
     <Compile Include="Coordinates\Coordinate.cs" />

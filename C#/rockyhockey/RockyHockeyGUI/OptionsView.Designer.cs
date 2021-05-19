@@ -35,7 +35,6 @@
             this.HeightTextBox = new System.Windows.Forms.TextBox();
             this.WidthLabel = new System.Windows.Forms.Label();
             this.HeightLabel = new System.Windows.Forms.Label();
-            this.ToleranceTextBox = new System.Windows.Forms.TextBox();
             this.PunchAxisPositionTextBox = new System.Windows.Forms.TextBox();
             this.DifficultyComboBox = new System.Windows.Forms.ComboBox();
             this.FrameRateTextBox = new System.Windows.Forms.TextBox();
@@ -52,9 +51,10 @@
             this.RestPositionDivisorLabel = new System.Windows.Forms.Label();
             this.PuckRadiusLabel = new System.Windows.Forms.Label();
             this.SizeRatioLabel = new System.Windows.Forms.Label();
+            this.SelectedCameraCBO = new System.Windows.Forms.ComboBox();
+            this.ToleranceTextBox = new System.Windows.Forms.TextBox();
             this.OKButton = new System.Windows.Forms.Button();
             this.AbortButton = new System.Windows.Forms.Button();
-            this.SelectedCameraCBO = new System.Windows.Forms.ComboBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -154,14 +154,6 @@
             this.HeightLabel.Size = new System.Drawing.Size(84, 13);
             this.HeightLabel.TabIndex = 0;
             this.HeightLabel.Text = "                height";
-            // 
-            // ToleranceTextBox
-            // 
-            this.ToleranceTextBox.Location = new System.Drawing.Point(166, 146);
-            this.ToleranceTextBox.Margin = new System.Windows.Forms.Padding(2);
-            this.ToleranceTextBox.Name = "ToleranceTextBox";
-            this.ToleranceTextBox.Size = new System.Drawing.Size(88, 20);
-            this.ToleranceTextBox.TabIndex = 5;
             // 
             // PunchAxisPositionTextBox
             // 
@@ -310,6 +302,23 @@
             this.SizeRatioLabel.TabIndex = 19;
             this.SizeRatioLabel.Text = "Bat Radius (mm)";
             // 
+            // SelectedCameraCBO
+            // 
+            this.SelectedCameraCBO.FormattingEnabled = true;
+            this.SelectedCameraCBO.Location = new System.Drawing.Point(166, 170);
+            this.SelectedCameraCBO.Margin = new System.Windows.Forms.Padding(2);
+            this.SelectedCameraCBO.Name = "SelectedCameraCBO";
+            this.SelectedCameraCBO.Size = new System.Drawing.Size(134, 21);
+            this.SelectedCameraCBO.TabIndex = 23;
+            // 
+            // ToleranceTextBox
+            // 
+            this.ToleranceTextBox.Location = new System.Drawing.Point(166, 146);
+            this.ToleranceTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.ToleranceTextBox.Name = "ToleranceTextBox";
+            this.ToleranceTextBox.Size = new System.Drawing.Size(88, 20);
+            this.ToleranceTextBox.TabIndex = 5;
+            // 
             // OKButton
             // 
             this.OKButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -334,15 +343,6 @@
             this.AbortButton.Text = "Abort";
             this.AbortButton.UseVisualStyleBackColor = true;
             this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
-            // 
-            // SelectedCameraCBO
-            // 
-            this.SelectedCameraCBO.FormattingEnabled = true;
-            this.SelectedCameraCBO.Location = new System.Drawing.Point(166, 170);
-            this.SelectedCameraCBO.Margin = new System.Windows.Forms.Padding(2);
-            this.SelectedCameraCBO.Name = "SelectedCameraCBO";
-            this.SelectedCameraCBO.Size = new System.Drawing.Size(134, 21);
-            this.SelectedCameraCBO.TabIndex = 23;
             // 
             // OptionsView
             // 

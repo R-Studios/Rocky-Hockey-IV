@@ -11,6 +11,7 @@ namespace RockyHockey.Common
     {
         private Config()
         {
+            
             GameFieldSize = new Size(423, 238);
             FrameRate = 187;
             GameDifficulty = Difficulties.hard;

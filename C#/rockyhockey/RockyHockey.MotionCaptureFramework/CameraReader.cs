@@ -44,8 +44,10 @@ namespace RockyHockey.MotionCaptureFramework
             image.image = new Mat();
             
             videoCaptureDevice.NewFrame += VideoCaptureDevice_NewFrame;
-            // Image liefert nur null zurück und kann daher nicht ausgewertet werden
             
+            
+            // Image liefert nur null zurück und kann daher nicht ausgewertet werden
+            //test
             return image;
         }
 
