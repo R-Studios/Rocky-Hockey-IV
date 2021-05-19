@@ -247,7 +247,7 @@ namespace RockyHockeyGUI
                 GameTimeLabel.Text = $"Game time: {stopwatch.Elapsed.ToString().Split('.').FirstOrDefault()}";
             }
 
-            pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider?.nextFrame;
+            pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider?.lastCapture.GetImage();
             if (imageDebuggingActive)
                 debuggingWindow?.displayImage(trajectoryCalculationFramework?.motionCaptureProvider.imageProvider.lastCapture);
 

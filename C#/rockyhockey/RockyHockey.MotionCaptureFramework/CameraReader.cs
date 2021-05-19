@@ -19,7 +19,9 @@ namespace RockyHockey.MotionCaptureFramework
         private VideoCaptureDevice videoCaptureDevice;
 
         //EmguCV
-        VideoCapture camera;
+        private VideoCapture camera;
+
+        private TimedImage screenshot = new TimedImage();
 
         /// <summary>
         /// initializes the camera
@@ -32,39 +34,38 @@ namespace RockyHockey.MotionCaptureFramework
             
             //configure selected Camera
             videoCaptureDevice = new VideoCaptureDevice(Config.Instance.Camera1.name);
-
-            //if (withConfigBorders)
-            //{
-            //    camera.SetCaptureProperty(CapProp.FrameWidth, cameraConfig.Resolution.Width);
-            //    camera.SetCaptureProperty(CapProp.FrameHeight, cameraConfig.Resolution.Height);
-            //}
-
-            //camera.SetCaptureProperty(CapProp.Fps, Config.Instance.FrameRate);
             videoCaptureDevice.Start();
-            //camera.Start();
+            
         }
 
         public override TimedImage getTimedImage()
         {
             TimedImage image = new TimedImage();
             image.image = new Mat();
-            
             videoCaptureDevice.NewFrame += VideoCaptureDevice_NewFrame;
-            
-            if (nextFrame != null)
-            {
-                Image<Bgr, byte> imageCV = new Image<Bgr, byte>(nextFrame);
-                image.image = imageCV.Mat;
-                image.timeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            }
+            // Image liefert nur null zurück und kann daher nicht ausgewertet werden
             
             return image;
         }
 
         private void VideoCaptureDevice_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
+            TimedImage image = new TimedImage();
+            image.image = new Mat();
+            Mat convertedImage = new Mat();
             nextFrame = (Bitmap)eventArgs.Frame.Clone();
+            Bitmap nextFrame2 = (Bitmap)eventArgs.Frame.Clone();
+            if (nextFrame2 != null)
+            {
+                Image<Bgr, byte> imageCV = new Image<Bgr, Byte>(nextFrame2);
+                convertedImage = imageCV.Mat;
+                image.image = convertedImage;
+                image.timeStamp = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                lastCapture = image;
+                screenshot = image;                
+            }            
         }
+
 
         public override void finalize()
         {

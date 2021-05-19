@@ -18,6 +18,8 @@ namespace RockyHockey.MotionCaptureFramework
         public abstract TimedImage getTimedImage();
         public abstract void finalize();
         public abstract int getFPS();
+
+        public TimedImage snapshot { get; protected set; }
     }
 
     public struct TimedImage

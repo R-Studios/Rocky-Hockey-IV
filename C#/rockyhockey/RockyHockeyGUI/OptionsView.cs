@@ -85,7 +85,6 @@ namespace RockyHockeyGUI
                 Config.Instance.GameDifficulty = (Difficulties)Enum.Parse(typeof(Difficulties), DifficultyComboBox.SelectedItem.ToString());
                 Config.Instance.ImaginaryAxePosition = Convert.ToInt32(PunchAxisPositionTextBox.Text);
                 Config.Instance.Tolerance = Convert.ToInt32(ToleranceTextBox.Text);
-                Console.WriteLine(filterInfoCollection[SelectedCameraCBO.SelectedIndex].MonikerString);
                 Config.Instance.Camera1.name = filterInfoCollection[SelectedCameraCBO.SelectedIndex].MonikerString;
                 Config.Instance.MaxBatVelocity = Convert.ToDouble(MaximumBatVelocityTextBox.Text);
                 Config.Instance.RestPositionDivisor = Convert.ToDouble(RestPositionDivisorTextBox.Text);

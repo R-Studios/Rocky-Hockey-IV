@@ -15,6 +15,11 @@ namespace RockyHockey.Common
             this.name = name;
         }
 
+        public CameraConfig(int index)
+        {
+            this.index = index;
+        }
+
         private CameraConfig() { }
 
         /// <summary>
