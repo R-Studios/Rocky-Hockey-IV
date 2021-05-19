@@ -42,6 +42,7 @@ namespace RockyHockey.MotionCaptureFramework
         {
             TimedImage image = new TimedImage();
             image.image = new Mat();
+            
             videoCaptureDevice.NewFrame += VideoCaptureDevice_NewFrame;
             // Image liefert nur null zurück und kann daher nicht ausgewertet werden
             
@@ -72,7 +73,7 @@ namespace RockyHockey.MotionCaptureFramework
             //camera?.Stop();
             //camera?.Dispose();
             //camera = null;
-            videoCaptureDevice?.Stop();
+            videoCaptureDevice?.SignalToStop();
             videoCaptureDevice = null;
         }
 
