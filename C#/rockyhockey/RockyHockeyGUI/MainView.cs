@@ -248,6 +248,7 @@ namespace RockyHockeyGUI
             }
 
             pictureBox1.Image = trajectoryCalculationFramework?.motionCaptureProvider.imageProvider?.lastCapture.GetImage();
+            this.pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             if (imageDebuggingActive)
                 debuggingWindow?.displayImage(trajectoryCalculationFramework?.motionCaptureProvider.imageProvider.lastCapture);
 
