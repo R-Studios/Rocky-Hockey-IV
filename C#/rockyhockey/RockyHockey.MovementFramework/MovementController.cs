@@ -54,16 +54,22 @@ namespace RockyHockey.MovementFramework
         public void InitializeSerialPorts()
         {
             string[] p = SerialPort.GetPortNames();
+            foreach (String s in p)
+                Console.WriteLine("Serial Port: " + s);
 
             try
             {
                 if (!initialized)
                 {
-                    xAxis = new SerialPort(p[0], 115200);
+                    xAxis = new SerialPort(p[0], 115200, Parity.None, 8, StopBits.One);
+                    xAxis.Handshake = Handshake.None;
                     xAxis.Open();
-                    yAxis = new SerialPort(p[1], 115200);
+                    xAxis.WriteTimeout = 500;
+                    yAxis = new SerialPort(p[1], 115200, Parity.None, 8, StopBits.One);
+                    
+                    yAxis.Handshake = Handshake.None;
+                    yAxis.WriteTimeout = 500;
                     yAxis.Open();
-
                     initialized = true;
                 }
 

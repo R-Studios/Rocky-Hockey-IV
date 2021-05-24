@@ -41,11 +41,20 @@
     <ApplicationIcon>rocky_logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AForge.Video">
-      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Video.dll</HintPath>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.dll</HintPath>
     </Reference>
-    <Reference Include="AForge.Video.DirectShow">
-      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Video.DirectShow.dll</HintPath>
+    <Reference Include="AForge.Imaging, Version=2.2.5.0, Culture=neutral, PublicKeyToken=ba8ddea9676ca48b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Math, Version=2.2.5.0, Culture=neutral, PublicKeyToken=abba2e25397ee8c9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Vision">
+      <HintPath>..\..\..\..\AForge.NET Framework-2.2.5\Release\AForge.Vision.dll</HintPath>
     </Reference>
     <Reference Include="Emgu.CV.UI, Version=3.4.1.2976, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EMGU.CV.3.4.1.2976\lib\net35\Emgu.CV.UI.dll</HintPath>
@@ -70,9 +79,6 @@
     </Reference>
     <Reference Include="OpenCvSharp.DebuggerVisualizers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCVSharp.2.4.0.1\lib\OpenCvSharp.DebuggerVisualizers.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenCVSharp.2.4.0.1\lib\OpenCvSharp.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="OpenCvSharp.Gpu, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCVSharp.2.4.0.1\lib\OpenCvSharp.Gpu.dll</HintPath>
@@ -122,6 +128,12 @@
     <Compile Include="CircleDetectionCalibration.Designer.cs">
       <DependentUpon>CircleDetectionCalibration.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameFieldDetectionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameFieldDetectionView.Designer.cs">
+      <DependentUpon>GameFieldDetectionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImageDebugging.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CircleDetectionCalibration.resx">
       <DependentUpon>CircleDetectionCalibration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GameFieldDetectionView.resx">
+      <DependentUpon>GameFieldDetectionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ImageDebugging.resx">
       <DependentUpon>ImageDebugging.cs</DependentUpon>

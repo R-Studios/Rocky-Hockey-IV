@@ -65,6 +65,8 @@ namespace RockyHockeyGUI
 
         private OptionsView optionsView;
 
+        private GameFieldDetectionView gameFieldDetectionView;
+
         private Stopwatch stopwatch;
         
         private TrajectoryCalculationFramework trajectoryCalculationFramework;
@@ -101,6 +103,13 @@ namespace RockyHockeyGUI
         /// <param name="e"></param>
         private async void StartButton_Click(object sender, EventArgs e)
         {
+            if (gameFieldDetectionView == null)
+            {
+                gameFieldDetectionView = new GameFieldDetectionView();
+                gameFieldDetectionView.FormClosed += OnOptionsClosed;
+            }
+            gameFieldDetectionView.Show();
+
             try
             {
                 if (optionsView != null)
