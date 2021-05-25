@@ -23,13 +23,15 @@ namespace RockyHockeyGUI
     {
         public GameFieldDetectionView(Bitmap imgInput)
         {
+            
             InitializeComponent();
             this.imgInput = imgInput;
             RectanglePicBox.Image = this.imgInput;
         }
         Bitmap imgInput;
         public ArrayList coordinatelist = new ArrayList();
-        
+        public ArrayList axiscoordinatelist = new ArrayList();
+
 
         private void RectanglePicBox_Click(object sender, EventArgs e)
         {
@@ -88,8 +90,93 @@ namespace RockyHockeyGUI
 
         private void StartGameButton_Click(object sender, EventArgs e)
         {
-            Config.Instance.Upp
+            DetermineGameField();
             this.Close();
+        }
+
+        private void DetermineGameField()
+        {
+            Config.Instance.GameField.UpperLeft = (System.Drawing.Point)coordinatelist[0];
+            Config.Instance.GameField.UpperRight = (System.Drawing.Point)coordinatelist[1];
+            Config.Instance.GameField.LowerRight = (System.Drawing.Point)coordinatelist[2];
+            Config.Instance.GameField.LowerLeft = (System.Drawing.Point)coordinatelist[3];
+            SaveAxes();
+        }
+
+        private void SaveAxes()
+        {
+            int smallestx = 0;
+            int highesty = 0;
+            int smallesty = 0;
+            int highestx = 0;
+
+
+            int min = int.MaxValue;
+            for (int i = 0; i < coordinatelist.Count; i++)
+            {
+                System.Drawing.Point p = (System.Drawing.Point)coordinatelist[i];
+
+                if (p.X < min)
+                {
+                    min = p.X;
+                    smallestx = p.X;
+                }
+
+            }
+
+            int max = int.MinValue;
+            for (int i = 0; i < coordinatelist.Count; i++)
+            {
+                System.Drawing.Point p = (System.Drawing.Point)coordinatelist[i];
+
+                if (p.Y > max)
+                {
+                    max = p.Y;
+                    highesty = p.Y;
+                }
+
+            }
+
+            min = int.MaxValue;
+            for (int i = 0; i < coordinatelist.Count; i++)
+            {
+                System.Drawing.Point p = (System.Drawing.Point)coordinatelist[i];
+
+                if (p.Y < min)
+                {
+                    min = p.Y;
+                    smallesty = p.Y;
+                }
+            }
+
+            max = int.MinValue;
+            for (int i = 0; i < coordinatelist.Count; i++)
+            {
+                System.Drawing.Point p = (System.Drawing.Point)coordinatelist[i];
+
+                if (p.X > max)
+                {
+                    max = p.X;
+                    highestx = p.X;
+                }
+            }
+
+            System.Drawing.Point smallestxhighesty = new System.Drawing.Point(smallestx, highesty); // Hier ist der 0 Punkt im Koordinatensystem
+            axiscoordinatelist.Add(smallestxhighesty);
+            Config.Instance.GameField.Offset = smallestxhighesty;
+            System.Drawing.Point point = new System.Drawing.Point(smallestxhighesty.X - smallestxhighesty.X, smallestxhighesty.Y - smallestxhighesty.Y);
+            Config.Instance.GameField.XYOrigin = point;
+
+            System.Drawing.Point smallestxsmallesty = new System.Drawing.Point(smallestx, smallesty); // Hier ist der Punkt ganz oben links
+            axiscoordinatelist.Add(smallestxsmallesty);
+            point = new System.Drawing.Point(smallestxsmallesty.X - smallestxhighesty.X, smallestxsmallesty.Y - smallestxhighesty.Y);
+            Config.Instance.GameField.ExtremeY = point;
+
+            System.Drawing.Point highestxhighesty = new System.Drawing.Point(highestx, highesty); // Hier ist der Punkt ganz unten rechts
+            axiscoordinatelist.Add(highestxhighesty);
+            point = new System.Drawing.Point(highestxhighesty.X - smallestxhighesty.X, highestxhighesty.Y - smallestxhighesty.Y);
+            Config.Instance.GameField.ExtremeX = point;
+
         }
     }
 }

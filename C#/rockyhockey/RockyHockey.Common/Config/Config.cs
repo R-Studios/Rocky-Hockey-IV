@@ -76,6 +76,8 @@ namespace RockyHockey.Common
 
         public PuckDetectionConfig detectionConfig { get; set; }
 
+        public GameFieldConfig GameField { get; set; }
+
         /// <summary>
         /// Size of the gamefield
         /// </summary>
